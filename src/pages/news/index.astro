@@ -1,0 +1,158 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/BaseLayout.astro';
+
+const posts = (await getCollection('news')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<Layout title="ニュース一覧 - Cute Blog">
+  <div class="container">
+    <div class="page-header">
+      <h1>ニュース</h1>
+      <p>プログラミングや開発に関する最新ニュースをお届けします。</p>
+    </div>
+    
+    <div class="news-container">
+      {posts.map(news => (
+        <article class="news-card">
+          <div class="news-date">
+            <span class="day">{new Date(news.data.pubDate).getDate()}</span>
+            <span class="month">{new Date(news.data.pubDate).toLocaleDateString('ja-JP', { month: 'short' })}</span>
+            <span class="year">{new Date(news.data.pubDate).getFullYear()}</span>
+          </div>
+          <div class="news-content">
+            <h2 class="news-title">
+              <a href={`/news/${news.id}`}>{news.data.title}</a>
+            </h2>
+            <p class="news-excerpt">{news.data.description}</p>
+            <a href={`/news/${news.id}`} class="read-more">続きを読む →</a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</Layout>
+
+<style lang="scss">
+  .page-header {
+    text-align: center;
+    margin: 2rem 0 3rem;
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(45deg, var(--base-color), var(--sub-color-1), var(--sub-color-4));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+    }
+    
+    p {
+      font-size: 1.2rem;
+      opacity: 0.8;
+    }
+  }
+  
+  .news-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .news-card {
+    display: flex;
+    gap: 1.5rem;
+    background-color: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+  }
+  
+  .news-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    padding: 1.5rem;
+    background-color: var(--sub-color-2);
+    color: var(--text-color);
+    
+    .day {
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+    
+    .month {
+      font-size: 1rem;
+      margin: 0.3rem 0;
+    }
+    
+    .year {
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+  }
+  
+  .news-content {
+    padding: 1.5rem;
+    flex: 1;
+  }
+  
+  .news-title {
+    font-size: 1.3rem;
+    margin: 0 0 0.8rem;
+    line-height: 1.4;
+    
+    a {
+      color: var(--text-color);
+      text-decoration: none;
+      
+      &:hover {
+        color: var(--base-color);
+      }
+    }
+  }
+  
+  .news-excerpt {
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+  
+  .read-more {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-color);
+    
+    &:hover {
+      color: var(--base-color);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .news-card {
+      flex-direction: column;
+    }
+    
+    .news-date {
+      flex-direction: row;
+      min-width: auto;
+      width: 100%;
+      padding: 1rem;
+      gap: 0.5rem;
+    }
+  }
+</style>

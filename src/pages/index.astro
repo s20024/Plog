@@ -1,50 +1,277 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import Layout from "../layouts/BaseLayout.astro";
+import FeaturedPosts from "../components/FeaturedPosts.astro";
+import LatestNews from "../components/LatestNews.astro";
+// import RecentMemos from "../components/RecentMemos.astro";
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-					>read the docs
-				</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out <a
-					href="https://github.com/Charca/astro-blog-template"
-					>astro-blog-template
-				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
-</html>
+<Layout title="Cute Blog - かわいいデザインの個人ブログサイト">
+  <div class="container">
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Welcome to <span class="gradient-text">Cute Blog</span></h1>
+        <p>
+          かわいいデザインの個人ブログサイトへようこそ！<br
+          />ブログ記事、ニュース、メモなど様々なコンテンツをお届けします。
+        </p>
+        <div class="hero-buttons">
+          <a href="/blog" class="btn">ブログを見る</a>
+          <a href="/about" class="btn btn-secondary">プロフィール</a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="image-container">
+          <div class="blob"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="featured-section">
+      <h2 class="section-title">人気の記事</h2>
+      <FeaturedPosts />
+    </section>
+
+    <div class="two-column-section">
+      <section class="news-section">
+        <h2 class="section-title">最新ニュース</h2>
+        <LatestNews />
+      </section>
+
+      <!-- <section class="memo-section">
+        <h2 class="section-title">最近のメモ</h2>
+        <RecentMemos />
+      </section> -->
+    </div>
+
+    <!-- <section class="cta-section">
+      <div class="cta-content">
+        <h2>ブログの更新をお知らせします</h2>
+        <p>
+          メールアドレスを登録して、最新の記事やニュースをいち早くお届けします。
+        </p>
+        <form class="subscribe-form">
+          <input type="email" placeholder="メールアドレス" required />
+          <button type="submit" class="btn">登録する</button>
+        </form>
+      </div>
+    </section> -->
+  </div>
+</Layout>
+
+<style lang="scss">
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 3rem 0;
+    align-items: center;
+
+    .hero-content {
+      h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        line-height: 1.2;
+
+        .gradient-text {
+          background: linear-gradient(
+            45deg,
+            var(--base-color),
+            var(--sub-color-1),
+            var(--sub-color-4)
+          );
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+        }
+      }
+
+      p {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+      }
+
+      .hero-buttons {
+        display: flex;
+        gap: 1rem;
+      }
+    }
+
+    .hero-image {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .image-container {
+        position: relative;
+        width: 100%;
+        height: 300px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .blob {
+          width: 300px;
+          height: 300px;
+          background: linear-gradient(
+            45deg,
+            var(--base-color),
+            var(--sub-color-3)
+          );
+          border-radius: 60% 40% 70% 30% / 60% 30% 70% 40%;
+          animation: blob-animation 8s ease-in-out infinite;
+          position: relative;
+
+          &::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 85%;
+            height: 85%;
+            background: white;
+            border-radius: 60% 40% 70% 30% / 60% 30% 70% 40%;
+            animation: blob-animation 8s ease-in-out infinite reverse;
+          }
+
+          &::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70%;
+            height: 70%;
+            background: linear-gradient(
+              45deg,
+              var(--sub-color-1),
+              var(--sub-color-4)
+            );
+            border-radius: 60% 40% 70% 30% / 60% 30% 70% 40%;
+            animation: blob-animation 8s ease-in-out infinite;
+          }
+        }
+      }
+    }
+  }
+
+  @keyframes blob-animation {
+    0% {
+      border-radius: 60% 40% 70% 30% / 60% 30% 70% 40%;
+    }
+    25% {
+      border-radius: 30% 60% 40% 70% / 50% 60% 30% 40%;
+    }
+    50% {
+      border-radius: 50% 40% 50% 70% / 30% 50% 70% 60%;
+    }
+    75% {
+      border-radius: 40% 60% 70% 40% / 70% 30% 50% 60%;
+    }
+    100% {
+      border-radius: 60% 40% 70% 30% / 60% 30% 70% 40%;
+    }
+  }
+
+  .section-title {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 50px;
+      height: 4px;
+      background: linear-gradient(45deg, var(--base-color), var(--sub-color-1));
+      border-radius: 10px;
+    }
+  }
+
+  .featured-section {
+    padding: 3rem 0;
+  }
+
+  .two-column-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 2rem 0;
+  }
+
+  .cta-section {
+    margin: 4rem 0 2rem;
+    background: linear-gradient(45deg, var(--sub-color-2), var(--sub-color-3));
+    border-radius: 20px;
+    padding: 3rem;
+
+    .cta-content {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+
+      h2 {
+        margin-bottom: 1rem;
+        color: var(--text-color);
+      }
+
+      p {
+        margin-bottom: 2rem;
+      }
+
+      .subscribe-form {
+        display: flex;
+        gap: 1rem;
+
+        input {
+          flex: 1;
+          padding: 0.75rem 1rem;
+          border: none;
+          border-radius: 50px;
+          font-size: 1rem;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+          &:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(209, 241, 204, 0.5);
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      grid-template-columns: 1fr;
+      text-align: center;
+
+      .hero-content {
+        h1 {
+          font-size: 2.5rem;
+        }
+
+        .hero-buttons {
+          justify-content: center;
+        }
+      }
+    }
+
+    .two-column-section {
+      grid-template-columns: 1fr;
+    }
+
+    .cta-section {
+      padding: 2rem;
+
+      .cta-content {
+        .subscribe-form {
+          flex-direction: column;
+        }
+      }
+    }
+  }
+</style>

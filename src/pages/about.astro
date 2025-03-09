@@ -1,62 +1,388 @@
 ---
-import Layout from '../layouts/BlogPost.astro';
+import Layout from "../layouts/BaseLayout.astro";
 ---
 
-<Layout
-	title="About Me"
-	description="Lorem ipsum dolor sit amet"
-	pubDate={new Date('August 08 2021')}
-	heroImage="/blog-placeholder-about.jpg"
->
-	<p>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-		labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo
-		viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam
-		adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus
-		et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus
-		vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque
-		sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
-	</p>
+<Layout title="プロフィール - Cute Blog">
+  <div class="container">
+    <div class="page-header">
+      <h1>プロフィール</h1>
+    </div>
 
-	<p>
-		Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum quisque non
-		tellus. Habitasse platea dictumst quisque sagittis purus sit amet. Tellus molestie nunc non
-		blandit massa. Cursus vitae congue mauris rhoncus. Accumsan tortor posuere ac ut. Fringilla urna
-		porttitor rhoncus dolor. Elit ullamcorper dignissim cras tincidunt lobortis. In cursus turpis
-		massa tincidunt dui ut ornare lectus. Integer feugiat scelerisque varius morbi enim nunc.
-		Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui vivamus arcu felis
-		bibendum. Dignissim suspendisse in est ante in nibh mauris. Sed tempus urna et pharetra pharetra
-		massa massa ultricies mi.
-	</p>
+    <div class="about-container">
+      <div class="profile-section">
+        <div class="profile-image">
+          <div class="image-placeholder"></div>
+        </div>
+        <div class="profile-info">
+          <h2>Cute Blog 管理人</h2>
+          <p class="profile-bio">
+            フロントエンド開発者として活動しています。React、TypeScript、AstroなどのWeb技術が好きで、日々の学びや発見をブログで共有しています。
+          </p>
+          <div class="social-links">
+            <a
+              href="https://github.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="social-icon"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <!-- todo:ここ修正 -->
+              </svg>
+            </a>
+            <a
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="social-icon"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723 10.1 10.1 0 01-3.127 1.184 4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"
+                ></path>
+              </svg>
+            </a>
+            <a
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="social-icon"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+                ></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
 
-	<p>
-		Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam sit amet nisl
-		suscipit. Lacus viverra vitae congue eu consequat ac felis donec. Egestas integer eget aliquet
-		nibh praesent tristique magna sit amet. Eget magna fermentum iaculis eu non diam. In vitae
-		turpis massa sed elementum. Tristique et egestas quis ipsum suspendisse ultrices. Eget lorem
-		dolor sed viverra ipsum. Vel turpis nunc eget lorem dolor sed viverra. Posuere ac ut consequat
-		semper viverra nam. Laoreet suspendisse interdum consectetur libero id faucibus. Diam phasellus
-		vestibulum lorem sed risus ultricies tristique. Rhoncus dolor purus non enim praesent elementum
-		facilisis. Ultrices tincidunt arcu non sodales neque. Tempus egestas sed sed risus pretium quam
-		vulputate. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Fringilla
-		urna porttitor rhoncus dolor purus non. Amet dictum sit amet justo donec enim.
-	</p>
+      <div class="about-content">
+        <section class="about-section">
+          <h2>このブログについて</h2>
+          <p>
+            「Cute
+            Blog」は、プログラミングや開発に関する情報を共有するブログサイトです。
+            主にフロントエンド開発に関する記事を中心に、日々の学びや発見を発信しています。
+          </p>
+          <p>
+            明るく、かわいいデザインにこだわり、技術的な内容でも親しみやすく読みやすいブログを目指しています。
+            初心者から上級者まで、様々なレベルの方に役立つ情報を提供できるよう心がけています。
+          </p>
+        </section>
 
-	<p>
-		Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut consequat semper
-		viverra. Tellus mauris a diam maecenas sed enim ut sem viverra. Venenatis urna cursus eget nunc
-		scelerisque viverra mauris in. Arcu ac tortor dignissim convallis aenean et tortor at. Curabitur
-		gravida arcu ac tortor dignissim convallis aenean et tortor. Egestas tellus rutrum tellus
-		pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet. Ut enim
-		blandit volutpat maecenas volutpat blandit aliquam etiam. Id donec ultrices tincidunt arcu. Id
-		cursus metus aliquam eleifend mi.
-	</p>
+        <section class="about-section">
+          <h2>主な内容</h2>
+          <div class="content-categories">
+            <div class="category-item">
+              <div
+                class="category-icon"
+                style="background-color: var(--base-color);"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M20 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zM4 19V5h16l.002 14H4z"
+                  ></path>
+                  <path
+                    d="M9.293 9.293L5.586 13l3.707 3.707 1.414-1.414L8.414 13l2.293-2.293zm5.414 0l-1.414 1.414L15.586 13l-2.293 2.293 1.414 1.414L18.414 13z"
+                  ></path>
+                </svg>
+              </div>
+              <h3>ブログ</h3>
+              <p>
+                プログラミングや開発に関する詳細な記事を公開しています。チュートリアルや解説、ベストプラクティスなどを紹介します。
+              </p>
+            </div>
 
-	<p>
-		Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus imperdiet. Id porta
-		nibh venenatis cras sed felis eget velit. Ipsum a arcu cursus vitae. Facilisis magna etiam
-		tempor orci eu lobortis elementum. Tincidunt dui ut ornare lectus sit. Quisque non tellus orci
-		ac. Blandit libero volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar
-		proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
-	</p>
+            <div class="category-item">
+              <div
+                class="category-icon"
+                style="background-color: var(--sub-color-1);"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"
+                  ></path>
+                  <path d="M11 11h2v6h-2zm0-4h2v2h-2z"></path>
+                </svg>
+              </div>
+              <h3>ニュース</h3>
+              <p>
+                プログラミングや開発に関する最新ニュースをお届けします。新しい技術やツール、アップデート情報などを紹介します。
+              </p>
+            </div>
+
+            <div class="category-item">
+              <div
+                class="category-icon"
+                style="background-color: var(--sub-color-3);"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M19 3H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zm0 16H5V5h14v14z"
+                  ></path>
+                  <path
+                    d="M7 7h1.5v1.5H7zm4 0h1.5v1.5H11zm4 0h1.5v1.5H15zm-8 4h1.5v1.5H7zm4 0h1.5v1.5H11zm4 0h1.5v1.5H15zm-8 4h1.5v1.5H7zm4 0h1.5v1.5H11zm4 0h1.5v1.5H15z"
+                  ></path>
+                </svg>
+              </div>
+              <h3>メモ</h3>
+              <p>
+                開発に役立つ技術メモやチートシートをまとめています。すぐに参照できる便利な情報を提供します。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="about-section">
+          <h2>お問い合わせ</h2>
+          <p>
+            ブログの内容に関するご質問やご意見、お仕事のご依頼などがありましたら、お気軽にお問い合わせください。
+          </p>
+          <a href="/contact" class="btn">お問い合わせフォーム</a>
+        </section>
+      </div>
+    </div>
+  </div>
 </Layout>
+
+<style lang="scss">
+  .page-header {
+    text-align: center;
+    margin: 2rem 0 3rem;
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(
+        45deg,
+        var(--base-color),
+        var(--sub-color-1),
+        var(--sub-color-4)
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+    }
+  }
+
+  .about-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .profile-section {
+    display: flex;
+    gap: 2rem;
+    background-color: white;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  }
+
+  .profile-image {
+    flex-shrink: 0;
+
+    .image-placeholder {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, var(--base-color), var(--sub-color-1));
+      position: relative;
+      overflow: hidden;
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23FFFFFF"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>')
+          center/60% no-repeat;
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .profile-info {
+    flex: 1;
+
+    h2 {
+      font-size: 1.8rem;
+      margin: 0 0 1rem;
+    }
+
+    .profile-bio {
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+
+      .social-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background-color: var(--sub-color-2);
+        border-radius: 50%;
+        transition: transform 0.3s ease;
+
+        &:hover {
+          transform: translateY(-3px);
+        }
+
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+  }
+
+  .about-content {
+    .about-section {
+      background-color: white;
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+
+      h2 {
+        font-size: 1.5rem;
+        margin: 0 0 1.5rem;
+        position: relative;
+        display: inline-block;
+
+        &::after {
+          content: "";
+          position: absolute;
+          bottom: -8px;
+          left: 0;
+          width: 40px;
+          height: 3px;
+          background: linear-gradient(
+            45deg,
+            var(--base-color),
+            var(--sub-color-1)
+          );
+          border-radius: 10px;
+        }
+      }
+
+      p {
+        margin-bottom: 1rem;
+        line-height: 1.6;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+
+      .content-categories {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+
+        .category-item {
+          text-align: center;
+
+          .category-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+
+            svg {
+              width: 30px;
+              height: 30px;
+              color: white;
+            }
+          }
+
+          h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+          }
+
+          p {
+            font-size: 0.9rem;
+            line-height: 1.5;
+          }
+        }
+      }
+
+      .btn {
+        margin-top: 1rem;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .profile-section {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .profile-info {
+      .social-links {
+        justify-content: center;
+      }
+    }
+
+    .about-content {
+      .about-section {
+        .content-categories {
+          grid-template-columns: 1fr;
+        }
+      }
+    }
+  }
+</style>

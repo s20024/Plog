@@ -1,0 +1,140 @@
+---
+// 仮のデータ（実際の実装ではMDXファイルからデータを取得します）
+const recentMemos = [
+  {
+    id: 1,
+    title: "useEffectの依存配列について",
+    date: "2025-03-17",
+    slug: "useeffect-dependency-array",
+    tags: ["React", "Hooks"],
+  },
+  {
+    id: 2,
+    title: "SCSSのミックスイン集",
+    date: "2025-03-15",
+    slug: "scss-mixins-collection",
+    tags: ["SCSS", "CSS"],
+  },
+  {
+    id: 3,
+    title: "TypeScriptの型定義テクニック",
+    date: "2025-03-13",
+    slug: "typescript-type-definition-techniques",
+    tags: ["TypeScript"],
+  },
+  {
+    id: 4,
+    title: "Astroのデータフェッチング",
+    date: "2025-03-11",
+    slug: "astro-data-fetching",
+    tags: ["Astro", "API"],
+  },
+];
+---
+
+<div class="memos-list">
+  {
+    recentMemos.map((memo) => (
+      <article class="memo-item">
+        <h3 class="memo-title">
+          <a href={`/memo/${memo.slug}`}>{memo.title}</a>
+        </h3>
+        <div class="memo-meta">
+          <span class="memo-date">
+            {new Date(memo.date).toLocaleDateString("ja-JP", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </span>
+          <div class="memo-tags">
+            {memo.tags.map((tag) => (
+              <a href={`/tags/${tag.toLowerCase()}`} class="tag">
+                {tag}
+              </a>
+            ))}
+          </div>
+        </div>
+      </article>
+    ))
+  }
+
+  <a href="/memo" class="view-all">すべてのメモを見る →</a>
+</div>
+
+<style lang="scss">
+  .memos-list {
+    background-color: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  }
+
+  .memo-item {
+    padding: 1rem 0;
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+
+  .memo-title {
+    font-size: 1rem;
+    margin: 0 0 0.5rem;
+    line-height: 1.4;
+
+    a {
+      color: var(--text-color);
+      text-decoration: none;
+
+      &:hover {
+        color: var(--base-color);
+      }
+    }
+  }
+
+  .memo-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .memo-date {
+    font-size: 0.85rem;
+    color: #666;
+  }
+
+  .memo-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+    .tag {
+      font-size: 0.75rem;
+      background-color: var(--sub-color-3);
+      color: var(--text-color);
+      padding: 0.2rem 0.5rem;
+      border-radius: 50px;
+
+      &:hover {
+        background-color: var(--base-color);
+      }
+    }
+  }
+
+  .view-all {
+    display: block;
+    text-align: right;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-color);
+
+    &:hover {
+      color: var(--base-color);
+    }
+  }
+</style>

@@ -1,0 +1,107 @@
+---
+import { getCollection } from 'astro:content';
+
+const latestNews = (await getCollection('news')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<div class="news-list">
+  {
+    latestNews.map((news) => (
+      <article class="news-item">
+        <div class="news-date">
+          <span class="day">{new Date(news.data.pubDate).getDate()}</span>
+          <span class="month">
+            {new Date(news.data.pubDate).toLocaleDateString("ja-JP", {
+              month: "short",
+            })}
+          </span>
+        </div>
+        <div class="news-content">
+          <h3 class="news-title">
+            <a href={`/news/${news.id}`}>{news.data.title}</a>
+          </h3>
+        </div>
+      </article>
+    ))
+  }
+
+  <a href="/news" class="view-all">すべてのニュースを見る →</a>
+</div>
+
+<style lang="scss">
+  .news-list {
+    background-color: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  }
+
+  .news-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+
+  .news-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 50px;
+    height: 50px;
+    background-color: var(--sub-color-2);
+    border-radius: 10px;
+    padding: 0.5rem;
+
+    .day {
+      font-size: 1.2rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .month {
+      font-size: 0.8rem;
+    }
+  }
+
+  .news-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .news-title {
+    font-size: 1rem;
+    margin: 0;
+    line-height: 1.4;
+
+    a {
+      color: var(--text-color);
+      text-decoration: none;
+
+      &:hover {
+        color: var(--base-color);
+      }
+    }
+  }
+
+  .view-all {
+    display: block;
+    text-align: right;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-color);
+
+    &:hover {
+      color: var(--base-color);
+    }
+  }
+</style>

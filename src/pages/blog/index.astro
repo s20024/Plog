@@ -1,111 +1,192 @@
 ---
-import BaseHead from '../../components/BaseHead.astro';
-import Header from '../../components/Header.astro';
-import Footer from '../../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
-import { getCollection } from 'astro:content';
-import FormattedDate from '../../components/FormattedDate.astro';
+import Layout from "../../layouts/BaseLayout.astro";
+import PostCard from "../../components/PostCard.astro";
+import { getCollection } from "astro:content";
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+// const categories = [...new Set(posts.map((post) => post.category))];
+const categories: any[] = [];
+// const tags = [...new Set(posts.flatMap((post) => post.tags))];
+const tags: any[] = [];
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									<img width={720} height={360} src={post.data.heroImage} alt="" />
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
-		</main>
-		<Footer />
-	</body>
-</html>
+<Layout title="ブログ記事一覧 - Cute Blog">
+  <div class="container">
+    <div class="page-header">
+      <h1>ブログ記事</h1>
+      <p>プログラミングや開発に関する記事を公開しています。</p>
+    </div>
+
+    <div class="blog-layout">
+      <div class="posts-container">
+        {posts.map((post) => <PostCard post={post} />)}
+      </div>
+
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <h2>カテゴリー</h2>
+          <ul class="category-list">
+            {
+              categories.map((category) => (
+                <li>
+                  <a href={`/category/${category.toLowerCase()}`}>{category}</a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div class="sidebar-section">
+          <h2>タグ</h2>
+          <div class="tags-cloud">
+            {
+              tags.map((tag) => (
+                <a href={`/tags/${tag.toLowerCase()}`} class="tag">
+                  {tag}
+                </a>
+              ))
+            }
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h2>アーカイブ</h2>
+          <ul class="archive-list">
+            <li><a href="/archive/2025/03">2025年3月</a></li>
+            <li><a href="/archive/2025/02">2025年2月</a></li>
+            <li><a href="/archive/2025/01">2025年1月</a></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</Layout>
+
+<style lang="scss">
+  .page-header {
+    text-align: center;
+    margin: 2rem 0 3rem;
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(
+        45deg,
+        var(--base-color),
+        var(--sub-color-1),
+        var(--sub-color-4)
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+    }
+
+    p {
+      font-size: 1.2rem;
+      opacity: 0.8;
+    }
+  }
+
+  .blog-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+  }
+
+  .posts-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .sidebar {
+    .sidebar-section {
+      background-color: white;
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+
+      h2 {
+        font-size: 1.3rem;
+        margin: 0 0 1rem;
+        position: relative;
+        display: inline-block;
+
+        &::after {
+          content: "";
+          position: absolute;
+          bottom: -5px;
+          left: 0;
+          width: 30px;
+          height: 3px;
+          background: linear-gradient(
+            45deg,
+            var(--base-color),
+            var(--sub-color-1)
+          );
+          border-radius: 10px;
+        }
+      }
+
+      .category-list,
+      .archive-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+          margin-bottom: 0.5rem;
+
+          a {
+            display: block;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+
+            &:hover {
+              background-color: var(--base-color);
+            }
+          }
+        }
+      }
+
+      .tags-cloud {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+
+        .tag {
+          font-size: 0.85rem;
+          background-color: var(--sub-color-3);
+          color: var(--text-color);
+          padding: 0.3rem 0.8rem;
+          border-radius: 50px;
+
+          &:hover {
+            background-color: var(--base-color);
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 992px) {
+    .blog-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .posts-container {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .posts-container {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
