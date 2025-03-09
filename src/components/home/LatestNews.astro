@@ -1,9 +1,11 @@
 ---
 import { getCollection } from 'astro:content';
 
+const PREVIEW_LENGTH = 6;
+
 const latestNews = (await getCollection('news')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+).slice(0, PREVIEW_LENGTH);
 ---
 
 <div class="news-list">

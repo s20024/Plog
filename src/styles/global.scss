@@ -95,6 +95,7 @@ img {
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: var(--text-color); // ホバー時の文字色を現在の文字色と同じに設定
   }
 
   &.btn-secondary {

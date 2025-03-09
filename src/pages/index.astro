@@ -1,21 +1,23 @@
 ---
 import Layout from "../layouts/BaseLayout.astro";
-import FeaturedPosts from "../components/FeaturedPosts.astro";
-import LatestNews from "../components/LatestNews.astro";
-// import RecentMemos from "../components/RecentMemos.astro";
+import LatestNews from "../components/home/LatestNews.astro";
+import FeaturedPosts from "../components/home/LatestPosts.astro";
+// import RecentMemos from "../components/home/RecentMemos.astro";
+import { SITE_TITLE } from "../consts";
 ---
 
-<Layout title="Cute Blog - かわいいデザインの個人ブログサイト">
+<Layout title={SITE_TITLE}>
   <div class="container">
     <section class="hero">
       <div class="hero-content">
-        <h1>Welcome to <span class="gradient-text">Cute Blog</span></h1>
+        <h1>Welcome to <span class="gradient-text">{SITE_TITLE}</span></h1>
         <p>
-          かわいいデザインの個人ブログサイトへようこそ！<br
-          />ブログ記事、ニュース、メモなど様々なコンテンツをお届けします。
+          s20024のプログへようこそ!!<br />
+          プログラミングの記事(プログ-Plog)を中心に、最近のつぶやきを書いていきます。<br />
+          <b>この右の変な奴治したい。。。。w</b>
         </p>
         <div class="hero-buttons">
-          <a href="/blog" class="btn">ブログを見る</a>
+          <a href="/blog" class="btn">プログを見る</a>
           <a href="/about" class="btn btn-secondary">プロフィール</a>
         </div>
       </div>
@@ -27,13 +29,13 @@ import LatestNews from "../components/LatestNews.astro";
     </section>
 
     <section class="featured-section">
-      <h2 class="section-title">人気の記事</h2>
+      <h2 class="section-title">最新のProg</h2>
       <FeaturedPosts />
     </section>
 
     <div class="two-column-section">
       <section class="news-section">
-        <h2 class="section-title">最新ニュース</h2>
+        <h2 class="section-title">最近の個人的ニュース</h2>
         <LatestNews />
       </section>
 

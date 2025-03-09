@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/background.scss';
+import '../../styles/background.scss';
+import { COLORS } from '../../consts';
+
+const BUBBLE_DENSITY = 0.00001; // 表示されるバブルの密度
+const RANDOM_BUBBLE_SIZE = 320; // 表示されるバブルのランダムサイズ
+const MIN_BUBBLE_SIZE = 20; // 表示されるバブルの最小サイズ
+const RANDOM_BUBBLE_SPEED = 0.5; // 表示されるバブルのランダムスピード
+const MIN_BUBBLE_SPEED = 0.1; // 表示されるバブルの最小スピード
+const BUBBLE_PROBABILITY = 0.9; // 表示されるバブルの確率
 
 interface Bubble {
   id: number;
@@ -11,24 +19,14 @@ interface Bubble {
   type: 'circle' | 'star';
 }
 
-const colors = [
-  '#D1F1CC', // baseColor
-  '#F3D1E5', // subColor1
-  '#D5E0F1', // subColor2
-  '#C8EFEA', // subColor3
-  '#EDD0E5', // subColor4
-];
-
 const BackgroundDecoration: React.FC = () => {
   const [bubbles, setBubbles] = useState<Bubble[]>([]);
 
   useEffect(() => {
-    // ウィンドウサイズに基づいてバブルの数を決定
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
-    const bubbleCount = Math.floor((windowWidth * windowHeight) / 40000);
+    const bubbleCount = Math.floor((windowWidth * windowHeight) * BUBBLE_DENSITY);
 
-    // バブルを生成
     const newBubbles: Bubble[] = [];
     for (let i = 0; i < bubbleCount; i++) {
       newBubbles.push(createBubble(i));
@@ -36,11 +34,10 @@ const BackgroundDecoration: React.FC = () => {
 
     setBubbles(newBubbles);
 
-    // リサイズイベントのリスナー
     const handleResize = () => {
       const newWindowWidth = window.innerWidth;
       const newWindowHeight = window.innerHeight;
-      const newBubbleCount = Math.floor((newWindowWidth * newWindowHeight) / 40000);
+      const newBubbleCount = Math.floor((newWindowWidth * newWindowHeight) * BUBBLE_DENSITY);
 
       if (newBubbleCount !== bubbles.length) {
         const updatedBubbles: Bubble[] = [];
@@ -65,16 +62,16 @@ const BackgroundDecoration: React.FC = () => {
   const createBubble = (id: number): Bubble => {
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
-    const size = Math.random() * 60 + 20; // 20px〜80pxのサイズ
+    const size = Math.random() * RANDOM_BUBBLE_SIZE + MIN_BUBBLE_SIZE;
 
     return {
       id,
       size,
       x: Math.random() * windowWidth,
       y: Math.random() * windowHeight,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      speed: Math.random() * 0.5 + 0.1, // 浮遊速度
-      type: Math.random() > 0.7 ? 'star' : 'circle', // 70%の確率で円、30%の確率で星
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      speed: Math.random() * RANDOM_BUBBLE_SPEED + MIN_BUBBLE_SPEED,
+      type: Math.random() > BUBBLE_PROBABILITY ? 'star' : 'circle',
     };
   };
 

@@ -10,6 +10,7 @@ const { post } = Astro.props;
         style={`background-color: ${["var(--base-color)", "var(--sub-color-1)", "var(--sub-color-3)", "var(--sub-color-4)"][Math.floor(Math.random() * 4)]}`}
       >
         <!-- <span class="category-tag">{post.category}</span> -->
+        <img src={post.data.heroImage} alt="" />
       </div>
     </a>
   </div>

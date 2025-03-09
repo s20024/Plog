@@ -1,0 +1,22 @@
+---
+import { getCollection } from "astro:content";
+import PostCard from "../PostCard.astro";
+
+const PREVIEW_LENGTH = 3; // 表示する数
+
+const latestPosts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+).slice(0, PREVIEW_LENGTH);
+---
+
+<div class="latest-posts">
+  {latestPosts.map((post) => <PostCard post={post} />)}
+</div>
+
+<style lang="scss">
+  .latest-posts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+</style>

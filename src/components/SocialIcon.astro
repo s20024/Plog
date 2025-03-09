@@ -1,0 +1,49 @@
+---
+import { GITHUB_URL, INSTAGRAM_URL } from "../consts";
+import IconGithub from "./icon/IconGithub.astro";
+import IconInstagram from "./icon/IconInstagram.astro";
+import IconTwitter from "./icon/IconTwitter.astro";
+
+const { type, link } = Astro.props;
+
+let default_link = '';
+if (type == 'github') {
+  default_link = GITHUB_URL;
+} else if (type == 'instagram') {
+  default_link = INSTAGRAM_URL;
+} else if (type == 'twitter') {
+  default_link = '';
+}
+---
+
+<div class="social-icon">
+  <a href={link ?? default_link} target="_blank" rel="noopener noreferrer" class="social-icon">
+    {
+      (type == 'github') ? <IconGithub /> :
+      (type == 'instagram') ? <IconInstagram /> :
+      (type == 'twitter') ? <IconTwitter /> : ''
+    }
+  </a>
+</div>
+
+<style lang="scss">
+  .social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: var(--sub-color-2);
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+</style>

@@ -1,4 +1,9 @@
 ---
+import IconCode from "../components/icon/IconCode.astro";
+import IconInformation from "../components/icon/IconInformation.astro";
+import IconMemo from "../components/icon/IconMemo.astro";
+import Profile from "../components/Profile.astro";
+import { SITE_TITLE } from "../consts";
 import Layout from "../layouts/BaseLayout.astro";
 ---
 
@@ -9,83 +14,19 @@ import Layout from "../layouts/BaseLayout.astro";
     </div>
 
     <div class="about-container">
-      <div class="profile-section">
-        <div class="profile-image">
-          <div class="image-placeholder"></div>
-        </div>
-        <div class="profile-info">
-          <h2>Cute Blog 管理人</h2>
-          <p class="profile-bio">
-            フロントエンド開発者として活動しています。React、TypeScript、AstroなどのWeb技術が好きで、日々の学びや発見をブログで共有しています。
-          </p>
-          <div class="social-links">
-            <a
-              href="https://github.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="social-icon"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <!-- todo:ここ修正 -->
-              </svg>
-            </a>
-            <a
-              href="#"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="social-icon"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path
-                  d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723 10.1 10.1 0 01-3.127 1.184 4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"
-                ></path>
-              </svg>
-            </a>
-            <a
-              href="#"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="social-icon"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path
-                  d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
-                ></path>
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
+      <Profile />
 
       <div class="about-content">
         <section class="about-section">
           <h2>このブログについて</h2>
           <p>
-            「Cute
-            Blog」は、プログラミングや開発に関する情報を共有するブログサイトです。
+            「{SITE_TITLE}」は、プログラミングや開発に関する情報をただただ発信するブログです。 <br />
             主にフロントエンド開発に関する記事を中心に、日々の学びや発見を発信しています。
           </p>
           <p>
-            明るく、かわいいデザインにこだわり、技術的な内容でも親しみやすく読みやすいブログを目指しています。
-            初心者から上級者まで、様々なレベルの方に役立つ情報を提供できるよう心がけています。
+            明るいデザインし、初心者でも読むのに抵抗のないデザインで作成しています。<br />
+            技術的な内容でも親しみやすく読みやすいブログを目指しています。
+            初心者から上級者まで、様々なレベルの方に役立つ情報を提供できるよう心がけていきます。
           </p>
         </section>
 
@@ -95,88 +36,52 @@ import Layout from "../layouts/BaseLayout.astro";
             <div class="category-item">
               <div
                 class="category-icon"
-                style="background-color: var(--base-color);"
+                style="background-color: var(--base-color); color: white;"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path
-                    d="M20 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zM4 19V5h16l.002 14H4z"
-                  ></path>
-                  <path
-                    d="M9.293 9.293L5.586 13l3.707 3.707 1.414-1.414L8.414 13l2.293-2.293zm5.414 0l-1.414 1.414L15.586 13l-2.293 2.293 1.414 1.414L18.414 13z"
-                  ></path>
-                </svg>
+                <IconCode />
               </div>
               <h3>ブログ</h3>
               <p>
-                プログラミングや開発に関する詳細な記事を公開しています。チュートリアルや解説、ベストプラクティスなどを紹介します。
+                プログラミングや開発に関する記事を書こうと思っています。フロンとメインで、バックエンドも少し触れる予定。
               </p>
             </div>
 
             <div class="category-item">
               <div
                 class="category-icon"
-                style="background-color: var(--sub-color-1);"
+                style="background-color: var(--sub-color-1); color: white;"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path
-                    d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"
-                  ></path>
-                  <path d="M11 11h2v6h-2zm0-4h2v2h-2z"></path>
-                </svg>
+                <IconInformation />
               </div>
               <h3>ニュース</h3>
               <p>
-                プログラミングや開発に関する最新ニュースをお届けします。新しい技術やツール、アップデート情報などを紹介します。
+                個人的ニュースを書こうと思っています。
               </p>
             </div>
 
             <div class="category-item">
               <div
                 class="category-icon"
-                style="background-color: var(--sub-color-3);"
+                style="background-color: var(--sub-color-3); color: white;"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path
-                    d="M19 3H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zm0 16H5V5h14v14z"
-                  ></path>
-                  <path
-                    d="M7 7h1.5v1.5H7zm4 0h1.5v1.5H11zm4 0h1.5v1.5H15zm-8 4h1.5v1.5H7zm4 0h1.5v1.5H11zm4 0h1.5v1.5H15zm-8 4h1.5v1.5H7zm4 0h1.5v1.5H11zm4 0h1.5v1.5H15z"
-                  ></path>
-                </svg>
+                <IconMemo />
               </div>
               <h3>メモ</h3>
               <p>
-                開発に役立つ技術メモやチートシートをまとめています。すぐに参照できる便利な情報を提供します。
+                未実装 <br />
+                個人的に開発に役立つ技術メモやチートシートをまとめていく予定。
               </p>
             </div>
           </div>
         </section>
 
-        <section class="about-section">
+        <!-- <section class="about-section">
           <h2>お問い合わせ</h2>
           <p>
             ブログの内容に関するご質問やご意見、お仕事のご依頼などがありましたら、お気軽にお問い合わせください。
           </p>
           <a href="/contact" class="btn">お問い合わせフォーム</a>
-        </section>
+        </section> -->
       </div>
     </div>
   </div>
@@ -208,81 +113,9 @@ import Layout from "../layouts/BaseLayout.astro";
     margin: 0 auto;
   }
 
-  .profile-section {
-    display: flex;
-    gap: 2rem;
-    background-color: white;
-    border-radius: 16px;
-    padding: 2rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-  }
-
-  .profile-image {
-    flex-shrink: 0;
-
-    .image-placeholder {
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
-      background: linear-gradient(45deg, var(--base-color), var(--sub-color-1));
-      position: relative;
-      overflow: hidden;
-
-      &::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23FFFFFF"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>')
-          center/60% no-repeat;
-        opacity: 0.8;
-      }
-    }
-  }
-
-  .profile-info {
-    flex: 1;
-
-    h2 {
-      font-size: 1.8rem;
-      margin: 0 0 1rem;
-    }
-
-    .profile-bio {
-      margin-bottom: 1.5rem;
-      line-height: 1.6;
-    }
-
-    .social-links {
-      display: flex;
-      gap: 1rem;
-
-      .social-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        background-color: var(--sub-color-2);
-        border-radius: 50%;
-        transition: transform 0.3s ease;
-
-        &:hover {
-          transform: translateY(-3px);
-        }
-
-        svg {
-          width: 20px;
-          height: 20px;
-        }
-      }
-    }
-  }
-
   .about-content {
+    margin-top: 2rem;
+
     .about-section {
       background-color: white;
       border-radius: 16px;
