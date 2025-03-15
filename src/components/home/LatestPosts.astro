@@ -19,4 +19,11 @@ const latestPosts = (await getCollection('blog')).sort(
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
   }
+
+  @media (max-width: 768px) {
+    .latest-posts {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
 </style>
