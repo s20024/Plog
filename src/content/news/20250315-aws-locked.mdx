@@ -1,0 +1,42 @@
+---
+title: 'AWSがロックされてた。。。'
+description: '最近の個人的に利用しているAWSのアカウントがロックされていました。'
+pubDate: '2025/03/15'
+heroImage: ''
+---
+
+### AWSがロックされていました。
+個人的に利用しているAWSがあり、主に勉強をするために利用しているのですが、急に利用できなくなりました。。。  
+
+時の始まりは、CloudFrontの勉強をするために、ディストリビューションを作成仕様とした際、、、
+```shell
+Your account must be verified before you can add new CloudFront resources. To verify your account, please contact AWS Support (https://console.aws.amazon.com/support/home#/) and include this error message.
+```
+![CloudFront](/images/news/20250315-aws-locked/cloudfront.png)
+と言われてしまい利用することができませんでした。  
+
+また、Lambdaを利用しようとしても、
+![Lambda](/images/news/20250315-aws-locked/lambda.png)
+のように表示され利用することが不可能でした。
+
+
+### 対応として、、、
+上記記載されている[サポート](https://console.aws.amazon.com/support/home#)からサポートを依頼しました。  
+
+お問い合わせは下記のような設定で作成しました。  
+・ケースタイプ: アカウント  
+・緊急度: 一般的な質問  
+・カテゴリー: アカウント, その他アカウントに関する問題  
+・言語: 日本語  
+併せて、CloudFrontが利用できないということと、上記エラーの画像を添付して送信しました。
+
+返答は意外と早くて、2日後には対応内容とロック原因の内容が返答されました。対応内容は結構細かく書かれており何をしたらいいかわかりやすかったです。  
+その後、数回のやり取りで無事、ロックを解除していただくことができました。  
+  
+#### 全体的にかかった時間は1週間ほどでした。  
+　　※4日は自分が放置していました。ちゃんと素早くすると4日程度で解決できると思います。
+
+#### ちなみに。。。
+原因は、AWSが不正利用されているかもしれない。という内容のサポートを自分が放置して、数か月立ったからロックをしてくれたようです。  
+AWSさん。すいませんでした。ありがとうございます。今後は気を付けます。。。  
+　　※不正利用のログインは自分自身でした。一安心でした。
