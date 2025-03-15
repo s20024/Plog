@@ -1,0 +1,214 @@
+---
+title: 'Laravel11にてメンテナンスモードをカスタムしてみた。'
+description: 'Laravel11のメンテナンスモードを可能な限りデフォルトの動作を残しつつカスタムしてみた。'
+pubDate: '2025/03/15'
+heroImage: '/images/blog/20250315-laravel-maintenance/Laravel_x_Maintenance.png'
+categories: []
+tags: ['Laravel', 'Laravel11', 'Maintenance', 'MaintenanceMode']
+---
+
+## Laravel11のメンテナンスモードをカスタムしてみました。
+追加したい機能として、
+- IPの許可
+  - デフォルト値の設定
+  - メンテナンス開始時に追加
+- 除外パスの設定
+  - メンテナンス開始時に追加
+- 開始時間の設定
+  - メンテナンス開始時に指定
+- 返却値の変更(jsonにて返却したい場合)
+  - デフォルト値の設定
+の4つを追加します。
+
+
+### Downコマンドのカスタム作成
+`php artisan down`にてLaravelではメンテナンスモードに移行することができますが、そのコマンドをカスタムして利用します。
+```php
+// app/Console/Commands/CustomDownCommand.php
+<?php
+
+namespace App\Console\Commands;
+
+use Illuminate\Foundation\Console\DownCommand;
+
+class CustomDonwCommand extends DownCommand
+{
+    protected $signature = 'down
+                {--redirect= : The path that users should be redirected to}
+                {--render= : The view that should be prerendered for display during maintenance mode}
+                {--retry= : The number of seconds after which the request may be retried}
+                {--refresh= : The number of seconds after which the browser may refresh}
+                {--secret= : The secret phrase that may be used to bypass maintenance mode}
+                {--with-secret : Generate a random secret phrase that may be used to bypass maintenance mode}
+                {--status=503 : The status code that should be used when returning the maintenance mode response}
+
+                {--allow-ips=* : The IP addresses that are allowed to access the application while maintenance mode is enabled}
+                {--exclude-paths=* : The paths that should be excluded from maintenance mode}
+                {--start-time= : The Unix timestamp when maintenance mode should start}
+    ';
+
+    public function handle()
+    {
+        parent::handle();
+    }
+
+    protected function getDownFilePayload()
+    {
+        return [
+            ...parent::getDownFilePayload(),
+            'allow_ips' => $this->option('allow-ips') ?? [],
+            'exclude_paths' => $this->option('exclude-paths') ?? [],
+            'start_time' => $this->option('start-time') ?? null,
+        ];
+    }
+}
+```
+上記作成したカスタムコマンドをAppServiceProviderのregisterで追加する。
+```php
+// app/Providers/AppServiceProvider.php
+use App\Console\Commands\CustomDonwCommand;
+// some code...
+    public function register(): void
+    {
+        // $this->app->extend(DownCommand::class, fn() => new CustomDonwCommand);
+        $this->commands(CustomDonwCommand::class);
+    }
+```
+
+### メンテナンスモードのカスタム作成
+Laravel11では、`PreventRequestsDuringMaintenance`にてメンテナンスモードの判定しているようです。
+
+```php
+// app/Http/Middleware/CustomPreventRequestsDuringMaintenance.php
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Config;
+
+class CustomPreventRequestsDuringMaintenance extends PreventRequestsDuringMaintenance
+{
+    protected $customExcepts = [];
+
+    public function handle($request, Closure $next)
+    {
+        if ($this->app->maintenanceMode()->active()) {
+            $maintenanceData = $this->app->maintenanceMode()->data();
+
+            // 許可IPの確認
+            $allowedIps = array_merge((@$maintenanceData['allow_ips'] ?? []), Config::get('app.maintenance.allow_ips', []));
+            if (in_array($request->ip(), $allowedIps)) {
+                return $next($request);
+            }
+
+            // 開始時間の確認
+            $startTime = @$maintenanceData['start_time'] ?? null;
+            if ($startTime && $startTime > time()) {
+                return $next($request);
+            }
+
+            // 除外パスの確認
+            $this->customExcepts = array_merge((@$maintenanceData['exclude_paths'] ?? []), Config::get('app.maintenance.exclude_paths', []));
+
+            try {
+                // デフォルトを呼び出す
+                $result = parent::handle($request, $next);
+
+                // 正常処理orscretパスの場合はそのまま返却 // todo: templateのresponseはどうにかしよう。。。w
+                if ($result instanceof Response || $request->path() === $maintenanceData['secret']) {
+                    return $result;
+                }
+
+                // メンテナンス中の場合はカスタムレスポンスを返却
+                $checkResponseJsons = $this->checkMaintenanceResponseJsons($request);
+                if ($checkResponseJsons) {
+                    return $checkResponseJsons;
+                }
+
+                return $result;
+            } catch (\Throwable $e) {
+                // メンテナンス中の場合はカスタムレスポンスを返却
+                $checkResponseJsons = $this->checkMaintenanceResponseJsons($request);
+                if ($checkResponseJsons) {
+                    return $checkResponseJsons;
+                }
+
+                throw $e;
+            }
+        }
+
+        return $next($request);
+    }
+
+    public function checkMaintenanceResponseJsons($request)
+    {
+        // 返却ステータスの確認
+        $responseJsons = Config::get('app.maintenance.response_jsons', []);
+        foreach ($responseJsons as $pattern => $response) {
+            $pattern = ($pattern === '/') ? $pattern : trim($pattern, '/');
+            if ($request->is($pattern)) {
+                return response()->json($response['json'], $response['status']);
+            }
+        }
+        return false;
+    }
+
+    public function getExcludedPaths()
+    {
+        return array_merge($this->except, static::$neverPrevent, $this->customExcepts);
+    }
+}
+```
+上記作成したMiddlewareを`bootstrap/app.php`にてセットする。
+```php
+// bootstrap/app.php
+// some code...
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware
+            // ->preventRequestsDuringMaintenance(['/api/*'])
+            ->replace(PreventRequestsDuringMaintenance::class, CustomPreventRequestsDuringMaintenance::class); // メンテナンスをカスタムに変更
+    })
+```
+
+### Configの編集
+```php
+// config/app.php
+// some code...
+    'maintenance' => [
+        'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
+        'store' => env('APP_MAINTENANCE_STORE', 'database'),
+
+        'allow_ips' => [
+            // 'XXX.XXX.XXX.XXX',
+        ],
+        'exclude_paths' => [
+            // '/api/*',
+        ],
+
+        'response_jsons' => [
+            '/api/*' => [
+                'status' => 200,
+                'json' => [
+                    'message' => 'maintenance now.',
+                ],
+            ],
+        ],
+    ],
+```
+
+
+## まとめ。。
+上記により、Laravelのメンテナンス開始時に、デフォルトのオプションに加え`--allow-ips`,`--exclude-paths`,`--start-time`の3つのオプションを追加することができます。  
+```shell
+php artisan down --allow-ips=0.0.0.0 # 0.0.0.0からのアクセスはメンテナンスモードに引っかからないようにする
+php artisan down --exclude-paths=/api/login # /api/loginのアクセスはメンテナンスモードに引っかからないようにする
+php artisan down --start-time=1742050800 # 日本時間(2025/03/15 15:00:00)からメンテナンスモードが開始される
+```
+その他、Jsonの返却値や、デフォルトの許可IP等は、`config/app.php`に記載することで対応が可能になります。
+
+#### この記事を書いて思ったこと。
+めちゃめちゃ雑な記事w  
+自分のメモ用のPlogなので、、、、許してください。  
