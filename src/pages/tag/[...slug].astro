@@ -22,6 +22,11 @@ export async function getStaticPaths() {
 
 <BaseLayout title={`tag-${tag}`}>
   <div class="container">
+    <div class="page-header">
+      <h1>{tag}</h1>
+      <p>「{tag}」タグがセットされている記事などの一覧です。</p>
+    </div>
+
     <section class="featured-section">
       <h2 class="section-title">Plog</h2>
       <Plogs type="tag" tag={tag} />
@@ -42,6 +47,25 @@ export async function getStaticPaths() {
 </BaseLayout>
 
 <style lang="scss">
+  .page-header {
+    text-align: center;
+    margin: 2rem 0 3rem;
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(45deg, var(--base-color), var(--sub-color-1), var(--sub-color-4));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+    }
+
+    p {
+      font-size: 1.2rem;
+      opacity: 0.8;
+    }
+  }
   .section-title {
     position: relative;
     display: inline-block;
