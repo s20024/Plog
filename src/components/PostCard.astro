@@ -27,20 +27,18 @@ const { post } = Astro.props;
           })
         }</span
       >
-      <!-- {
-        post.tags && (
+      {
+        post.data.tags && (
           <div class="post-tags">
-            {post.tags.slice(0, 2).map((tag) => (
+            {post.data.tags.slice(0, 2).map((tag: string) => (
               <a href={`/tag/${tag.toLowerCase()}`} class="tag">
                 {tag}
               </a>
             ))}
-            {post.tags.length > 2 && (
-              <span class="more-tags">+{post.tags.length - 2}</span>
-            )}
+            {post.data.tags.length > 2 && <span class="more-tags">+{post.data.tags.length - 2}</span>}
           </div>
         )
-      } -->
+      }
     </div>
     <p class="post-excerpt">{post.data.description}</p>
     <a href={`/plog/${post.id}`} class="read-more">続きを読む →</a>

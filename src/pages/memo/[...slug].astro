@@ -16,7 +16,6 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<'memo'>;
 
 const memo = Astro.props;
-const tags = memo.data.tags;
 const { Content } = await render(memo);
 ---
 
@@ -35,17 +34,15 @@ const { Content } = await render(memo);
               })
             }
           </time>
-          {
-            tags && (
-              <div class="post-tags">
-                {tags.map((tag: string) => (
-                  <a href={`/tag/${tag.toLowerCase()}`} class="tag">
-                    {tag}
-                  </a>
-                ))}
-              </div>
-            )
-          }
+          <div class="post-tags">
+            {
+              memo.data.tags.map((tag: string) => (
+                <a href={`/tag/${tag.toLowerCase()}`} class="tag">
+                  {tag}
+                </a>
+              ))
+            }
+          </div>
         </div>
       </header>
 

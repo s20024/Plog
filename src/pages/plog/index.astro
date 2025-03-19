@@ -4,8 +4,14 @@ import PostCard from '../../components/PostCard.astro';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('plog')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-// const tags = [...new Set(posts.flatMap((post) => post.tags))];
-const tags: any[] = [];
+const tags: string[] = [];
+posts.map((tagable) => {
+  tagable.data.tags.map((tag) => {
+    if (!tags.includes(tag)) {
+      tags.push(tag);
+    }
+  });
+});
 ---
 
 <Layout title="Plog記事一覧">
@@ -24,14 +30,13 @@ const tags: any[] = [];
         <div class="sidebar-section">
           <h2>タグ</h2>
           <div class="tags-cloud">
-            未実装 - これから実装する？
-            <!-- {
+            {
               tags.map((tag) => (
                 <a href={`/tag/${tag.toLowerCase()}`} class="tag">
                   {tag}
                 </a>
               ))
-            } -->
+            }
           </div>
         </div>
 

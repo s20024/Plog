@@ -1,14 +1,20 @@
 ---
 import { getCollection } from 'astro:content';
 
-const PREVIEW_LENGTH = 6;
+const { type = 'latest', max = -1, tag = '' } = Astro.props;
+let memos = (await getCollection('memo')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const latestMemos = (await getCollection('memo')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, PREVIEW_LENGTH);
+if (type == 'tag') {
+  memos = memos.filter((memo) => memo.data.tags.map((tag) => tag.toLowerCase()).includes(tag));
+}
+if (0 <= max) {
+  memos = memos.slice(0, max);
+}
 ---
 
 <div class="memos-list">
   {
-    latestMemos.map((memo) => (
+    memos.map((memo) => (
       <article class="memo-item">
         <h3 class="memo-title">
           <a href={`/memo/${memo.id}`}>{memo.data.title}</a>

@@ -4,7 +4,7 @@ import Layout from '../../layouts/BaseLayout.astro';
 import { type CollectionEntry, getCollection } from 'astro:content';
 import { render } from 'astro:content';
 import Profile from '../../components/Profile.astro';
-import LatestPlogs from '../../components/LatestPlogs.astro';
+import Plogs from '../../components/Plogs.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('plog');
@@ -44,7 +44,7 @@ const { Content } = await render(post);
                 })
               }
             </time>
-            <!-- <div class="post-tags">
+            <div class="post-tags">
               {
                 post.data.tags.map((tag: string) => (
                   <a href={`/tag/${tag.toLowerCase()}`} class="tag">
@@ -52,7 +52,7 @@ const { Content } = await render(post);
                   </a>
                 ))
               }
-            </div> -->
+            </div>
           </div>
         </header>
 
@@ -85,7 +85,7 @@ const { Content } = await render(post);
 
       <aside class="latest-posts">
         <h2 class="section-title">最新のPlog</h2>
-        <LatestPlogs flow="vertical" />
+        <Plogs flow="vertical" max="3" />
       </aside>
     </div>
   </div>
@@ -139,6 +139,24 @@ const { Content } = await render(post);
     gap: 1.5rem;
     flex-wrap: wrap;
     opacity: 0.8;
+
+    .post-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+
+      .tag {
+        font-size: 0.85rem;
+        background-color: var(--sub-color-3);
+        color: var(--text-color);
+        padding: 0.3rem 0.8rem;
+        border-radius: 50px;
+
+        &:hover {
+          background-color: var(--base-color);
+        }
+      }
+    }
   }
 
   .post-date {

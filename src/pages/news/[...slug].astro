@@ -34,13 +34,15 @@ const { Content } = await render(post);
               })
             }</time
           >
-          <!-- {tags && (
-            <div class="post-tags">
-              {tags.map((tag: string) => (
-                <a href={`/tag/${tag.toLowerCase()}`} class="tag">{tag}</a>
-              ))}
-            </div>
-          )} -->
+          <div class="post-tags">
+            {
+              post.data.tags.map((tag: string) => (
+                <a href={`/tag/${tag.toLowerCase()}`} class="tag">
+                  {tag}
+                </a>
+              ))
+            }
+          </div>
         </div>
       </header>
 

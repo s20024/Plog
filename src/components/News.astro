@@ -1,14 +1,20 @@
 ---
 import { getCollection } from 'astro:content';
 
-const PREVIEW_LENGTH = 6;
+const { type = 'latest', max = -1, tag = '' } = Astro.props;
+let news = (await getCollection('news')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const latestNews = (await getCollection('news')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, PREVIEW_LENGTH);
+if (type == 'tag') {
+  news = news.filter((news) => news.data.tags.map((tag) => tag.toLowerCase()).includes(tag));
+}
+if (0 <= max) {
+  news = news.slice(0, max);
+}
 ---
 
 <div class="news-list">
   {
-    latestNews.map((news) => (
+    news.map((news) => (
       <article class="news-item">
         <div class="news-date">
           <span class="day">{new Date(news.data.pubDate).getDate()}</span>

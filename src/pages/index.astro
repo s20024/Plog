@@ -1,8 +1,8 @@
 ---
 import Layout from '../layouts/BaseLayout.astro';
-import LatestNews from '../components/LatestNews.astro';
-import LatestPlogs from '../components/LatestPlogs.astro';
-import LatestMemos from '../components/LatestMemos.astro';
+import News from '../components/News.astro';
+import Plogs from '../components/Plogs.astro';
+import Memos from '../components/Memos.astro';
 import { SITE_TITLE } from '../consts';
 ---
 
@@ -12,7 +12,7 @@ import { SITE_TITLE } from '../consts';
       <div class="hero-content">
         <h1>Welcome to <span class="gradient-text">{SITE_TITLE}</span></h1>
         <p>
-          s20024のプログへようこそ!!<br />
+          {SITE_TITLE}へようこそ!!<br />
           プログラミングの記事(プログ-Plog)を中心に、最近のつぶやきを書いていきます。<br />
           <b>この右の変な奴治したい。。。。w</b>
         </p>
@@ -30,18 +30,18 @@ import { SITE_TITLE } from '../consts';
 
     <section class="featured-section">
       <h2 class="section-title">最新のPlog</h2>
-      <LatestPlogs />
+      <Plogs max="6" />
     </section>
 
     <div class="two-column-section">
       <section class="news-section">
         <h2 class="section-title">最近の個人的ニュース</h2>
-        <LatestNews />
+        <News max="6" />
       </section>
 
       <section class="memo-section">
         <h2 class="section-title">最近のメモ</h2>
-        <LatestMemos />
+        <Memos max="6" />
       </section>
     </div>
 

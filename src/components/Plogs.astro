@@ -2,15 +2,19 @@
 import { getCollection } from 'astro:content';
 import PostCard from './PostCard.astro';
 
-const PREVIEW_LENGTH = 3; // 表示する数
+const { type = 'latest', max = -1, tag = '', flow = 'horizon' } = Astro.props;
+let plogs = (await getCollection('plog')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const latestPlogs = (await getCollection('plog')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, PREVIEW_LENGTH);
-
-const { flow = 'horizon' } = Astro.props;
+if (type == 'tag') {
+  plogs = plogs.filter((plog) => plog.data.tags.map((tag) => tag.toLowerCase()).includes(tag));
+}
+if (0 <= max) {
+  plogs = plogs.slice(0, max);
+}
 ---
 
 <div class={`latest-plogs ${flow === 'horizon' ? 'horizon' : 'vertical'}`}>
-  {latestPlogs.map((plog) => <PostCard post={plog} />)}
+  {plogs.map((plog) => <PostCard post={plog} />)}
 </div>
 
 <style lang="scss">

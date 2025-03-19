@@ -1,13 +1,15 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import LatestPlogs from '../../components/LatestPlogs.astro';
-import LatestNews from '../../components/LatestNews.astro';
-import LatestMemos from '../../components/LatestMemos.astro';
+import Plogs from '../../components/Plogs.astro';
+import News from '../../components/News.astro';
+import Memos from '../../components/Memos.astro';
+
+const tag = Astro.params.slug;
 
 export async function getStaticPaths() {
   const tags: string[] = [];
-  [...(await getCollection('plog')), ...(await getCollection('memo'))].map((tagable) => {
+  [...(await getCollection('plog')), ...(await getCollection('news')), ...(await getCollection('memo'))].map((tagable) => {
     tagable.data.tags.map((tag) => {
       if (!tags.includes(tag.toLowerCase())) {
         tags.push(tag.toLowerCase());
@@ -16,29 +18,24 @@ export async function getStaticPaths() {
   });
   return tags.map((tag) => ({ params: { slug: tag } }));
 }
-
-const tag = Astro.params.slug;
-const plogs = (await getCollection('plog')).filter((plog) => plog.data.tags.includes(tag));
-const news = []; // (await getCollection('news')).filter((news) => plog.data.tags.includes(tag));
-const memos = (await getCollection('memo')).filter((memo) => memo.data.tags.includes(tag));
 ---
 
 <BaseLayout title={`tag-${tag}`}>
   <div class="container">
     <section class="featured-section">
-      <h2 class="section-title">最新のPlog</h2>
-      <LatestPlogs />
+      <h2 class="section-title">Plog</h2>
+      <Plogs type="tag" tag={tag} />
     </section>
 
     <div class="two-column-section">
       <section class="news-section">
-        <h2 class="section-title">最近の個人的ニュース</h2>
-        <LatestNews />
+        <h2 class="section-title">ニュース</h2>
+        <News type="tag" tag={tag} />
       </section>
 
       <section class="memo-section">
-        <h2 class="section-title">最近のメモ</h2>
-        <LatestMemos />
+        <h2 class="section-title">メモ</h2>
+        <Memos type="tag" tag={tag} />
       </section>
     </div>
   </div>
