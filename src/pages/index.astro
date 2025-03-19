@@ -1,9 +1,9 @@
 ---
-import Layout from "../layouts/BaseLayout.astro";
-import LatestNews from "../components/LatestNews.astro";
-import LatestPlogs from "../components/LatestPlogs.astro";
-// import RecentMemos from "../components/home/RecentMemos.astro";
-import { SITE_TITLE } from "../consts";
+import Layout from '../layouts/BaseLayout.astro';
+import LatestNews from '../components/LatestNews.astro';
+import LatestPlogs from '../components/LatestPlogs.astro';
+import LatestMemos from '../components/LatestMemos.astro';
+import { SITE_TITLE } from '../consts';
 ---
 
 <Layout title={SITE_TITLE}>
@@ -39,18 +39,16 @@ import { SITE_TITLE } from "../consts";
         <LatestNews />
       </section>
 
-      <!-- <section class="memo-section">
+      <section class="memo-section">
         <h2 class="section-title">最近のメモ</h2>
-        <RecentMemos />
-      </section> -->
+        <LatestMemos />
+      </section>
     </div>
 
     <!-- <section class="cta-section">
       <div class="cta-content">
         <h2>ブログの更新をお知らせします</h2>
-        <p>
-          メールアドレスを登録して、最新の記事やニュースをいち早くお届けします。
-        </p>
+        <p>メールアドレスを登録して、最新の記事やニュースをいち早くお届けします。</p>
         <form class="subscribe-form">
           <input type="email" placeholder="メールアドレス" required />
           <button type="submit" class="btn">登録する</button>
@@ -75,12 +73,7 @@ import { SITE_TITLE } from "../consts";
         line-height: 1.2;
 
         .gradient-text {
-          background: linear-gradient(
-            45deg,
-            var(--base-color),
-            var(--sub-color-1),
-            var(--sub-color-4)
-          );
+          background: linear-gradient(45deg, var(--base-color), var(--sub-color-1), var(--sub-color-4));
           -webkit-background-clip: text;
           background-clip: text;
           color: transparent;
@@ -115,17 +108,13 @@ import { SITE_TITLE } from "../consts";
         .blob {
           width: 300px;
           height: 300px;
-          background: linear-gradient(
-            45deg,
-            var(--base-color),
-            var(--sub-color-3)
-          );
+          background: linear-gradient(45deg, var(--base-color), var(--sub-color-3));
           border-radius: 60% 40% 70% 30% / 60% 30% 70% 40%;
           animation: blob-animation 8s ease-in-out infinite;
           position: relative;
 
           &::before {
-            content: "";
+            content: '';
             position: absolute;
             top: 50%;
             left: 50%;
@@ -138,18 +127,14 @@ import { SITE_TITLE } from "../consts";
           }
 
           &::after {
-            content: "";
+            content: '';
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 70%;
             height: 70%;
-            background: linear-gradient(
-              45deg,
-              var(--sub-color-1),
-              var(--sub-color-4)
-            );
+            background: linear-gradient(45deg, var(--sub-color-1), var(--sub-color-4));
             border-radius: 60% 40% 70% 30% / 60% 30% 70% 40%;
             animation: blob-animation 8s ease-in-out infinite;
           }
@@ -183,7 +168,7 @@ import { SITE_TITLE } from "../consts";
     font-size: 1.8rem;
 
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       bottom: -10px;
       left: 0;

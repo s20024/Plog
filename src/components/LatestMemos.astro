@@ -1,54 +1,28 @@
 ---
-// 仮のデータ（実際の実装ではMDXファイルからデータを取得します）
-const recentMemos = [
-  {
-    id: 1,
-    title: "useEffectの依存配列について",
-    date: "2025-03-17",
-    slug: "useeffect-dependency-array",
-    tags: ["React", "Hooks"],
-  },
-  {
-    id: 2,
-    title: "SCSSのミックスイン集",
-    date: "2025-03-15",
-    slug: "scss-mixins-collection",
-    tags: ["SCSS", "CSS"],
-  },
-  {
-    id: 3,
-    title: "TypeScriptの型定義テクニック",
-    date: "2025-03-13",
-    slug: "typescript-type-definition-techniques",
-    tags: ["TypeScript"],
-  },
-  {
-    id: 4,
-    title: "Astroのデータフェッチング",
-    date: "2025-03-11",
-    slug: "astro-data-fetching",
-    tags: ["Astro", "API"],
-  },
-];
+import { getCollection } from 'astro:content';
+
+const PREVIEW_LENGTH = 6;
+
+const latestMemos = (await getCollection('memo')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, PREVIEW_LENGTH);
 ---
 
 <div class="memos-list">
   {
-    recentMemos.map((memo) => (
+    latestMemos.map((memo) => (
       <article class="memo-item">
         <h3 class="memo-title">
-          <a href={`/memo/${memo.slug}`}>{memo.title}</a>
+          <a href={`/memo/${memo.id}`}>{memo.data.title}</a>
         </h3>
         <div class="memo-meta">
           <span class="memo-date">
-            {new Date(memo.date).toLocaleDateString("ja-JP", {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
+            {new Date(memo.data.pubDate).toLocaleDateString('ja-JP', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
             })}
           </span>
           <div class="memo-tags">
-            {memo.tags.map((tag) => (
+            {memo.data.tags.map((tag) => (
               <a href={`/tags/${tag.toLowerCase()}`} class="tag">
                 {tag}
               </a>
