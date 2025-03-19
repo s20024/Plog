@@ -2,6 +2,9 @@
 export const SITE_TITLE = 's20024\'s Plog';
 export const SITE_DESCRIPTION = 'プログラミングの学習記録を残すブログです。';
 
+export const PLOGGER = 's20024';
+export const PLOGGER_NAME = 'やら';
+
 export const COLORS = [
   '#D1F1CC',
   '#F3D1E5',
