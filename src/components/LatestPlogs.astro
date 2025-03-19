@@ -1,0 +1,39 @@
+---
+import { getCollection } from "astro:content";
+import PostCard from "./PostCard.astro";
+
+const PREVIEW_LENGTH = 3; // 表示する数
+
+const latestPlogs = (await getCollection('plog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+).slice(0, PREVIEW_LENGTH);
+
+const { flow = "horizon" } = Astro.props;
+---
+
+<div class={`latest-plogs ${flow === "horizon" ? "horizon" : "vertical"}`}>
+  {latestPlogs.map((plog) => <PostCard post={plog} />)}
+</div>
+
+<style lang="scss">
+  .latest-plogs {
+    display: grid;
+    gap: 2rem;
+
+    &.horizon {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    &.vertical {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .latest-plogs.horizon {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+</style>

@@ -3,7 +3,7 @@ import Layout from "../../layouts/BaseLayout.astro";
 import PostCard from "../../components/PostCard.astro";
 import { getCollection } from "astro:content";
 
-const posts = (await getCollection('blog')).sort(
+const posts = (await getCollection('plog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 // const categories = [...new Set(posts.map((post) => post.category))];
@@ -12,14 +12,14 @@ const categories: any[] = [];
 const tags: any[] = [];
 ---
 
-<Layout title="ブログ記事一覧">
+<Layout title="Plog記事一覧">
   <div class="container">
     <div class="page-header">
-      <h1>ブログ記事</h1>
-      <p>プログラミングや開発に関する記事を公開しています。</p>
+      <h1>Plog記事</h1>
+      <p>プログラミングや開発に関する記事を書いています。</p>
     </div>
 
-    <div class="blog-layout">
+    <div class="plog-layout">
       <div class="posts-container">
         {posts.map((post) => <PostCard post={post} />)}
       </div>
@@ -92,7 +92,7 @@ const tags: any[] = [];
     }
   }
 
-  .blog-layout {
+  .plog-layout {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 2rem;
@@ -177,7 +177,7 @@ const tags: any[] = [];
   }
 
   @media (max-width: 992px) {
-    .blog-layout {
+    .plog-layout {
       grid-template-columns: 1fr;
     }
 

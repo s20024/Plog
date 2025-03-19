@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/BaseLayout.astro";
-import LatestNews from "../components/home/LatestNews.astro";
-import FeaturedPosts from "../components/home/LatestPosts.astro";
+import LatestNews from "../components/LatestNews.astro";
+import LatestPlogs from "../components/LatestPlogs.astro";
 // import RecentMemos from "../components/home/RecentMemos.astro";
 import { SITE_TITLE } from "../consts";
 ---
@@ -17,7 +17,7 @@ import { SITE_TITLE } from "../consts";
           <b>この右の変な奴治したい。。。。w</b>
         </p>
         <div class="hero-buttons">
-          <a href="/blog" class="btn">プログを見る</a>
+          <a href="/plog" class="btn">プログを見る</a>
           <a href="/about" class="btn btn-secondary">プロフィール</a>
         </div>
       </div>
@@ -29,8 +29,8 @@ import { SITE_TITLE } from "../consts";
     </section>
 
     <section class="featured-section">
-      <h2 class="section-title">最新のProg</h2>
-      <FeaturedPosts />
+      <h2 class="section-title">最新のPlog</h2>
+      <LatestPlogs />
     </section>
 
     <div class="two-column-section">

@@ -4,9 +4,10 @@ import Layout from "../../layouts/BaseLayout.astro";
 import { type CollectionEntry, getCollection } from 'astro:content';
 import { render } from 'astro:content';
 import Profile from "../../components/Profile.astro";
+import LatestPlogs from "../../components/LatestPlogs.astro";
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
+  const posts = await getCollection('plog');
   return posts.map((post, index) => {
     const prevPost = index > 0 ? posts[index - 1] : null;
     const nextPost = index < posts.length - 1 ? posts[index + 1] : null;
@@ -18,75 +19,85 @@ export async function getStaticPaths() {
 }
 
 type Props = {
-  post: CollectionEntry<'blog'>;
-  prevPost: CollectionEntry<'blog'> | null;
-  nextPost: CollectionEntry<'blog'> | null;
+  post: CollectionEntry<'plog'>;
+  prevPost: CollectionEntry<'plog'> | null;
+  nextPost: CollectionEntry<'plog'> | null;
 };
 
 const { post, prevPost, nextPost } = Astro.props;
 const { Content } = await render(post);
 ---
 
-<Layout title={`${post.data.title} - Cute Blog`}>
+<Layout title={`${post.data.title} - Cute Plog`}>
   <div class="container">
-    <article class="post-container">
-      <header class="post-header">
-        <!-- <div class="post-category">{category}</div> -->
-        <h1 class="post-title">{post.data.title}</h1>
-        <div class="post-meta">
-          <time class="post-date"
-            >{
-              new Date(post.data.pubDate).toLocaleDateString("ja-JP", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })
-            }</time
-          >
-          <!-- {
-            tags && (
-              <div class="post-tags">
-                {tags.map((tag: string) => (
-                  <a href={`/tags/${tag.toLowerCase()}`} class="tag">
-                    {tag}
-                  </a>
-                ))}
-              </div>
-            )
-          } -->
-        </div>
-      </header>
+    <div class="content-layout">
+      <article class="post-container">
+        <header class="post-header">
+          <!-- <div class="post-category">{category}</div> -->
+          <h1 class="post-title">{post.data.title}</h1>
+          <div class="post-meta">
+            <time class="post-date"
+              >{
+                new Date(post.data.pubDate).toLocaleDateString("ja-JP", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
+              }</time
+            >
+            <!-- {
+              tags && (
+                <div class="post-tags">
+                  {tags.map((tag: string) => (
+                    <a href={`/tags/${tag.toLowerCase()}`} class="tag">
+                      {tag}
+                    </a>
+                  ))}
+                </div>
+              ))
+            } -->
+          </div>
+        </header>
 
-      <div class="post-content markdown-body" data-color-mode="light" data-light-theme="light">
-        <Content />
-      </div>
-
-      <footer class="post-footer">
-
-        <div class="post-navigation">
-          {prevPost && (
-            <a href={`/blog/${prevPost.id}`} class="prev-post">
-              <span>前の記事</span>
-              <p>{prevPost.data.title}</p>
-            </a>
-          )}
-          {nextPost && (
-            <a href={`/blog/${nextPost.id}`} class="next-post">
-              <span>次の記事</span>
-              <p>{nextPost.data.title}</p>
-            </a>
-          )}
+        <div class="post-content markdown-body" data-color-mode="light" data-light-theme="light">
+          <Content />
         </div>
 
-        <Profile />
+        <footer class="post-footer">
+          <div class="post-navigation">
+            {prevPost && (
+              <a href={`/plog/${prevPost.id}`} class="prev-post">
+                <span>前の記事</span>
+                <p>{prevPost.data.title}</p>
+              </a>
+            )}
+            {nextPost && (
+              <a href={`/plog/${nextPost.id}`} class="next-post">
+                <span>次の記事</span>
+                <p>{nextPost.data.title}</p>
+              </a>
+            )}
+          </div>
+          <Profile />
+        </footer>
+      </article>
 
-      </footer>
-    </article>
+      <aside class="latest-posts">
+        <h2 class="section-title">最新のPlog</h2>
+        <LatestPlogs flow="vertical" />
+      </aside>
+    </div>
   </div>
 </Layout>
 
 <style lang="scss">
+  .content-layout {
+    display: flex;
+    gap: 2rem;
+  }
+
   .post-container {
+    flex: 3;
     max-width: 800px;
     margin: 2rem auto;
     background-color: rgba(255, 255, 255, 0.95);
@@ -94,6 +105,12 @@ const { Content } = await render(post);
     overflow: hidden;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
     transition: transform 0.2s ease;
+  }
+
+  .latest-posts {
+    margin: 2rem auto;
+    max-width: 300px;
+    flex: 1;
   }
 
   .post-header {
@@ -180,6 +197,14 @@ const { Content } = await render(post);
   }
 
   @media (max-width: 768px) {
+    .content-layout {
+      flex-direction: column;
+    }
+
+    .latest-posts {
+      max-width: 100%;
+    }
+
     .post-header {
       padding: 1.5rem 1.5rem 1rem;
     }

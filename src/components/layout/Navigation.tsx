@@ -13,7 +13,7 @@ const Navigation: React.FC = () => {
       <div className="desktop-nav">
         <ul>
           <li><a href="/">ホーム</a></li>
-          <li><a href="/blog">ブログ</a></li>
+          <li><a href="/plog">プログ</a></li>
           <li><a href="/news">ニュース</a></li>
           {/* <li><a href="/memo">メモ</a></li> */}
           <li><a href="/about">プロフィール</a></li>
@@ -30,7 +30,7 @@ const Navigation: React.FC = () => {
         <div className={`mobile-menu ${isMenuOpen ? 'active' : ''}`}>
           <ul>
             <li><a href="/" onClick={toggleMenu}>ホーム</a></li>
-            <li><a href="/blog" onClick={toggleMenu}>ブログ</a></li>
+            <li><a href="/plog" onClick={toggleMenu}>プログ</a></li>
             <li><a href="/news" onClick={toggleMenu}>ニュース</a></li>
             {/* <li><a href="/memo" onClick={toggleMenu}>メモ</a></li> */}
             <li><a href="/about" onClick={toggleMenu}>プロフィール</a></li>
