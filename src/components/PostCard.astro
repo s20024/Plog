@@ -7,9 +7,8 @@ const { post } = Astro.props;
     <a href={`/plog/${post.id}`}>
       <div
         class="image-placeholder"
-        style={`background-color: ${["var(--base-color)", "var(--sub-color-1)", "var(--sub-color-3)", "var(--sub-color-4)"][Math.floor(Math.random() * 4)]}`}
+        style={`background-color: ${['var(--base-color)', 'var(--sub-color-1)', 'var(--sub-color-3)', 'var(--sub-color-4)'][Math.floor(Math.random() * 4)]}`}
       >
-        <!-- <span class="category-tag">{post.category}</span> -->
         <img src={post.data.heroImage} alt="" />
       </div>
     </a>
@@ -21,10 +20,10 @@ const { post } = Astro.props;
     <div class="post-meta">
       <span class="post-date"
         >{
-          new Date(post.data.pubDate).toLocaleDateString("ja-JP", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
+          new Date(post.data.pubDate).toLocaleDateString('ja-JP', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
           })
         }</span
       >
@@ -66,7 +65,6 @@ const { post } = Astro.props;
   }
 
   .post-image {
-    // height: 200px;
     overflow: hidden;
 
     a {

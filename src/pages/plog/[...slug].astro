@@ -1,10 +1,10 @@
 ---
-import "github-markdown-css/github-markdown-light.css";
-import Layout from "../../layouts/BaseLayout.astro";
+import 'github-markdown-css/github-markdown-light.css';
+import Layout from '../../layouts/BaseLayout.astro';
 import { type CollectionEntry, getCollection } from 'astro:content';
 import { render } from 'astro:content';
-import Profile from "../../components/Profile.astro";
-import LatestPlogs from "../../components/LatestPlogs.astro";
+import Profile from '../../components/Profile.astro';
+import LatestPlogs from '../../components/LatestPlogs.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('plog');
@@ -33,15 +33,14 @@ const { Content } = await render(post);
     <div class="content-layout">
       <article class="post-container">
         <header class="post-header">
-          <!-- <div class="post-category">{category}</div> -->
           <h1 class="post-title">{post.data.title}</h1>
           <div class="post-meta">
             <time class="post-date"
               >{
-                new Date(post.data.pubDate).toLocaleDateString("ja-JP", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
+                new Date(post.data.pubDate).toLocaleDateString('ja-JP', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
                 })
               }</time
             >
@@ -59,24 +58,32 @@ const { Content } = await render(post);
           </div>
         </header>
 
-        <div class="post-content markdown-body" data-color-mode="light" data-light-theme="light">
+        <div
+          class="post-content markdown-body"
+          data-color-mode="light"
+          data-light-theme="light"
+        >
           <Content />
         </div>
 
         <footer class="post-footer">
           <div class="post-navigation">
-            {prevPost && (
-              <a href={`/plog/${prevPost.id}`} class="prev-post">
-                <span>前の記事</span>
-                <p>{prevPost.data.title}</p>
-              </a>
-            )}
-            {nextPost && (
-              <a href={`/plog/${nextPost.id}`} class="next-post">
-                <span>次の記事</span>
-                <p>{nextPost.data.title}</p>
-              </a>
-            )}
+            {
+              prevPost && (
+                <a href={`/plog/${prevPost.id}`} class="prev-post">
+                  <span>前の記事</span>
+                  <p>{prevPost.data.title}</p>
+                </a>
+              )
+            }
+            {
+              nextPost && (
+                <a href={`/plog/${nextPost.id}`} class="next-post">
+                  <span>次の記事</span>
+                  <p>{nextPost.data.title}</p>
+                </a>
+              )
+            }
           </div>
           <Profile />
         </footer>
@@ -117,7 +124,11 @@ const { Content } = await render(post);
     padding: 3rem 2.5rem 2rem;
     text-align: center;
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-    background: linear-gradient(to bottom, rgba(var(--base-color-rgb), 0.05), transparent);
+    background: linear-gradient(
+      to bottom,
+      rgba(var(--base-color-rgb), 0.05),
+      transparent
+    );
   }
 
   .post-title {

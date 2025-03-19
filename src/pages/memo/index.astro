@@ -1,76 +1,10 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../../layouts/BaseLayout.astro';
 
-// 仮のデータ（実際の実装ではMDXファイルからデータを取得します）
-const memos = [
-  {
-    id: 1,
-    title: "useEffectの依存配列について",
-    content: "ReactのuseEffect hookで依存配列を正しく設定する方法と、よくある間違いについてのメモです。無限ループを防ぐためのベストプラクティスも紹介します。",
-    date: "2025-03-17",
-    slug: "useeffect-dependency-array",
-    tags: ["React", "Hooks"]
-  },
-  {
-    id: 2,
-    title: "SCSSのミックスイン集",
-    content: "よく使うSCSSのミックスインをまとめました。レスポンシブデザイン、フレックスボックス、グリッドレイアウト、アニメーションなど、再利用可能なミックスインのコレクションです。",
-    date: "2025-03-15",
-    slug: "scss-mixins-collection",
-    tags: ["SCSS", "CSS"]
-  },
-  {
-    id: 3,
-    title: "TypeScriptの型定義テクニック",
-    content: "TypeScriptで複雑な型を定義するテクニックをまとめました。ユーティリティ型、条件付き型、マッピング型などの高度な型システムの活用方法を解説します。",
-    date: "2025-03-13",
-    slug: "typescript-type-definition-techniques",
-    tags: ["TypeScript"]
-  },
-  {
-    id: 4,
-    title: "Astroのデータフェッチング",
-    content: "Astroでのデータフェッチング方法をまとめました。静的生成時のデータ取得、クライアントサイドでのフェッチング、APIルートの作成など、様々なアプローチを紹介します。",
-    date: "2025-03-11",
-    slug: "astro-data-fetching",
-    tags: ["Astro", "API"]
-  },
-  {
-    id: 5,
-    title: "GitHubActions便利なワークフロー",
-    content: "GitHubActionsで使える便利なワークフローをまとめました。CI/CD、自動テスト、デプロイ、依存関係の更新など、開発効率を上げるための設定例を紹介します。",
-    date: "2025-03-09",
-    slug: "github-actions-useful-workflows",
-    tags: ["GitHub", "CI/CD"]
-  },
-  {
-    id: 6,
-    title: "JavaScriptのパフォーマンス最適化",
-    content: "JavaScriptのパフォーマンスを最適化するためのテクニックをまとめました。メモ化、遅延読み込み、仮想化リスト、Webワーカーの活用など、実践的な方法を紹介します。",
-    date: "2025-03-07",
-    slug: "javascript-performance-optimization",
-    tags: ["JavaScript", "パフォーマンス"]
-  },
-  {
-    id: 7,
-    title: "アクセシビリティチェックリスト",
-    content: "Webサイトのアクセシビリティを向上させるためのチェックリストです。セマンティックHTML、キーボードナビゲーション、スクリーンリーダー対応など、重要なポイントをまとめました。",
-    date: "2025-03-05",
-    slug: "accessibility-checklist",
-    tags: ["アクセシビリティ", "HTML"]
-  },
-  {
-    id: 8,
-    title: "CSSアニメーションのパフォーマンス",
-    content: "CSSアニメーションのパフォーマンスを最適化するためのテクニックをまとめました。transformとopacityの活用、will-changeプロパティ、アニメーションの最適化方法などを紹介します。",
-    date: "2025-03-03",
-    slug: "css-animation-performance",
-    tags: ["CSS", "アニメーション", "パフォーマンス"]
-  }
-];
-
-// タグの一覧を取得
-const allTags = [...new Set(memos.flatMap(memo => memo.tags))];
+const memos = (await getCollection('memo')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
 ---
 
 <Layout title="メモ一覧">
@@ -79,36 +13,37 @@ const allTags = [...new Set(memos.flatMap(memo => memo.tags))];
       <h1>メモ</h1>
       <p>開発に役立つ技術メモやチートシートをまとめています。</p>
     </div>
-    
-    <div class="memo-layout">
-      <div class="tags-filter">
-        <h2>タグで絞り込む</h2>
-        <div class="tags-cloud">
-          {allTags.map(tag => (
-            <a href={`/tags/${tag.toLowerCase()}`} class="tag">{tag}</a>
-          ))}
-        </div>
-      </div>
-      
-      <div class="memos-container">
-        {memos.map(memo => (
+
+    <div class="memos-container">
+      {
+        memos.map((memo) => (
           <article class="memo-card">
             <h2 class="memo-title">
-              <a href={`/memo/${memo.slug}`}>{memo.title}</a>
+              <a href={`/memo/${memo.id}`}>{memo.data.title}</a>
             </h2>
             <div class="memo-meta">
-              <span class="memo-date">{new Date(memo.date).toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+              <span class="memo-date">
+                {new Date(memo.data.pubDate).toLocaleDateString('ja-JP', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </span>
               <div class="memo-tags">
-                {memo.tags.map(tag => (
-                  <a href={`/tags/${tag.toLowerCase()}`} class="tag">{tag}</a>
+                {memo.data.tags.map((tag) => (
+                  <a href={`/tags/${tag.toLowerCase()}`} class="tag">
+                    {tag}
+                  </a>
                 ))}
               </div>
             </div>
-            <p class="memo-excerpt">{memo.content}</p>
-            <a href={`/memo/${memo.slug}`} class="read-more">続きを読む →</a>
+            <p class="memo-excerpt">{memo.data.description}</p>
+            <a href={`/memo/${memo.id}`} class="read-more">
+              続きを読む →
+            </a>
           </article>
-        ))}
-      </div>
+        ))
+      }
     </div>
   </div>
 </Layout>
@@ -117,93 +52,100 @@ const allTags = [...new Set(memos.flatMap(memo => memo.tags))];
   .page-header {
     text-align: center;
     margin: 2rem 0 3rem;
-    
+
     h1 {
       font-size: 2.5rem;
       margin-bottom: 0.5rem;
-      background: linear-gradient(45deg, var(--base-color), var(--sub-color-1), var(--sub-color-4));
+      background: linear-gradient(
+        45deg,
+        var(--base-color),
+        var(--sub-color-1),
+        var(--sub-color-4)
+      );
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
       display: inline-block;
     }
-    
+
     p {
       font-size: 1.2rem;
       opacity: 0.8;
     }
   }
-  
+
   .memo-layout {
     display: flex;
     flex-direction: column;
     gap: 2rem;
   }
-  
+
   .tags-filter {
     background-color: white;
     border-radius: 16px;
     padding: 1.5rem;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    
+
     h2 {
       font-size: 1.3rem;
       margin: 0 0 1rem;
     }
-    
+
     .tags-cloud {
       display: flex;
       flex-wrap: wrap;
       gap: 0.8rem;
-      
+
       .tag {
         font-size: 0.9rem;
         background-color: var(--sub-color-3);
         color: var(--text-color);
         padding: 0.4rem 1rem;
         border-radius: 50px;
-        
+
         &:hover {
           background-color: var(--base-color);
         }
       }
     }
   }
-  
+
   .memos-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
   }
-  
+
   .memo-card {
     background-color: white;
     border-radius: 16px;
     padding: 1.5rem;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+
     &:hover {
       transform: translateY(-5px);
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     }
   }
-  
+
   .memo-title {
     font-size: 1.3rem;
     margin: 0 0 0.8rem;
     line-height: 1.4;
-    
+
     a {
       color: var(--text-color);
       text-decoration: none;
-      
+
       &:hover {
         color: var(--base-color);
       }
     }
   }
-  
+
   .memo-meta {
     display: flex;
     justify-content: space-between;
@@ -212,29 +154,29 @@ const allTags = [...new Set(memos.flatMap(memo => memo.tags))];
     flex-wrap: wrap;
     gap: 0.5rem;
   }
-  
+
   .memo-date {
     font-size: 0.85rem;
     color: #666;
   }
-  
+
   .memo-tags {
     display: flex;
     gap: 0.5rem;
-    
+
     .tag {
       font-size: 0.75rem;
       background-color: var(--sub-color-3);
       color: var(--text-color);
       padding: 0.2rem 0.5rem;
       border-radius: 50px;
-      
+
       &:hover {
         background-color: var(--base-color);
       }
     }
   }
-  
+
   .memo-excerpt {
     font-size: 0.95rem;
     margin-bottom: 1.5rem;
@@ -244,17 +186,17 @@ const allTags = [...new Set(memos.flatMap(memo => memo.tags))];
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  
+
   .read-more {
     font-size: 0.9rem;
     font-weight: 600;
     color: var(--text-color);
-    
+
     &:hover {
       color: var(--base-color);
     }
   }
-  
+
   @media (max-width: 992px) {
     .memos-container {
       grid-template-columns: 1fr;

@@ -21,7 +21,9 @@ const Navigation: React.FC = () => {
           <li>
             <a href="/news">ニュース</a>
           </li>
-          {/* <li><a href="/memo">メモ</a></li> */}
+          <li>
+            <a href="/memo">メモ</a>
+          </li>
           <li>
             <a href="/about">プロフィール</a>
           </li>
@@ -55,7 +57,11 @@ const Navigation: React.FC = () => {
                 ニュース
               </a>
             </li>
-            {/* <li><a href="/memo" onClick={toggleMenu}>メモ</a></li> */}
+            <li>
+              <a href="/memo" onClick={toggleMenu}>
+                メモ
+              </a>
+            </li>
             <li>
               <a href="/about" onClick={toggleMenu}>
                 プロフィール

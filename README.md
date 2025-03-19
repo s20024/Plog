@@ -34,3 +34,11 @@ s20024(やら)のプログラミングログです。
 | `npm run preview`         | Preview your build locally, before deploying     |
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
+| `npx prettier --write .`  | Format your code                                 |
+
+## Todoメモ
+
+- `[...slug].astro`の部分のデザイン統一化。
+- `post`なのか`[news|plog|memo]`なのかはっきりさせる
+- `plog`の利用していないデータの削除、データ名の修正
+- Tag機能の追加

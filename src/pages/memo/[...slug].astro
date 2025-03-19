@@ -7,40 +7,45 @@ import { render } from 'astro:content';
 import Profile from '../../components/Profile.astro';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('news');
-  return posts.map((post) => ({
-    params: { slug: post.id },
-    props: post,
+  const memos = await getCollection('memo');
+  return memos.map((memo) => ({
+    params: { slug: memo.id },
+    props: memo,
   }));
 }
-type Props = CollectionEntry<'news'>;
+type Props = CollectionEntry<'memo'>;
 
-const post = Astro.props;
-const { Content } = await render(post);
+const memo = Astro.props;
+const tags = memo.data.tags;
+const { Content } = await render(memo);
 ---
 
-<Layout title={`${post.data.title}`}>
+<Layout title={`${memo.data.title}`}>
   <div class="container">
     <article class="post-container">
       <header class="post-header">
-        <h1 class="post-title">{post.data.title}</h1>
+        <h1 class="post-title">{memo.data.title}</h1>
         <div class="post-meta">
-          <time class="post-date"
-            >{
-              new Date(post.data.pubDate).toLocaleDateString('ja-JP', {
+          <time class="post-date">
+            {
+              new Date(memo.data.pubDate).toLocaleDateString('ja-JP', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
               })
-            }</time
-          >
-          <!-- {tags && (
-            <div class="post-tags">
-              {tags.map((tag: string) => (
-                <a href={`/tags/${tag.toLowerCase()}`} class="tag">{tag}</a>
-              ))}
-            </div>
-          )} -->
+            }
+          </time>
+          {
+            tags && (
+              <div class="post-tags">
+                {tags.map((tag: string) => (
+                  <a href={`/tags/${tag.toLowerCase()}`} class="tag">
+                    {tag}
+                  </a>
+                ))}
+              </div>
+            )
+          }
         </div>
       </header>
 

@@ -1,13 +1,11 @@
 ---
-import Layout from "../../layouts/BaseLayout.astro";
-import PostCard from "../../components/PostCard.astro";
-import { getCollection } from "astro:content";
+import Layout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('plog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
-// const categories = [...new Set(posts.map((post) => post.category))];
-const categories: any[] = [];
 // const tags = [...new Set(posts.flatMap((post) => post.tags))];
 const tags: any[] = [];
 ---
@@ -25,20 +23,6 @@ const tags: any[] = [];
       </div>
 
       <aside class="sidebar">
-        <div class="sidebar-section">
-          <h2>カテゴリー</h2>
-          <ul class="category-list">
-            未実装 - これから実装する？
-            <!-- {
-              categories.map((category) => (
-                <li>
-                  <a href={`/category/${category.toLowerCase()}`}>{category}</a>
-                </li>
-              ))
-            } -->
-          </ul>
-        </div>
-
         <div class="sidebar-section">
           <h2>タグ</h2>
           <div class="tags-cloud">
@@ -119,7 +103,7 @@ const tags: any[] = [];
         display: inline-block;
 
         &::after {
-          content: "";
+          content: '';
           position: absolute;
           bottom: -5px;
           left: 0;
@@ -134,7 +118,6 @@ const tags: any[] = [];
         }
       }
 
-      .category-list,
       .archive-list {
         list-style: none;
         padding: 0;
