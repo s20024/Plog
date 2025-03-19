@@ -1,0 +1,95 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/BaseLayout.astro';
+
+const tags: string[] = [];
+[...(await getCollection('plog')), ...(await getCollection('memo'))].map((tagable) => {
+  tagable.data.tags.map((tag) => {
+    if (!tags.includes(tag)) {
+      tags.push(tag);
+    }
+  });
+});
+---
+
+<Layout title="タグ一覧">
+  <div class="container">
+    <div class="page-header">
+      <h1>タグ一覧</h1>
+      <p>このサイトのタグ一覧です。</p>
+    </div>
+
+    <div>
+      <div class="tags-filter">
+        <h2>タグで絞り込む</h2>
+        <div class="tags-cloud">
+          {
+            tags.map((tag) => (
+              <a href={`/tag/${tag.toLowerCase()}`} class="tag">
+                {tag}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style lang="scss">
+  .page-header {
+    text-align: center;
+    margin: 2rem 0 3rem;
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(45deg, var(--base-color), var(--sub-color-1), var(--sub-color-4));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+    }
+
+    p {
+      font-size: 1.2rem;
+      opacity: 0.8;
+    }
+  }
+
+  .memo-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .tags-filter {
+    background-color: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+
+    h2 {
+      font-size: 1.3rem;
+      margin: 0 0 1rem;
+    }
+
+    .tags-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+
+      .tag {
+        font-size: 0.9rem;
+        background-color: var(--sub-color-3);
+        color: var(--text-color);
+        padding: 0.4rem 1rem;
+        border-radius: 50px;
+
+        &:hover {
+          background-color: var(--base-color);
+        }
+      }
+    }
+  }
+</style>

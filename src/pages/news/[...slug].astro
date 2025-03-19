@@ -37,18 +37,14 @@ const { Content } = await render(post);
           <!-- {tags && (
             <div class="post-tags">
               {tags.map((tag: string) => (
-                <a href={`/tags/${tag.toLowerCase()}`} class="tag">{tag}</a>
+                <a href={`/tag/${tag.toLowerCase()}`} class="tag">{tag}</a>
               ))}
             </div>
           )} -->
         </div>
       </header>
 
-      <div
-        class="post-content markdown-body"
-        data-color-mode="light"
-        data-light-theme="light"
-      >
+      <div class="post-content markdown-body" data-color-mode="light" data-light-theme="light">
         <Content />
       </div>
 

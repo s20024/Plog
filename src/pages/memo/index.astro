@@ -2,9 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/BaseLayout.astro';
 
-const memos = (await getCollection('memo')).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+const memos = (await getCollection('memo')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
 <Layout title="メモ一覧">
@@ -31,7 +29,7 @@ const memos = (await getCollection('memo')).sort(
               </span>
               <div class="memo-tags">
                 {memo.data.tags.map((tag) => (
-                  <a href={`/tags/${tag.toLowerCase()}`} class="tag">
+                  <a href={`/tag/${tag.toLowerCase()}`} class="tag">
                     {tag}
                   </a>
                 ))}
@@ -56,12 +54,7 @@ const memos = (await getCollection('memo')).sort(
     h1 {
       font-size: 2.5rem;
       margin-bottom: 0.5rem;
-      background: linear-gradient(
-        45deg,
-        var(--base-color),
-        var(--sub-color-1),
-        var(--sub-color-4)
-      );
+      background: linear-gradient(45deg, var(--base-color), var(--sub-color-1), var(--sub-color-4));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;

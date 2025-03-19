@@ -31,7 +31,7 @@ const { post } = Astro.props;
         post.tags && (
           <div class="post-tags">
             {post.tags.slice(0, 2).map((tag) => (
-              <a href={`/tags/${tag.toLowerCase()}`} class="tag">
+              <a href={`/tag/${tag.toLowerCase()}`} class="tag">
                 {tag}
               </a>
             ))}

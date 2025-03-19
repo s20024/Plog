@@ -3,9 +3,7 @@ import Layout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
 import { getCollection } from 'astro:content';
 
-const posts = (await getCollection('plog')).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+const posts = (await getCollection('plog')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 // const tags = [...new Set(posts.flatMap((post) => post.tags))];
 const tags: any[] = [];
 ---
@@ -29,7 +27,7 @@ const tags: any[] = [];
             未実装 - これから実装する？
             <!-- {
               tags.map((tag) => (
-                <a href={`/tags/${tag.toLowerCase()}`} class="tag">
+                <a href={`/tag/${tag.toLowerCase()}`} class="tag">
                   {tag}
                 </a>
               ))
@@ -58,12 +56,7 @@ const tags: any[] = [];
     h1 {
       font-size: 2.5rem;
       margin-bottom: 0.5rem;
-      background: linear-gradient(
-        45deg,
-        var(--base-color),
-        var(--sub-color-1),
-        var(--sub-color-4)
-      );
+      background: linear-gradient(45deg, var(--base-color), var(--sub-color-1), var(--sub-color-4));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -109,11 +102,7 @@ const tags: any[] = [];
           left: 0;
           width: 30px;
           height: 3px;
-          background: linear-gradient(
-            45deg,
-            var(--base-color),
-            var(--sub-color-1)
-          );
+          background: linear-gradient(45deg, var(--base-color), var(--sub-color-1));
           border-radius: 10px;
         }
       }

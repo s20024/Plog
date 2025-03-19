@@ -23,7 +23,7 @@ const latestMemos = (await getCollection('memo')).sort((a, b) => b.data.pubDate.
           </span>
           <div class="memo-tags">
             {memo.data.tags.map((tag) => (
-              <a href={`/tags/${tag.toLowerCase()}`} class="tag">
+              <a href={`/tag/${tag.toLowerCase()}`} class="tag">
                 {tag}
               </a>
             ))}

@@ -1,0 +1,82 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LatestPlogs from '../../components/LatestPlogs.astro';
+import LatestNews from '../../components/LatestNews.astro';
+import LatestMemos from '../../components/LatestMemos.astro';
+
+export async function getStaticPaths() {
+  const tags: string[] = [];
+  [...(await getCollection('plog')), ...(await getCollection('memo'))].map((tagable) => {
+    tagable.data.tags.map((tag) => {
+      if (!tags.includes(tag.toLowerCase())) {
+        tags.push(tag.toLowerCase());
+      }
+    });
+  });
+  return tags.map((tag) => ({ params: { slug: tag } }));
+}
+
+const tag = Astro.params.slug;
+const plogs = (await getCollection('plog')).filter((plog) => plog.data.tags.includes(tag));
+const news = []; // (await getCollection('news')).filter((news) => plog.data.tags.includes(tag));
+const memos = (await getCollection('memo')).filter((memo) => memo.data.tags.includes(tag));
+---
+
+<BaseLayout title={`tag-${tag}`}>
+  <div class="container">
+    <section class="featured-section">
+      <h2 class="section-title">最新のPlog</h2>
+      <LatestPlogs />
+    </section>
+
+    <div class="two-column-section">
+      <section class="news-section">
+        <h2 class="section-title">最近の個人的ニュース</h2>
+        <LatestNews />
+      </section>
+
+      <section class="memo-section">
+        <h2 class="section-title">最近のメモ</h2>
+        <LatestMemos />
+      </section>
+    </div>
+  </div>
+</BaseLayout>
+
+<style lang="scss">
+  .section-title {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 50px;
+      height: 4px;
+      background: linear-gradient(45deg, var(--base-color), var(--sub-color-1));
+      border-radius: 10px;
+    }
+  }
+
+  .featured-section {
+    padding: 3rem 0;
+  }
+
+  .two-column-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 2rem 0;
+  }
+
+  @media (max-width: 768px) {
+    .two-column-section {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

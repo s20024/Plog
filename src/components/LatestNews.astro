@@ -3,9 +3,7 @@ import { getCollection } from 'astro:content';
 
 const PREVIEW_LENGTH = 6;
 
-const latestNews = (await getCollection('news')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-).slice(0, PREVIEW_LENGTH);
+const latestNews = (await getCollection('news')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, PREVIEW_LENGTH);
 ---
 
 <div class="news-list">
@@ -15,8 +13,8 @@ const latestNews = (await getCollection('news')).sort(
         <div class="news-date">
           <span class="day">{new Date(news.data.pubDate).getDate()}</span>
           <span class="month">
-            {new Date(news.data.pubDate).toLocaleDateString("ja-JP", {
-              month: "short",
+            {new Date(news.data.pubDate).toLocaleDateString('ja-JP', {
+              month: 'short',
             })}
           </span>
         </div>

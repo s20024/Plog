@@ -1,12 +1,12 @@
 ---
-import { PLOGGER, PLOGGER_NAME } from "../consts";
-import SocialIcon from "./SocialIcon.astro";
+import { PLOGGER, PLOGGER_NAME } from '../consts';
+import SocialIcon from './SocialIcon.astro';
 
-const { type = "small" } = Astro.props;
+const { type = 'small' } = Astro.props;
 ---
 
 <div class={`profile-section ${type}`}>
-  <div class="profile-image" {...(type === "small" ? { onclick: "location.href='/about'" } : {})}>
+  <div class="profile-image" {...type === 'small' ? { onclick: "location.href='/about'" } : {}}>
     <!-- todo:click処理修正 -->
     <div class="image-placeholder"></div>
   </div>
@@ -44,7 +44,7 @@ const { type = "small" } = Astro.props;
         overflow: hidden;
 
         &::after {
-          content: "";
+          content: '';
           position: absolute;
           top: 0;
           left: 0;
