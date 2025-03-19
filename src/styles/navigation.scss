@@ -20,7 +20,11 @@
             left: 0;
             width: 0;
             height: 3px;
-            background: linear-gradient(45deg, var(--base-color), var(--sub-color-1));
+            background: linear-gradient(
+              45deg,
+              var(--base-color),
+              var(--sub-color-1)
+            );
             border-radius: 10px;
             transition: width 0.3s ease;
           }

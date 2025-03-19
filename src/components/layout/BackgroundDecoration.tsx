@@ -25,7 +25,7 @@ const BackgroundDecoration: React.FC = () => {
   useEffect(() => {
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
-    const bubbleCount = Math.floor((windowWidth * windowHeight) * BUBBLE_DENSITY);
+    const bubbleCount = Math.floor(windowWidth * windowHeight * BUBBLE_DENSITY);
 
     const newBubbles: Bubble[] = [];
     for (let i = 0; i < bubbleCount; i++) {
@@ -37,7 +37,9 @@ const BackgroundDecoration: React.FC = () => {
     const handleResize = () => {
       const newWindowWidth = window.innerWidth;
       const newWindowHeight = window.innerHeight;
-      const newBubbleCount = Math.floor((newWindowWidth * newWindowHeight) * BUBBLE_DENSITY);
+      const newBubbleCount = Math.floor(
+        newWindowWidth * newWindowHeight * BUBBLE_DENSITY,
+      );
 
       if (newBubbleCount !== bubbles.length) {
         const updatedBubbles: Bubble[] = [];

@@ -1,27 +1,32 @@
 # Plog(Plograming-blog)
+
 s20024(やら)のプログラミングログです。
 
 ## 環境構築
+
 - node:v22
 - その他:[package.json](package.json)参照
 
 1. Nodeのバージョンを22に変更 (例:nodebrew)
-    ```shell
-    nodebrew install 22 
-    nodebrew use 22
-    ```
+
+   ```shell
+   nodebrew install 22
+   nodebrew use 22
+   ```
 
 2. npmのパッケージをインストール
-    ```shell
-    npm install
-    ```
+
+   ```shell
+   npm install
+   ```
 
 3. 開発サーバーを起動
-    ```shell
-    npm run dev
-    ```
+   ```shell
+   npm run dev
+   ```
 
 ## Astro CLI
+
 | Command                   | Action                                           |
 | :------------------------ | :----------------------------------------------- |
 | `npm run dev`             | Starts local dev server at `localhost:4321`      |

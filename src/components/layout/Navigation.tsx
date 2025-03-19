@@ -12,16 +12,27 @@ const Navigation: React.FC = () => {
     <nav className="navigation">
       <div className="desktop-nav">
         <ul>
-          <li><a href="/">ホーム</a></li>
-          <li><a href="/plog">プログ</a></li>
-          <li><a href="/news">ニュース</a></li>
+          <li>
+            <a href="/">ホーム</a>
+          </li>
+          <li>
+            <a href="/plog">プログ</a>
+          </li>
+          <li>
+            <a href="/news">ニュース</a>
+          </li>
           {/* <li><a href="/memo">メモ</a></li> */}
-          <li><a href="/about">プロフィール</a></li>
+          <li>
+            <a href="/about">プロフィール</a>
+          </li>
         </ul>
       </div>
 
       <div className="mobile-nav">
-        <button className={`hamburger ${isMenuOpen ? 'active' : ''}`} onClick={toggleMenu}>
+        <button
+          className={`hamburger ${isMenuOpen ? 'active' : ''}`}
+          onClick={toggleMenu}
+        >
           <span></span>
           <span></span>
           <span></span>
@@ -29,11 +40,27 @@ const Navigation: React.FC = () => {
 
         <div className={`mobile-menu ${isMenuOpen ? 'active' : ''}`}>
           <ul>
-            <li><a href="/" onClick={toggleMenu}>ホーム</a></li>
-            <li><a href="/plog" onClick={toggleMenu}>プログ</a></li>
-            <li><a href="/news" onClick={toggleMenu}>ニュース</a></li>
+            <li>
+              <a href="/" onClick={toggleMenu}>
+                ホーム
+              </a>
+            </li>
+            <li>
+              <a href="/plog" onClick={toggleMenu}>
+                プログ
+              </a>
+            </li>
+            <li>
+              <a href="/news" onClick={toggleMenu}>
+                ニュース
+              </a>
+            </li>
             {/* <li><a href="/memo" onClick={toggleMenu}>メモ</a></li> */}
-            <li><a href="/about" onClick={toggleMenu}>プロフィール</a></li>
+            <li>
+              <a href="/about" onClick={toggleMenu}>
+                プロフィール
+              </a>
+            </li>
           </ul>
         </div>
       </div>

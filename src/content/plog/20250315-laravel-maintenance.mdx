@@ -8,7 +8,9 @@ tags: ['Laravel', 'Laravel11', 'Maintenance', 'MaintenanceMode']
 ---
 
 ## Laravel11のメンテナンスモードをカスタムしてみました。
+
 追加したい機能として、
+
 - IPの許可
   - デフォルト値の設定
   - メンテナンス開始時に追加
@@ -18,11 +20,12 @@ tags: ['Laravel', 'Laravel11', 'Maintenance', 'MaintenanceMode']
   - メンテナンス開始時に指定
 - 返却値の変更(jsonにて返却したい場合)
   - デフォルト値の設定
-の4つを追加します。
-
+    の4つを追加します。
 
 ### Downコマンドのカスタム作成
+
 `php artisan down`にてLaravelではメンテナンスモードに移行することができますが、そのコマンドをカスタムして利用します。
+
 ```php
 // app/Console/Commands/CustomDownCommand.php
 <?php
@@ -63,7 +66,9 @@ class CustomDonwCommand extends DownCommand
     }
 }
 ```
+
 上記作成したカスタムコマンドをAppServiceProviderのregisterで追加する。
+
 ```php
 // app/Providers/AppServiceProvider.php
 use App\Console\Commands\CustomDonwCommand;
@@ -76,6 +81,7 @@ use App\Console\Commands\CustomDonwCommand;
 ```
 
 ### メンテナンスモードのカスタム作成
+
 Laravel11では、`PreventRequestsDuringMaintenance`にてメンテナンスモードの判定しているようです。
 
 ```php
@@ -117,7 +123,7 @@ class CustomPreventRequestsDuringMaintenance extends PreventRequestsDuringMainte
                 // デフォルトを呼び出す
                 $result = parent::handle($request, $next);
 
-                // 正常処理orscretパスの場合はそのまま返却 // todo: templateのresponseはどうにかしよう。。。w
+                // 正常処理orscretパスの場合はそのまま返却 // templateのresponseはどうにかしよう。。。w
                 if ($result instanceof Response || $request->path() === $maintenanceData['secret']) {
                     return $result;
                 }
@@ -162,7 +168,9 @@ class CustomPreventRequestsDuringMaintenance extends PreventRequestsDuringMainte
     }
 }
 ```
+
 上記作成したMiddlewareを`bootstrap/app.php`にてセットする。
+
 ```php
 // bootstrap/app.php
 // some code...
@@ -174,6 +182,7 @@ class CustomPreventRequestsDuringMaintenance extends PreventRequestsDuringMainte
 ```
 
 ### Configの編集
+
 ```php
 // config/app.php
 // some code...
@@ -199,16 +208,19 @@ class CustomPreventRequestsDuringMaintenance extends PreventRequestsDuringMainte
     ],
 ```
 
-
 ## まとめ。。
-上記により、Laravelのメンテナンス開始時に、デフォルトのオプションに加え`--allow-ips`,`--exclude-paths`,`--start-time`の3つのオプションを追加することができます。  
+
+上記により、Laravelのメンテナンス開始時に、デフォルトのオプションに加え`--allow-ips`,`--exclude-paths`,`--start-time`の3つのオプションを追加することができます。
+
 ```shell
 php artisan down --allow-ips=0.0.0.0 # 0.0.0.0からのアクセスはメンテナンスモードに引っかからないようにする
 php artisan down --exclude-paths=/api/login # /api/loginのアクセスはメンテナンスモードに引っかからないようにする
 php artisan down --start-time=1742050800 # 日本時間(2025/03/15 15:00:00)からメンテナンスモードが開始される
 ```
+
 その他、Jsonの返却値や、デフォルトの許可IP等は、`config/app.php`に記載することで対応が可能になります。
 
 #### この記事を書いて思ったこと。
+
 めちゃめちゃ雑な記事w  
-自分のメモ用のPlogなので、、、、許してください。  
+自分のメモ用のPlogなので、、、、許してください。
