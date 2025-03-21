@@ -1,7 +1,7 @@
 ---
 import '../styles/global.scss';
-import Header from '../components/layout/Header.astro';
-import Footer from '../components/layout/Footer.astro';
+import Header from '../components/layout/Header.tsx';
+import Footer from '../components/layout/Footer';
 import BackgroundDecoration from '../components/layout/BackgroundDecoration';
 
 export interface Props {
@@ -39,11 +39,11 @@ const {
   </head>
   <body>
     <BackgroundDecoration client:load />
-    <Header />
+    <Header client:load /> <!-- memo:表示が遅かったら、header.astroにし、Navigationをclient:loadに変更 -->
     <main>
       <slot />
     </main>
-    <Footer />
+    <Footer client:load />
   </body>
 </html>
 

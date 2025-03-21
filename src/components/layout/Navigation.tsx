@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../styles/navigation.scss';
+import style from './Navigation.module.scss';
 
 const Navigation: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -9,8 +9,8 @@ const Navigation: React.FC = () => {
   };
 
   return (
-    <nav className="navigation">
-      <div className="desktop-nav">
+    <nav className={style.navigation}>
+      <div className={style.desktopNav}>
         <ul>
           <li>
             <a href="/">ホーム</a>
@@ -30,17 +30,14 @@ const Navigation: React.FC = () => {
         </ul>
       </div>
 
-      <div className="mobile-nav">
-        <button
-          className={`hamburger ${isMenuOpen ? 'active' : ''}`}
-          onClick={toggleMenu}
-        >
+      <div className={style.mobileNav}>
+        <button className={`${style.hamburger} ${isMenuOpen ? style.active : ''}`} onClick={toggleMenu}>
           <span></span>
           <span></span>
           <span></span>
         </button>
 
-        <div className={`mobile-menu ${isMenuOpen ? 'active' : ''}`}>
+        <div className={`${style.mobileMenu} ${isMenuOpen ? style.active : ''}`}>
           <ul>
             <li>
               <a href="/" onClick={toggleMenu}>

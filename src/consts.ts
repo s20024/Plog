@@ -9,3 +9,4 @@ export const COLORS = ['#D1F1CC', '#F3D1E5', '#D5E0F1', '#C8EFEA', '#EDD0E5'];
 
 export const GITHUB_URL = 'https://github.com/s20024/';
 export const INSTAGRAM_URL = 'https://www.instagram.com/';
+export const TWITTER_URL = 'https://x.com/s20024itcollege';

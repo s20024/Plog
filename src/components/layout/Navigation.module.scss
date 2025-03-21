@@ -1,5 +1,5 @@
 .navigation {
-  .desktop-nav {
+  .desktopNav {
     ul {
       display: flex;
       list-style: none;
@@ -20,11 +20,7 @@
             left: 0;
             width: 0;
             height: 3px;
-            background: linear-gradient(
-              45deg,
-              var(--base-color),
-              var(--sub-color-1)
-            );
+            background: linear-gradient(45deg, var(--base-color), var(--sub-color-1));
             border-radius: 10px;
             transition: width 0.3s ease;
           }
@@ -32,36 +28,12 @@
           &:hover::after {
             width: 100%;
           }
-
-          &.github-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background-color: var(--sub-color-2);
-            border-radius: 50%;
-            transition: transform 0.3s ease;
-
-            &:hover {
-              transform: translateY(-3px) rotate(5deg);
-
-              &::after {
-                width: 0;
-              }
-            }
-
-            svg {
-              width: 24px;
-              height: 24px;
-            }
-          }
         }
       }
     }
   }
 
-  .mobile-nav {
+  .mobileNav {
     display: none;
 
     .hamburger {
@@ -101,7 +73,7 @@
       }
     }
 
-    .mobile-menu {
+    .mobileMenu {
       position: fixed;
       top: 0;
       right: -100%;
@@ -139,11 +111,11 @@
   }
 
   @media (max-width: 768px) {
-    .desktop-nav {
+    .desktopNav {
       display: none;
     }
 
-    .mobile-nav {
+    .mobileNav {
       display: block;
     }
   }

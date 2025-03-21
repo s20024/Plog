@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../../styles/background.scss';
+import style from './BackgroundDecoration.module.scss';
 import { COLORS } from '../../consts';
 
 const BUBBLE_DENSITY = 0.00001; // 表示されるバブルの密度
@@ -37,9 +37,7 @@ const BackgroundDecoration: React.FC = () => {
     const handleResize = () => {
       const newWindowWidth = window.innerWidth;
       const newWindowHeight = window.innerHeight;
-      const newBubbleCount = Math.floor(
-        newWindowWidth * newWindowHeight * BUBBLE_DENSITY,
-      );
+      const newBubbleCount = Math.floor(newWindowWidth * newWindowHeight * BUBBLE_DENSITY);
 
       if (newBubbleCount !== bubbles.length) {
         const updatedBubbles: Bubble[] = [];
@@ -78,11 +76,11 @@ const BackgroundDecoration: React.FC = () => {
   };
 
   return (
-    <div className="bg-decoration">
+    <div className={style.bgDecoration}>
       {bubbles.map((bubble) => (
         <div
           key={bubble.id}
-          className={`bubble ${bubble.type}`}
+          className={`${style.bubble} ${style[bubble.type]}`}
           style={{
             width: `${bubble.size}px`,
             height: `${bubble.size}px`,

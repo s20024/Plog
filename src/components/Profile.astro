@@ -1,6 +1,6 @@
 ---
 import { PLOGGER, PLOGGER_NAME } from '../consts';
-import SocialIcon from './SocialIcon.astro';
+import SocialIcon from './SocialIcon';
 
 const { type = 'small' } = Astro.props;
 ---
@@ -19,6 +19,7 @@ const { type = 'small' } = Astro.props;
     </p>
     <div class="social-links">
       <SocialIcon type="github" />
+      <SocialIcon type="twitter" />
     </div>
   </div>
 </div>
@@ -68,6 +69,11 @@ const { type = 'small' } = Astro.props;
       .profile-bio {
         margin-bottom: 1.5rem;
         line-height: 1.6;
+      }
+      
+      .social-links {
+        display: flex;
+        gap: 0.5rem;
       }
     }
 

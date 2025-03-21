@@ -1,0 +1,106 @@
+.footer {
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 3rem 0 1.5rem;
+  margin-top: 3rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+
+  .container {
+    .footerContent {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+
+      .footerLogo {
+        h2 {
+          font-size: 1.8rem;
+          margin: 0 0 0.5rem;
+          background: linear-gradient(45deg, var(--base-color), var(--sub-color-1), var(--sub-color-4));
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+        }
+
+        p {
+          font-size: 0.9rem;
+          opacity: 0.8;
+        }
+      }
+
+      .footerLinks {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+
+        .linkGroup {
+          h3 {
+            font-size: 1.2rem;
+            margin: 0 0 1rem;
+            position: relative;
+            display: inline-block;
+
+            &::after {
+              content: '';
+              position: absolute;
+              bottom: -5px;
+              left: 0;
+              width: 30px;
+              height: 3px;
+              background: linear-gradient(45deg, var(--base-color), var(--sub-color-1));
+              border-radius: 10px;
+            }
+          }
+
+          ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+
+            li {
+              margin-bottom: 0.5rem;
+
+              a {
+                font-size: 0.95rem;
+                opacity: 0.8;
+                transition: opacity 0.2s ease;
+
+                &:hover {
+                  opacity: 1;
+                }
+              }
+            }
+          }
+
+          .socialLinks {
+            display: flex;
+            gap: 1rem;
+          }
+        }
+      }
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+
+      p {
+        font-size: 0.9rem;
+        opacity: 0.7;
+        margin: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .footerContent {
+        grid-template-columns: 1fr;
+      }
+
+      .footerLinks {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+    }
+  }
+}
