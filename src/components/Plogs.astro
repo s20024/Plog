@@ -6,7 +6,7 @@ const { type = 'latest', max = -1, tag = '', flow = 'horizon' } = Astro.props;
 let plogs = (await getCollection('plog')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 if (type == 'tag') {
-  plogs = plogs.filter((plog) => plog.data.tags.map((tag) => tag.toLowerCase()).includes(tag));
+  plogs = plogs.filter((plog) => plog.data.tags && plog.data.tags.map((tag) => tag.toLowerCase()).includes(tag));
 }
 if (0 <= max) {
   plogs = plogs.slice(0, max);

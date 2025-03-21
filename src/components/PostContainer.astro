@@ -1,0 +1,217 @@
+---
+import 'github-markdown-css/github-markdown-light.css';
+import { render } from "astro:content";
+import Profile from "./Profile";
+
+const { post, prevPost, nextPost } = Astro.props;
+const { Content } = await render(post);
+---
+
+<article class="post-container">
+  <header class="post-header">
+    <h1 class="post-title">{post.data.title}</h1>
+    <div class="post-meta">
+      <time class="post-date">
+        {
+          new Date(post.data.pubDate).toLocaleDateString('ja-JP', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          })
+        }
+      </time>
+      <div class="post-tags">
+        {
+          post.data.tags &&
+          post.data.tags.map((tag: string) => (
+            <a href={`/tag/${tag.toLowerCase()}`} class="tag">
+              {tag}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </header>
+
+  <div class="post-content markdown-body" data-color-mode="light" data-light-theme="light">
+    <Content />
+  </div>
+
+  <footer class="post-footer">
+    <div class="post-navigation">
+      {
+        prevPost && (
+          <a href={`/plog/${prevPost.id}`} class="prev-post">
+            <span>前の記事</span>
+            <p>{prevPost.data.title}</p>
+          </a>
+        )
+      }
+      {
+        nextPost && (
+          <a href={`/plog/${nextPost.id}`} class="next-post">
+            <span>次の記事</span>
+            <p>{nextPost.data.title}</p>
+          </a>
+        )
+      }
+    </div>
+    <Profile client:load />
+  </footer>
+</article>
+
+<style lang="scss">
+  .post-container {
+    flex: 3;
+    max-width: 800px;
+    margin: 2rem auto;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease;
+
+    .post-header {
+      padding: 3rem 2.5rem 2rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      background: linear-gradient(to bottom, rgba(var(--base-color-rgb), 0.05), transparent);
+
+      .post-title {
+        font-size: 2.2rem;
+        margin-bottom: 1.2rem;
+        line-height: 1.4;
+        font-weight: 700;
+        background: linear-gradient(45deg, var(--base-color), var(--sub-color-2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .post-meta {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        opacity: 0.8;
+
+        .post-date {
+          font-size: 0.95rem;
+          color: #555;
+          font-weight: 500;
+        }
+
+        .post-tags {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+
+          .tag {
+            font-size: 0.85rem;
+            background-color: var(--sub-color-3);
+            color: var(--text-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+
+            &:hover {
+              background-color: var(--base-color);
+            }
+          }
+        }
+      }
+    }
+
+    .post-content {
+      padding: 2.5rem;
+      line-height: 1.85;
+      color: #2c3e50;
+
+    }
+
+    .post-footer {
+      padding: 2rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+
+      .post-navigation {
+        margin-bottom: 2rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+
+        a {
+          padding: 1rem;
+          background-color: rgba(0, 0, 0, 0.02);
+          border-radius: 8px;
+          transition: background-color 0.2s ease;
+
+          &:hover {
+            background-color: var(--base-color);
+          }
+
+          span {
+            display: block;
+            font-size: 0.8rem;
+            margin-bottom: 0.3rem;
+            opacity: 0.7;
+          }
+
+          p {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0;
+          }
+
+          &.prev-post {
+            text-align: left;
+          }
+
+          &.next-post {
+            text-align: right;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .post-container {
+      width: 100%;
+    }
+
+    .post-header {
+      padding: 1.5rem 1.5rem 1rem;
+    }
+
+    .post-title {
+      font-size: 1.8rem;
+    }
+
+    .post-content {
+      padding: 1.5rem;
+    }
+
+    .post-footer {
+      padding: 1.5rem;
+    }
+
+    .author-box {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .post-navigation {
+      grid-template-columns: 1fr;
+
+      a {
+        text-align: center;
+
+        &.prev-post,
+        &.next-post {
+          text-align: center;
+        }
+      }
+    }
+  }
+</style>

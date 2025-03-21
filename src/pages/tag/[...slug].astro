@@ -10,6 +10,7 @@ const tag = Astro.params.slug;
 export async function getStaticPaths() {
   const tags: string[] = [];
   [...(await getCollection('plog')), ...(await getCollection('news')), ...(await getCollection('memo'))].map((tagable) => {
+    if (!tagable.data.tags) return;
     tagable.data.tags.map((tag) => {
       if (!tags.includes(tag.toLowerCase())) {
         tags.push(tag.toLowerCase());

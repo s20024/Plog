@@ -28,11 +28,14 @@ const memos = (await getCollection('memo')).sort((a, b) => b.data.pubDate.valueO
                 })}
               </span>
               <div class="memo-tags">
-                {memo.data.tags.map((tag) => (
-                  <a href={`/tag/${tag.toLowerCase()}`} class="tag">
-                    {tag}
-                  </a>
-                ))}
+                {
+                  memo.data.tags &&
+                  memo.data.tags.map((tag) => (
+                    <a href={`/tag/${tag.toLowerCase()}`} class="tag">
+                      {tag}
+                    </a>
+                  ))
+                }
               </div>
             </div>
             <p class="memo-excerpt">{memo.data.description}</p>

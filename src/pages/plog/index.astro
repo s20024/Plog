@@ -3,10 +3,11 @@ import Layout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
 import { getCollection } from 'astro:content';
 
-const posts = (await getCollection('plog')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const plogs = (await getCollection('plog')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 const tags: string[] = [];
-posts.map((tagable) => {
-  tagable.data.tags.map((tag) => {
+plogs.map((plog) => {
+  if (!plog.data.tags) return;
+  plog.data.tags.map((tag) => {
     if (!tags.includes(tag)) {
       tags.push(tag);
     }
@@ -22,8 +23,8 @@ posts.map((tagable) => {
     </div>
 
     <div class="plog-layout">
-      <div class="posts-container">
-        {posts.map((post) => <PostCard post={post} />)}
+      <div class="plogs-container">
+        {plogs.map((plog) => <PostCard post={plog} />)}
       </div>
 
       <aside class="sidebar">
@@ -80,7 +81,7 @@ posts.map((tagable) => {
     gap: 2rem;
   }
 
-  .posts-container {
+  .plogs-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
@@ -158,13 +159,13 @@ posts.map((tagable) => {
       grid-template-columns: 1fr;
     }
 
-    .posts-container {
+    .plogs-container {
       grid-template-columns: repeat(2, 1fr);
     }
   }
 
   @media (max-width: 768px) {
-    .posts-container {
+    .plogs-container {
       grid-template-columns: 1fr;
     }
   }

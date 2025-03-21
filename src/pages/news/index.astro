@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/BaseLayout.astro';
 
-const posts = (await getCollection('news')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const news = (await getCollection('news')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
 <Layout title="ニュース一覧">
@@ -14,7 +14,7 @@ const posts = (await getCollection('news')).sort((a, b) => b.data.pubDate.valueO
 
     <div class="news-container">
       {
-        posts.map((news) => (
+        news.map((news) => (
           <article class="news-card">
             <div class="news-date">
               <span class="day">{new Date(news.data.pubDate).getDate()}</span>

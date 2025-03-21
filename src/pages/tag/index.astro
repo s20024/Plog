@@ -4,6 +4,7 @@ import Layout from '../../layouts/BaseLayout.astro';
 
 const tags: string[] = [];
 [...(await getCollection('plog')), ...(await getCollection('news')), ...(await getCollection('memo'))].map((tagable) => {
+  if (!tagable.data.tags) return;
   tagable.data.tags.map((tag) => {
     if (!tags.includes(tag)) {
       tags.push(tag);

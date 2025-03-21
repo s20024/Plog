@@ -5,7 +5,7 @@ const { type = 'latest', max = -1, tag = '' } = Astro.props;
 let news = (await getCollection('news')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 if (type == 'tag') {
-  news = news.filter((news) => news.data.tags.map((tag) => tag.toLowerCase()).includes(tag));
+  news = news.filter((news) => news.data.tags && news.data.tags.map((tag) => tag.toLowerCase()).includes(tag));
 }
 if (0 <= max) {
   news = news.slice(0, max);
