@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import Tags from './Tags';
 
 const { type = 'latest', max = -1, tag = '' } = Astro.props;
 let memos = (await getCollection('memo')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
@@ -27,16 +28,7 @@ if (0 <= max) {
               day: 'numeric',
             })}
           </span>
-          <div class="memo-tags">
-            {
-              memo.data.tags &&
-              memo.data.tags.map((tag) => (
-                <a href={`/tag/${tag.toLowerCase()}`} class="tag">
-                  {tag}
-                </a>
-              ))
-            }
-          </div>
+          <Tags tags={memo.data.tags} />
         </div>
       </article>
     ))
@@ -88,24 +80,6 @@ if (0 <= max) {
   .memo-date {
     font-size: 0.85rem;
     color: #666;
-  }
-
-  .memo-tags {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-
-    .tag {
-      font-size: 0.75rem;
-      background-color: var(--sub-color-3);
-      color: var(--text-color);
-      padding: 0.2rem 0.5rem;
-      border-radius: 50px;
-
-      &:hover {
-        background-color: var(--base-color);
-      }
-    }
   }
 
   .view-all {

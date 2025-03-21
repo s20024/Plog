@@ -1,0 +1,28 @@
+.tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+
+  .tag {
+    font-size: 0.75rem;
+    background-color: var(--sub-color-3);
+    color: var(--text-color);
+    padding: 0.2rem 0.5rem;
+    border-radius: 50px;
+
+    &:hover {
+      background-color: var(--base-color);
+    }
+
+    &.large {
+        font-size: 0.9rem;
+        padding: 0.4rem 1rem;
+    }
+  }
+
+  .moreTags {
+    font-size: 0.75rem;
+    color: #666;
+  }
+}
+

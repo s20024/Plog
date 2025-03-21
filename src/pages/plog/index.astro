@@ -2,6 +2,7 @@
 import Layout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
 import { getCollection } from 'astro:content';
+import Tags from '../../components/Tags';
 
 const plogs = (await getCollection('plog')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 const tags: string[] = [];
@@ -31,13 +32,7 @@ plogs.map((plog) => {
         <div class="sidebar-section">
           <h2>タグ</h2>
           <div class="tags-cloud">
-            {
-              tags.map((tag) => (
-                <a href={`/tag/${tag.toLowerCase()}`} class="tag">
-                  {tag}
-                </a>
-              ))
-            }
+            <Tags tags={tags} />
           </div>
         </div>
 
@@ -138,18 +133,6 @@ plogs.map((plog) => {
         display: flex;
         flex-wrap: wrap;
         gap: 0.5rem;
-
-        .tag {
-          font-size: 0.85rem;
-          background-color: var(--sub-color-3);
-          color: var(--text-color);
-          padding: 0.3rem 0.8rem;
-          border-radius: 50px;
-
-          &:hover {
-            background-color: var(--base-color);
-          }
-        }
       }
     }
   }
