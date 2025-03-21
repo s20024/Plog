@@ -6,6 +6,8 @@ heroImage: ''
 tags: ['AWS', 'ロック']
 ---
 
+import ImageViewer from '../../components/ImageViewer';
+
 ### AWSがロックされていました。
 
 個人的に利用しているAWSがあり、主に勉強をするために利用しているのですが、急に利用できなくなりました。。。
@@ -16,11 +18,12 @@ tags: ['AWS', 'ロック']
 Your account must be verified before you can add new CloudFront resources. To verify your account, please contact AWS Support (https://console.aws.amazon.com/support/home#/) and include this error message.
 ```
 
-![CloudFront](/images/news/20250315-aws-locked/cloudfront.png)
+<ImageViewer src="/images/news/20250315-aws-locked/cloudfront.png" alt="CloudFront" client:load />
 と言われてしまい利用することができませんでした。
 
 また、Lambdaを利用しようとしても、
-![Lambda](/images/news/20250315-aws-locked/lambda.png)
+
+<ImageViewer src="/images/news/20250315-aws-locked/lambda.png" alt="Lambda" client:load />
 のように表示され利用することが不可能でした。
 
 ### 対応として、、、
