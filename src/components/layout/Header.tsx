@@ -10,6 +10,7 @@ const Header = () => {
         <div className={styles.headerContent}>
           <div className={styles.logo}>
             <a href="/">
+              <img className={styles.logoImg} src="/images/logo@256.png" alt={SITE_TITLE} />
               <h1 className={styles.siteTitle}>{SITE_TITLE}</h1>
             </a>
           </div>

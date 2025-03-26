@@ -12,10 +12,20 @@
     justify-content: space-between;
     align-items: center;
 
-    .logo a {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+    .logo {
+      a {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .logoImg {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
     }
 
     .siteTitle {

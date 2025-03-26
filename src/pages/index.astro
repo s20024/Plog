@@ -14,7 +14,6 @@ import { SITE_TITLE } from '../consts';
         <p>
           {SITE_TITLE}へようこそ!!<br />
           プログラミングの記事(プログ-Plog)を中心に、最近のつぶやきを書いていきます。<br />
-          <b>この右の変な奴治したい。。。。w</b>
         </p>
         <div class="hero-buttons">
           <a href="/plog" class="btn">プログを見る</a>
@@ -22,9 +21,7 @@ import { SITE_TITLE } from '../consts';
         </div>
       </div>
       <div class="hero-image">
-        <div class="image-container">
-          <div class="blob"></div>
-        </div>
+        <img src="/images/logo@256.png" alt="Logo Image" />
       </div>
     </section>
 
@@ -97,48 +94,12 @@ import { SITE_TITLE } from '../consts';
       justify-content: center;
       align-items: center;
 
-      .image-container {
-        position: relative;
-        width: 100%;
-        height: 300px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        .blob {
-          width: 300px;
-          height: 300px;
-          background: linear-gradient(45deg, var(--base-color), var(--sub-color-3));
-          border-radius: 60% 40% 70% 30% / 60% 30% 70% 40%;
-          animation: blob-animation 8s ease-in-out infinite;
-          position: relative;
-
-          &::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 85%;
-            height: 85%;
-            background: white;
-            border-radius: 60% 40% 70% 30% / 60% 30% 70% 40%;
-            animation: blob-animation 8s ease-in-out infinite reverse;
-          }
-
-          &::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 70%;
-            height: 70%;
-            background: linear-gradient(45deg, var(--sub-color-1), var(--sub-color-4));
-            border-radius: 60% 40% 70% 30% / 60% 30% 70% 40%;
-            animation: blob-animation 8s ease-in-out infinite;
-          }
-        }
+      img {
+        width: 250px;
+        height: 250px;
+        border-radius: 50%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        background-color: white;
       }
     }
   }
