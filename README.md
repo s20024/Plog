@@ -40,6 +40,5 @@ github-copilotのアシスタントは、「ずんだもん」人格にしてい
 
 ## Todoメモ
 
-- Profileアイコンの生成
 - Junksの作成
 - Productsの作成

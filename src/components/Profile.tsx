@@ -14,8 +14,8 @@ const Profile: React.FC<ProfileProps> = ({ type = 'short' }) => {
 
   return (
     <div className={`${styles.profileSection} ${styles[type]}`}>
-      <div className={styles.profileImage} onClick={handleClick}>
-        <div className={styles.imagePlaceholder}></div>
+      <div className={styles.profileImageWrapper} onClick={handleClick}>
+        <img src="/images/profile@256.png" alt="Profile" className={styles.profileImage} />
       </div>
       <div className={styles.profileInfo}>
         <h2>
@@ -24,7 +24,7 @@ const Profile: React.FC<ProfileProps> = ({ type = 'short' }) => {
         <p className={styles.profileBio}>
           プログラマー歴2年の初心者プログラマーです。
           <br />
-          フロントエンドエンジニアをしています。たまにバックエンドもしています。
+          フロントエンドエンジニアです。たまにバックエンドもしています。
           <br />
           SNSは、あまりやっていないです。
         </p>
