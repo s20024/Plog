@@ -1,6 +1,8 @@
-# Plog(Plograming-blog)
+# [Plog(Plograming-blog)](https://plog.to-kome.com)
 
-s20024(やら)のプログラミングログです。
+s20024(やら)のプログラミングログです。  
+github-copilotのアシスタントは、「ずんだもん」人格にしている。w  
+　　→たまに、ブログの内容に補完で入ってくるから気を付けないと。w
 
 ## 環境構築
 
@@ -25,7 +27,7 @@ s20024(やら)のプログラミングログです。
    npm run dev
    ```
 
-## Astro CLI
+## Astro / Prettier
 
 | Command                   | Action                                           |
 | :------------------------ | :----------------------------------------------- |
@@ -39,3 +41,5 @@ s20024(やら)のプログラミングログです。
 ## Todoメモ
 
 - Profileアイコンの生成
+- Junksの作成
+- Productsの作成
