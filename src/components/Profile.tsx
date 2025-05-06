@@ -18,15 +18,13 @@ const Profile: React.FC<ProfileProps> = ({ type = 'short' }) => {
         <img src="/images/profile@256.png" alt="Profile" className={styles.profileImage} />
       </div>
       <div className={styles.profileInfo}>
-        <h2>
-          {PLOGGER}({PLOGGER_NAME})
-        </h2>
+        <h2>{PLOGGER}({PLOGGER_NAME})</h2>
         <p className={styles.profileBio}>
-          プログラマー歴2年の初心者プログラマーです。
+          プログラマー歴2年の初心者プログラマーです。<br />
+          フロントエンドエンジニアです。たまにバックエンドもしています。<br />
+          SNSは、あまりやっていないです。<br />
           <br />
-          フロントエンドエンジニアです。たまにバックエンドもしています。
-          <br />
-          SNSは、あまりやっていないです。
+          最近プログラマー向いていないと思い始めています。どうしよ。。。
         </p>
         <div className={styles.socialLinks}>
           <SocialIcon type="github" />
