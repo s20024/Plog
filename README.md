@@ -1,4 +1,4 @@
-# [Plog(Plograming-blog)](https://plog.to-kome.com)
+# [Plog(Plograming-blog)](https://plog.s20024.com)
 
 s20024(やら)のプログラミングログです。  
 github-copilotのアシスタントは、「ずんだもん」人格にしている。w  

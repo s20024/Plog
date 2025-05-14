@@ -5,7 +5,7 @@ import react from '@astrojs/react';
 import rehypeExternalLinks from 'rehype-external-links';
 
 export default defineConfig({
-  site: 'https://plog.to-kome.com',
+  site: 'https://plog.s20024.com',
   integrations: [
     mdx({
       rehypePlugins: [
