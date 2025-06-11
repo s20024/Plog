@@ -1,0 +1,98 @@
+---
+title: 'AngularプロジェクトにReactを統合してみた！'
+description: 'AngularをベースにしたIonicプロジェクトにReactを組み込む方法を解説します。'
+pubDate: '2025/05/21'
+heroImage: '/images/plog/20250521-angular-react-integration/angular-react.png'
+tags: ['Angular', 'React', 'Ionic', '統合']
+---
+
+## 背景
+
+IonicとAngularを利用したプロジェクトにReactを統合することで、Reactのエコシステムを活用しつつ、既存のAngularコードを活かすことができます。このブログでは、その具体的な手順を解説します。
+
+## 手順
+
+### 1. 必要なパッケージのインストール
+
+以下のコマンドを実行して、Reactとその型定義をインストールします。
+
+```bash
+npm install react react-dom
+npm install -D @types/react @types/react-dom
+```
+
+### 2. `tsconfig.json`の設定変更
+
+`tsconfig.json`に以下の設定を追加します。
+
+```json
+{
+  "compilerOptions": {
+    "jsx": "react"
+  }
+}
+```
+
+### 3. Reactコンポーネントの作成
+
+以下のようなシンプルなReactコンポーネントを作成します。
+
+```tsx
+import * as React from 'react';
+
+export const ReactComponent: React.FunctionComponent<any> = (props: any) => {
+  const [clickCount, setClickCount] = React.useState(0);
+
+  const handleClick = () => {
+    setClickCount(clickCount + 1);
+  };
+
+  return (
+    <>
+      <h2 onClick={handleClick}>{props.message} Count: {clickCount}</h2>
+    </>
+  );
+};
+```
+
+### 4. AngularとReactの連携
+
+Angularのコンポーネント内でReactをレンダリングするために、以下のコードを使用します。
+
+```tsx
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import * as React from 'react';
+import { createRoot, Root } from 'react-dom/client';
+import { ReactComponent } from 'src/app/components/ReactComponent';
+
+@Component({
+  selector: 'app-tab1',
+  templateUrl: 'tab1.page.html',
+  styleUrls: ['tab1.page.scss']
+})
+export class Tab1Page {
+  @ViewChild('reactContainer', { static: false }) reactContainer!: ElementRef;
+  private reactRoot?: Root;
+
+  ngAfterViewInit(): void {
+    if (this.reactContainer) {
+      this.reactRoot = createRoot(this.reactContainer.nativeElement);
+      this.reactRoot.render(<ReactComponent message={'This message is React.'} />);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.reactRoot) {
+      this.reactRoot.unmount();
+    }
+  }
+}
+```
+
+## 結果
+
+ReactとAngularが共存するアプリケーションが完成しました！ReactのコンポーネントがAngularの中で動作する様子を確認できます。
+
+## まとめ
+
+この方法を使えば、既存のAngularプロジェクトにReactを統合し、両方のフレームワークの利点を活かすことができます。ぜひ試してみてください！
