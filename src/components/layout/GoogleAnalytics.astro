@@ -1,0 +1,11 @@
+---
+import { ANALITICS_ID } from "../../consts";
+---
+
+<script define:vars={{ ANALITICS_ID }} type="text/javascript">
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', id);
+</script>
+<script async src={`https://www.googletagmanager.com/gtag/js?id=${ANALITICS_ID}`}></script>
