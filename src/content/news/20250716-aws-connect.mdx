@@ -1,0 +1,52 @@
+---
+title: 'AmazonConnectにて電話番号が取得できない問題'
+description: 'AmazonConnectにて個人アカウントで電話番号を取得しようとした際の問題と解決方法(なし)。'
+pubDate: '2025/07/16'
+heroImage: ''
+tags: ['AWS', 'AmazonConnect', 'Phone']
+---
+
+import ImageViewer from '../../components/ImageViewer';
+
+# AmazonConnectで電話番号が取得できない
+
+## 結論から
+`個人アカウント`では、電話番号は取得できなさそうです。  
+`サポートセンターとのやり取り`にて下記のようなことを伝えられました。
+```
+Amazon Connect はビジネス構成のみをサポートするように設計されたコンタクトセンターのセットアップとなっており、
+恐れ入りますが、個人向けのセットアップはサポートしておりません。
+```
+とのことです。
+
+ビジネス用途の流れを伝えると、取得緩和可能なようです。
+
+
+## 経緯
+
+電話を利用したシステムの開発を行おうことを想定し、勉強の一環として個人利用(勉強用)のAWSアカウントにて、AmazonConnectで勉強しておこうと思い、電話番号を取得する流れになりました。
+
+初めての話番号取得で、
+```text
+電話番号を登録できませんでした
+The allowed limit for claimed phone numbers has been exceeded for your instance
+```
+<ImageViewer src="/images/news/20250716-aws-connect/get-phone-number.png" alt="Get Phone Number" client:load />
+と言われてしまい電話番号を取得することができませんでした。  
+
+
+[Docs](https://docs.aws.amazon.com/ja_jp/connect/latest/adminguide/amazon-connect-service-limits.html)を確認すると、
+```
+インスタンスあたりの電話番号数
+5
+電話番号を初めて取得する場合でも、「電話番号の上限に達しました」というエラーメッセージが表示されることがあります。このエラーメッセージの原因となるすべての問題は、解決 サポート するために からのヘルプが必要です。
+```
+との記載があったので、サポートに連絡をしてみることにしたのが経緯になります。。
+
+
+## 対応?結局(自分なり)
+AmazonConnectが利用できなかったので、[Twilio](https://www.twilio.com/)を利用することにしました。  
+いったん勉強もできて、無料枠が`2000円分`くらいあり、勉強にはとても良いサービスでした。  
+
+### `※注意ですが、個人での日本の電話番号取得はできませんでした。`
+電話番号取得は外国のものをとってテストする形になるので、Twilio側が2000円分無料枠があっても、`電話をかけるほうは国際電話になり料金上がるかもしれない`ので、気を付けてください。
