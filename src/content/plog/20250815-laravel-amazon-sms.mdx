@@ -101,6 +101,7 @@ class AmazonSMS extends Command
 ### 4. コマンドの実行
 実際コマンドのほうを投げて実際届くのか確認してみてください。  
 `※注意`サンドボックス中はサンドボックスに登録された電話番号にしか送信できません。
+`※注意`送信者のデフォルト名は`NOTICE`になります。送信者作成してもID名が間違っている場合は、`NOTICE`が送信者名になります。  
 ```bash
 php artisan amazon:sms +819012345678 "Hello from Laravel!"
 ```
