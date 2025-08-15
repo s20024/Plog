@@ -1,0 +1,98 @@
+---
+title: 'LaravelでTwilioを利用してSMSを送信する'
+description: 'LaravelでTwilioを利用してSMSを送信する方法を解説します。'
+pubDate: '2025/08/15'
+heroImage: '/images/plog/20250815-laravel-twilio-sms/Laravel_x_TwilioSMS.png'
+tags: ['Laravel', 'Twilio', 'SMS']
+---
+
+# Laravel x TwilioでSMSを送信する
+LaravelからTwilioを通して、SMSを送信する処理の実装を残しておきます。
+対象者として、`Laravel`を利用したことがある方です。
+
+## 手順
+
+### 1. Twilioの準備
+アカウントは各自作成してください。`※トライアルアカウント`は2000円くらいの無料枠あるので、便利です。  
+ログイン後、ダッシュボードにある`Account SID`と`Auth Token`、`Twilio Phone Number`を取得し、`.env`にて保持してください。  
+- ※`Twilio Phone Number`は、Twilioのコンソールから電話番号を取得する必要があります。※USだと160円くらいで買えました。
+
+```env
+TWILIO_ACCOUNT_SID=your_account_sid
+TWILIO_AUTH_TOKEN=your_auth_token
+TWILIO_FROM=your_twilio_phone_number
+```
+
+### 2. Twilio SDKのインストール
+下記コマンドを実行し、TwilioのSDKをインストールします  
+- 現在(記載当時)は`^8.7`が最新のようです。
+```bash
+composer require twilio/sdk
+```
+
+### 3. コマンドの作成
+下記コマンドにて、Laravelのコマンドを作成します。
+```bash
+php artisan make:command TwilioSMS
+```
+
+処理のほうは短く記載しておきます。
+```php
+<?php
+
+namespace App\Console\Commands;
+
+use Illuminate\Console\Command;
+use Twilio\Rest\Client;
+
+class TwilioSMS extends Command
+{
+    protected $signature = 'twilio:sms {to} {message}';
+    protected $description = 'Send an SMS via Twilio';
+
+    public function handle()
+    {
+        // memo: Trialプランの場合、「from」は変えられない。また、「Sent from your Twilio tutorial account」が一緒に送られる。
+        // もし仕事として実装する方は、configをきれいに作成してください。
+        $sid = config('services.twilio.sid', env('TWILIO_SID'));
+        $token = config('services.twilio.token', env('TWILIO_TOKEN'));
+        $from = config('services.twilio.from', env('TWILIO_FROM'));
+        $to = $this->argument('to');
+        $message = $this->argument('message');
+
+        try {
+            $twilio = new Client($sid, $token);
+            $twilio->messages->create($to, [
+                'from' => $from,
+                'body' => $message
+            ]);
+            $this->info("SMS送信に成功しました: {$to}");
+        } catch (\Exception $e) {
+            $this->error("SMS送信に失敗しました: " . $e->getMessage());
+        }
+
+    }
+}
+```
+
+### 4. コマンドの実行
+実際コマンドのほうを投げて実際届くのか確認してみてください。
+```bash
+php artisan twilio:sms +819012345678 "Hello from Laravel!"
+```
+- `※注意`トライアルアカウントの場合、認証された電話番号にしか送信できません。
+- `※注意`SMSの内容に「Sent from your Twilio tutorial account」という文言が追加されます。
+
+```txt
+Sent from your Twilio tutorial account
+- Hello from Laravel!
+```
+というメッセージが届くと思われます。
+
+## まとめ
+上記内容にて、LaravelからTwilioを利用してSMSを送信する方法を解説しました。  
+今後利用することがある方がいたら、参考にしていただければと思います。  
+
+ヒサビサニ、プログノコウシンシタ。。。
+
+
