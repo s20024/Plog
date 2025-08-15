@@ -3,18 +3,19 @@ title: 'LaravelでTwilioを利用してSMSを送信する'
 description: 'LaravelでTwilioを利用してSMSを送信する方法を解説します。'
 pubDate: '2025/08/15'
 heroImage: '/images/plog/20250815-laravel-twilio-sms/Laravel_x_TwilioSMS.png'
-tags: ['Laravel', 'Twilio', 'SMS']
+tags: ['Laravel', 'Laravel12', 'Twilio', 'SMS']
 ---
 
 # Laravel x TwilioでSMSを送信する
-LaravelからTwilioを通して、SMSを送信する処理の実装を残しておきます。
-対象者として、`Laravel`を利用したことがある方です。
+LaravelからTwilioを通して、SMSを送信する処理の実装を残しておきます。  
+対象者として、`Laravel`を利用したことがある方です。  
+- ※Twilioでの日本の[SMS送信](https://www.twilio.com/ja-jp/sms/pricing/jp)は1本`0.084$≒12円`くらいかかるので、注意してください。(記載当時)  
 
 ## 手順
 
 ### 1. Twilioの準備
 アカウントは各自作成してください。`※トライアルアカウント`は2000円くらいの無料枠あるので、便利です。  
-ログイン後、ダッシュボードにある`Account SID`と`Auth Token`、`Twilio Phone Number`を取得し、`.env`にて保持してください。  
+ログイン後、[ダッシュボード](https://console.twilio.com/)にある`Account SID`と`Auth Token`、`Twilio Phone Number`を取得し、`.env`にて保持してください。  
 - ※`Twilio Phone Number`は、Twilioのコンソールから電話番号を取得する必要があります。※USだと160円くらいで買えました。
 
 ```env
@@ -76,12 +77,12 @@ class TwilioSMS extends Command
 ```
 
 ### 4. コマンドの実行
-実際コマンドのほうを投げて実際届くのか確認してみてください。
+実際コマンドのほうを投げて実際届くのか確認してみてください。  
+`※注意`トライアルアカウントの場合、認証された電話番号にしか送信できません。  
+`※注意`SMSの内容に「Sent from your Twilio tutorial account」という文言が追加されます。  
 ```bash
 php artisan twilio:sms +819012345678 "Hello from Laravel!"
 ```
-- `※注意`トライアルアカウントの場合、認証された電話番号にしか送信できません。
-- `※注意`SMSの内容に「Sent from your Twilio tutorial account」という文言が追加されます。
 
 ```txt
 Sent from your Twilio tutorial account
@@ -94,5 +95,3 @@ Sent from your Twilio tutorial account
 今後利用することがある方がいたら、参考にしていただければと思います。  
 
 ヒサビサニ、プログノコウシンシタ。。。
-
-

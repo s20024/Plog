@@ -1,0 +1,115 @@
+---
+title: 'LaravelでAmazonSNSを利用してSMSを送信する'
+description: 'LaravelでAmazonSNSを利用してSMSを送信する方法を解説します。'
+pubDate: '2025/08/15'
+heroImage: '/images/plog/20250815-laravel-amazon-sms/Laravel_x_AmazonSNSSMS.png'
+tags: ['Laravel', 'Laravel12', 'AmazonSNS', 'SMS']
+---
+
+# Laravel x AmazonSNSでSMSを送信する
+LaravelからAmazonSNSを通して、SMSを送信する処理の実装を残しておきます。  
+対象者として、`Laravel`,`AWS`をちょっとでも利用したことがある方です。  
+- ※AmazonSNSでの日本の[SMS送信](https://aws.amazon.com/jp/end-user-messaging/pricing/)は1本`0.07451$≒11円`くらいかかるので、注意してください。(記載当時)  
+
+## 手順
+
+### 1. AWSの準備
+`※注意:`テスト環境だと、サンドボックス内の電話番号にしか送信できません。  
+そのため、サンドボックスにテストに利用する電話番号を登録する必要があります。
+
+1. サンドボックスに電話番号の登録
+2. 送信者の作成(End User messagingコンソール)
+    - 作成した名前でSMSを送信することができます。
+3. いったんコンソール側から送信テストしてください。
+4. IAMユーザーの作成
+    - 今回は送信の実装ですので、SNSの`Publish`権限を付与します。
+5. 作成したIAMユーザーのアクセスキーを取得
+
+### 2. Laravel側の準備
+1. `.env`にて、上記作成したアクセスキーを設定します。
+    ```dotenv
+    AWS_ACCESS_KEY_ID=xxxxxxxxxxxx
+    AWS_SECRET_ACCESS_KEY=xxxxxxxxxxxx
+    AWS_REGION=ap-northeast-1
+    ```
+2. `composer`にて、AWSのSDKをインストールします。 ※記載当時は`^3.10`です。
+    ```bash
+    composer require aws/aws-sdk-php-laravel
+    ```
+
+3. `bootstrap/providers.php`にて、プロバイダーの登録
+    ```php
+    <?php
+
+    return [
+        // any providers...
+        Aws\Laravel\AwsServiceProvider::class,
+    ];
+    ```
+4. `config/aws.php`の作成
+    ```php
+    php artisan vendor:publish --provider="Aws\Laravel\AwsServiceProvider"
+    ```
+
+### 3. コマンドの実装
+artisanコマンドを利用して、Laravelコマンドを作成します。
+```bash
+php artisan make:command AmazonSMS
+```
+処理の実装は以下のようになります。
+```php
+<?php
+
+namespace App\Console\Commands;
+
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\App;
+use Throwable;
+
+class AmazonSMS extends Command
+{
+    protected $signature = 'amazon:sms {phoneNumber} {message} {senderId?}';
+    protected $description = 'Send an SMS via Amazon SNS';
+
+    public function handle()
+    {
+        // memo: Trialプランの場合、承認された電話番号にしか送信できない。
+        $phoneNumber = $this->argument('phoneNumber');
+        $message = $this->argument('message');
+        $senderId = $this->argument('senderId');
+
+        $sns = App::make('aws')->createClient('sns');
+        try {
+            $sns->publish([
+                'Message' => $message,
+                'PhoneNumber' => $phoneNumber,
+                ...($senderId ? ['MessageAttributes' => [
+                    'AWS.SNS.SMS.SenderID' => [
+                        'DataType' => 'String',
+                        'StringValue' => $senderId
+                    ],
+                ]] : []),
+            ]);
+        } catch (Throwable $e) {
+            $this->error('Failed to send SMS: ' . $e->getMessage());
+            return 1;
+        }
+    }
+}
+```
+
+### 4. コマンドの実行
+実際コマンドのほうを投げて実際届くのか確認してみてください。  
+`※注意`サンドボックス中はサンドボックスに登録された電話番号にしか送信できません。
+```bash
+php artisan amazon:sms +819012345678 "Hello from Laravel!"
+```
+
+```txt
+Hello from Laravel!
+```
+というメッセージが届くと思われます。
+
+## まとめ
+ということで、LaravelからAmazonSNSを利用してSMSを送信する方法を解説しました。  
+Twilioを利用したSMS送信も記載しているので、どちらを利用するか検討している方は、そちらもご覧ください。  
