@@ -1,0 +1,145 @@
+---
+title: 'LaravelでAmazonBedrockを利用してAIと会話実装'
+description: 'LaravelでAmazonBedrockを利用してAIと会話する方法を解説します。'
+pubDate: '2025/08/15'
+heroImage: '/images/plog/20250815-laravel-amazon-bedrock/Laravel_x_AmazonBedrock.png'
+tags: ['Laravel', 'Laravel12', 'AmazonBedrock', 'AI']
+---
+
+import ImageViewer from '../../components/ImageViewer';
+
+# Laravel x AmazonBedrockでAIと会話する
+LaravelからAmazonBedrockを通して、AIと会話する処理の実装を残しておきます。  
+対象者として、`Laravel`,`AWS`をちょっとでも利用したことがある方です。  
+
+## 手順
+
+### 1. AWSの準備
+1. 利用するModelを申請する。※[Model Catalog](https://us-east-1.console.aws.amazon.com/bedrock/home?region=us-east-1#/model-catalog)
+    - 今回は、`Nova lite`を利用します。
+2. IAMユーザーの作成
+    - 今回は送信の実装ですので、Bedrockの`InvokeModel`,`InvokeModelWithResponseStream`権限を付与します。
+3. 作成したIAMユーザーのアクセスキーを取得
+
+### 2. Laravel側の準備
+1. `.env`にて、上記作成したアクセスキー、リージョン、モデルIDを設定します。
+    ```dotenv
+    AWS_ACCESS_KEY_ID=xxxxxxxxxxxx
+    AWS_SECRET_ACCESS_KEY=xxxxxxxxxxxx
+    AWS_REGION=ap-northeast-1
+    AWS_BEDROCK_MODEL_ID="amazon.nova-lite-v1:0"
+    ```
+2. `composer`にて、AWSのSDKをインストールします。 ※記載当時は`^3.10`です。
+    ```bash
+    composer require aws/aws-sdk-php-laravel
+    ```
+
+3. `bootstrap/providers.php`にて、プロバイダーの登録
+    ```php
+    <?php
+
+    return [
+        // any providers...
+        Aws\Laravel\AwsServiceProvider::class,
+    ];
+    ```
+4. `config/aws.php`の作成
+    ```php
+    php artisan vendor:publish --provider="Aws\Laravel\AwsServiceProvider"
+    ```
+5. `config/aws.php`の編集(ベッドロックのModelIDの設定)
+    ```php
+    <?php
+    // any code...
+    return [
+        // any code...
+        'bedrock_model_id' => env('AWS_BEDROCK_MODEL_ID', 'amazon.nova-lite-v1:0'),
+    ];
+    ```
+
+### 3. コマンドの実装
+artisanコマンドを利用して、Laravelコマンドを作成します。
+```bash
+php artisan make:command BedrockConverse
+```
+処理の実装は以下のようになります。
+```php
+<?php
+
+namespace App\Console\Commands;
+
+use Aws\BedrockRuntime\BedrockRuntimeClient;
+use Illuminate\Console\Command;
+
+class BedrockConverse extends Command
+{
+    protected $signature = 'bedrock:converse';
+    protected $description = 'Converse with Bedrock AI';
+
+    public function handle()
+    {
+        $conversationHistory = [];
+        $client = new BedrockRuntimeClient([
+            'region' => config('aws.region'),
+        ]);
+
+        $this->info("Bedrock AIチャットを開始します。終了するには 'exit' と入力してください。");
+
+        while (true) {
+            $userMessage = $this->ask('あなたのメッセージを入力してください', 'こんにちは');
+            if (strtolower(trim($userMessage)) === 'exit') {
+                $this->info('チャットを終了します。');
+                break;
+            }
+
+            $conversationHistory[] = [
+                'role' => 'user',
+                'content' => [['text' => $userMessage]],
+            ];
+
+            try {
+                $response = $client->converseStream([
+                    'modelId' => config('aws.bedrock_model_id'),
+                    'messages' => $conversationHistory,
+                    'inferenceConfig' => [
+                        'maxTokens' => 512,
+                        'temperature' => 0.7,
+                    ],
+                ]);
+
+                $aiReply = '';
+                $this->info("Bedrockの回答:");
+                foreach ($response['stream'] as $event) {
+                    if (isset($event['contentBlockDelta']['delta']['text'])) {
+                        print($event['contentBlockDelta']['delta']['text']);
+                        $aiReply .= $event['contentBlockDelta']['delta']['text'];
+                    }
+                }
+                print("\n");
+
+                $conversationHistory[] = [
+                    'role' => 'assistant',
+                    'content' => [['text' => $aiReply]],
+                ];
+
+            } catch (\Exception $e) {
+                $this->error('Bedrock APIリクエストでエラーが発生しました: ' . $e->getMessage());
+            }
+        }
+    }
+}
+```
+
+### 4. コマンドの実行
+実際コマンドのを投げて会話してみてください。  
+`※注意`一応、利用料金は従量課金で増えるのを理解しておいてください。
+```bash
+php artisan bedrock:converse"
+```
+
+<ImageViewer src="/images/plog/20250815-laravel-amazon-bedrock/converse.png" alt="デザイン" client:load />
+のように会話ができると思います。  
+
+## まとめ
+ということで、Laravelのコマンドから、Amazon Bedrockを利用してAIと会話する実装を記録しておきます。  
+ユーザーとのやり取りをHttp通信する際は、メッセージのやり取りをセッションで持ったりしないといけないので、ちょっと面倒ですよね。。w  
