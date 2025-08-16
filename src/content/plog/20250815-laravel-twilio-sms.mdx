@@ -18,7 +18,7 @@ LaravelからTwilioを通して、SMSを送信する処理の実装を残して�
 ログイン後、[ダッシュボード](https://console.twilio.com/)にある`Account SID`と`Auth Token`、`Twilio Phone Number`を取得し、`.env`にて保持してください。  
 - ※`Twilio Phone Number`は、Twilioのコンソールから電話番号を取得する必要があります。※USだと160円くらいで買えました。
 
-```env
+```dotenv
 TWILIO_ACCOUNT_SID=your_account_sid
 TWILIO_AUTH_TOKEN=your_auth_token
 TWILIO_FROM=your_twilio_phone_number

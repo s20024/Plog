@@ -24,7 +24,8 @@ const Profile: React.FC<ProfileProps> = ({ type = 'short' }) => {
           フロントエンドエンジニアです。たまにバックエンドもしています。<br />
           SNSは、あまりやっていないです。<br />
           <br />
-          最近プログラマー向いていないと思い始めています。どうしよ。。。
+          ん。。。Laravelの記事しか書いて無くね?w<br />
+          バックエンドエンジニアじゃん。w<br />
         </p>
         <div className={styles.socialLinks}>
           <SocialIcon type="github" />
