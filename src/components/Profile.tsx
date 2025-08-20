@@ -30,6 +30,7 @@ const Profile: React.FC<ProfileProps> = ({ type = 'short' }) => {
         <div className={styles.socialLinks}>
           <SocialIcon type="github" />
           <SocialIcon type="twitter" />
+          <SocialIcon type="portfolio" />
         </div>
       </div>
     </div>
