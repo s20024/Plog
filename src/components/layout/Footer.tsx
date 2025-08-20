@@ -23,7 +23,7 @@ const Footer = () => {
                   <a href="/">ホーム</a>
                 </li>
                 <li>
-                  <a href="/plog">ブログ</a>
+                  <a href="/plog">プログ</a>
                 </li>
                 <li>
                   <a href="/news">ニュース</a>
