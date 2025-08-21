@@ -10,6 +10,17 @@
   --font-main: 'Nunito', 'M PLUS Rounded 1c', sans-serif;
 }
 
+// ダークモード用の変数
+:root[data-theme='dark'] {
+  --bg-color: #1a1a1a;
+  --base-color: #4a6741;
+  --sub-color-1: #6b3f56;
+  --sub-color-2: #4a5a6b;
+  --sub-color-3: #3f5e58;
+  --sub-color-4: #654a5e;
+  --text-color: #e0e0e0;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

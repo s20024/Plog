@@ -120,3 +120,13 @@
     }
   }
 }
+
+// ダークモード用のスタイル調整
+:root[data-theme='dark'] .navigation {
+  .mobileNav {
+    .mobileMenu {
+      background-color: var(--bg-color);
+      border-left: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  }
+}

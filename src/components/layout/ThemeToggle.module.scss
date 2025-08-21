@@ -1,0 +1,76 @@
+.themeToggle {
+  display: flex;
+  align-items: center;
+
+  .toggleTabs {
+    display: flex;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    padding: 4px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    .tab {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 32px;
+      border: none;
+      background: transparent;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+      position: relative;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        transform: scale(1.05);
+      }
+
+      &.active {
+        background-color: var(--base-color);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        
+        &:hover {
+          background-color: var(--base-color);
+          transform: scale(1.02);
+        }
+      }
+
+      // アクセシビリティのためのフォーカス表示
+      &:focus-visible {
+        outline: 2px solid var(--base-color);
+        outline-offset: 2px;
+      }
+    }
+  }
+}
+
+// ダークモード用のスタイル調整
+:root[data-theme='dark'] .themeToggle {
+  .toggleTabs {
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    .tab {
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+    }
+  }
+}
+
+// レスポンシブ対応
+@media (max-width: 768px) {
+  .themeToggle {
+    .toggleTabs {
+      .tab {
+        width: 36px;
+        height: 28px;
+        font-size: 1rem;
+      }
+    }
+  }
+}

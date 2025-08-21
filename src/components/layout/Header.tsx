@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './Header.module.scss';
 import Navigation from './Navigation';
+import ThemeToggle from './ThemeToggle';
 import { SITE_TITLE } from '../../consts';
 
 const Header = () => {
@@ -14,7 +15,10 @@ const Header = () => {
               <h1 className={styles.siteTitle}>{SITE_TITLE}</h1>
             </a>
           </div>
-          <Navigation />
+          <div className={styles.headerActions}>
+            <ThemeToggle />
+            <Navigation />
+          </div>
         </div>
       </div>
     </header>
