@@ -17,6 +17,9 @@ export default defineConfig({
           },
         ],
       ],
+      shikiConfig: {
+        theme: 'snazzy-light', // default: 'github-dark'
+      },
     }),
     sitemap(),
     react(),
