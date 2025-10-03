@@ -8,13 +8,13 @@ tags: ['TypeScript', 'Enum']
 
 # TypescriptのEnumを嫌いになってしまいました
 `Enum`は結構好きです。TypescriptのEnumの扱いがあまり好きではないです。  
-TypescriptのEnum使うより、Objectとして作成したほうがいいのでは？と思うことが多々あります。
-一応、JavascriptにEnumがないので、TypescriptでEnumを作成しても、コンパイル後はObjectになるので、それが原因ということも含め、、、
+TypescriptのEnum使うより、Objectとして作成したほうがいいのでは？と思うことが多々あります。  
+一応、JavascriptにEnumがないので、TypescriptでEnumを作成しても、コンパイル後はObjectになるので、それが原因ということも含め、、、  
 最近記事を書いていないので、1年くらい前に思っていたことを、記事として残しておきます。w  
 
 ## 理由1
 enumの値が、Objectではなくただの文字列として扱われるため、Enumにする意味もないのかな？と思います。  
-`PHP`だとEnumの中に`label()`のようなメソッドを定義で期待するので便利なんですよね。。  
+`PHP`だとEnumの中に`label()`のようなメソッドを記載できるので便利なんですよね。。  
 また、ほかの記述法もあるので、Enumを使う理由があまりないように思います。
 ```typescript
 type Color = 'red' | 'blue' | 'green';
