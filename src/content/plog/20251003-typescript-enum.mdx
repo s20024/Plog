@@ -1,0 +1,109 @@
+---
+title: 'TypescriptのEnumを嫌いになった話'
+description: 'TypeScriptでEnumを利用する際の注意点や問題点について解説します。'
+pubDate: '2025/10/03'
+heroImage: '/images/plog/20251003-typescript-enum/Typescript_x_Enum.png'
+tags: ['TypeScript', 'Enum']
+---
+
+# TypescriptのEnumを嫌いになってしまいました
+`Enum`は結構好きです。TypescriptのEnumの扱いがあまり好きではないです。  
+TypescriptのEnum使うより、Objectとして作成したほうがいいのでは？と思うことが多々あります。
+一応、JavascriptにEnumがないので、TypescriptでEnumを作成しても、コンパイル後はObjectになるので、それが原因ということも含め、、、
+最近記事を書いていないので、1年くらい前に思っていたことを、記事として残しておきます。w  
+
+## 理由1
+enumの値が、Objectではなくただの文字列として扱われるため、Enumにする意味もないのかな？と思います。  
+`PHP`だとEnumの中に`label()`のようなメソッドを定義で期待するので便利なんですよね。。  
+また、ほかの記述法もあるので、Enumを使う理由があまりないように思います。
+```typescript
+type Color = 'red' | 'blue' | 'green';
+const ColorList = ['red', 'blue', 'green'] as const;
+const ColorObject = { red: 'red', blue: 'blue', green: 'green' } as const;
+enum ColorEnum {
+  Red = 'red',
+  Blue = 'blue',
+  Green = 'green',
+}
+
+const red1: Color = 'red';
+const red2: string = ColorList[0];
+const red3: string = ColorObject.red;
+const red4: string = ColorEnum.Red;
+```
+
+## 理由2
+上記の件で、となれば`マジックナンバー問題が多い数字は、enumあり!!`  
+と思っていたのもつかの間、別の問題がありました。
+例えば、みんな利用するStatusでEnumを作成する場合、Object.keysで取得する際、文字列Enumと数値Enumで挙動が異なります。  
+データを一覧で撮りたい場合など、`PHP`だと、`Status::cases()`で取得できます。  
+なら、Typescriptでも`Object.keys(StatusEnum)`で取得できると思いきや、数値Enumの場合、余計な値が入ってしまいます。
+```typescript
+enum StatusString {
+  Inactive = 'inactive',
+  Active = 'active',
+}
+
+enum StatusNumber {
+  Inactive = 0,
+  Active = 1,
+}
+
+console.log(Object.keys(StatusString)); // ['Inactive', 'Active']
+console.log(Object.values(StatusString)); // ['inactive', 'active']
+console.log(Object.entries(StatusString)); // [['Inactive', 'inactive'], ['Active', 'active']]
+
+console.log(Object.keys(StatusNumber)); // ['0', '1', 'Inactive', 'Active']
+console.log(Object.values(StatusNumber)); // ['inactive', 'active', 0, 1]
+console.log(Object.entries(StatusNumber)); // [['0', 'inactive'], ['1', 'active'], ['Inactive', 0], ['Active', 1]]
+```
+
+## 理由3
+はい。。。 そんでもって、僕なりの解決策を書いておきます。 `※ほかにもっといい方法ないかな。。。あればTsEnumを好きになりそう。`
+### `Helper`の作成!!
+これなら、`PHP`のように`label`やその他fromなども作成できますね!! それでも面倒。。。
+```typescript
+enum Status {
+  Inactive = 0,
+  Active = 1,
+}
+
+class StatusHelper {
+  public static keys(): string[] {
+    return Object.keys(Status).filter((key) => isNaN(Number(key)));
+  }
+  public static values(): any[] {
+    return Object.values(Status).filter((value) => !isNaN(Number(value))).map((value) => Number(value));
+  }
+  public static entries(): [string, any][] {
+    return Object.entries(Status).filter(([key, value]) => isNaN(Number(key))).map(([key, value]) => [key, Number(value)]);
+  }
+}
+
+console.log(Object.keys(Status)); // ['0', '1', 'Inactive', 'Active']
+console.log(Object.values(Status)); // ['inactive', 'active', 0, 1]
+console.log(Object.entries(Status)); // [['0', 'inactive'], ['1', 'active'], ['Inactive', 0], ['Active', 1]]
+
+console.log(StatusHelper.keys()); // ['Inactive', 'Active']
+console.log(StatusHelper.values()); // [0, 1]
+console.log(StatusHelper.entries()); // [['Inactive', 0], ['Active', 1]]
+```
+
+## まとめ
+上記の3つの理由から、TypescriptのEnumをあまり好きに利用しなくなりました。  
+リテラルを利用したり、普通にObjectとして、利用してます。  
+
+一応下に自分なりですが、最近の記述法を書いておきます。`※enumを利用しない`  
+まぁ、labelとか作成する場合は、Helperやりなんやり作成しないとですね。w 
+```typescript
+const Status = {
+  Inactive: 0,
+  Active: 1,
+} as const;
+type Status = typeof Status[keyof typeof Status];
+
+console.log(Object.keys(Status)); // ['Inactive', 'Active']
+console.log(Object.values(Status)); // [0, 1]
+console.log(Object.entries(Status)); // [['Inactive', 0], ['Active', 1]]
+```
+
