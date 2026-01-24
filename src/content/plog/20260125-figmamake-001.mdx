@@ -1,0 +1,49 @@
+---
+title: 'FigmaMakeを使ってみた!!'
+description: 'FigmaMakeを利用してWebサイトを作成してみました。'
+pubDate: '2026/01/25'
+heroImage: '/images/plog/20260125-figmamake-001/figmamake-001.png'
+tags: ['Figma', 'Figma Make', 'AI']
+---
+
+import ImageViewer from '../../components/ImageViewer';
+
+## FigmaMakeを使ってみた!!
+
+[作成したサイト](https://s20024.github.io/Junks/figmamake-001/)
+
+利用してみた感じ、FigmaMakeは非常に直感的で使いやすいツールでした。  
+AIがデザインの提案をしてくれるため、初心者でもプロフェッショナルなデザインを簡単に作成できます。
+また、そのままFigmaからWebサイトの公開もできるようですので、とても便利なものだと思います。
+
+## 実際に編集している画面↓↓
+
+<ImageViewer src="/images/plog/20260125-figmamake-001/edit.png" alt="FigmaMakeEdit画面" client:load />
+
+## 感想
+
+デザイン初心者からの目線で言うと、FigmaMakeは非常に助かるツールだと思いました。  
+また、自分が作成するよりもずっときれいに作成でき、すぐ確認もできるのでとても便利なツールだと思いました。  
+`FigmaDesign`側にもデザインを持っていけるので、プロトタイプが作成できた後の管理もしやすいのかな？と思っています。  
+　　※自分はデザイン初心者ですので、、、そこまで詳しくないですが、、、ｗ  
+`FigmaDesign`から持っていくことはできないよう？ですのでそこが少々悲しいです。 ※`初期作成の際は持っていけそうです。(右クリックから「FigmaMakeに送信する」)`  
+色変更や文字サイズ変更、Radius変更などはFigmaMake側で行えます。もう少々細かい修正は、FigmaDesignにもっていき、その編集をして、`Design側でコピーしてその内容をMake側で張り付けてAIに反映させる`という方法でどうにかいけます。
+
+---
+
+開発者目線からすると、、、
+
+細かいですが、FigmaMakeからFigmaDesignにもっていった際に、`少々デザインが崩れていた`り、`変わってたり`する部分がありました。  
+また、FigmaMakeの画面で、ロードしたら表示される実装があるのですが、ロードする前にFigmaDesignにもっていこうとすると、ロードされていないものは表示されませんでした。  
+　　※仕方ないといえば仕方ないのですが、、、；；  
+　　※今後のアップデートで対応されることを期待します。。。；；
+
+また、Githubにリポジトリを作成できるようですが、`.github`のような隠しフォルダ、ファイルの`作成はできない`のはショックです。  
+　　※Github側から.github/workflows/deploy.ymlを作成したのですが、FigmaMake側からGitPushすると削除されてしまいました。  
+これができると、GithubActionsで簡単にビルドしたり、いろいろできるので対応してほしいと思いました。。。
+
+## 参考/利用したリンク
+
+- [Figma](https://www.figma.com/)
+- [Figma Make(connpass)](https://www.figma.com/ja-jp/make/)
+- [Junks Figmamake001](https://s20024.github.io/Junks/figmamake-001/)
