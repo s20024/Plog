@@ -38,6 +38,9 @@ const Footer = () => {
               <h3>その他</h3>
               <ul>
                 <li>
+                  <a href="/chat">チャット</a>
+                </li>
+                <li>
                   <a href="/about">プロフィール</a>
                 </li>
                 {/* <li><a href="/contact">お問い合わせ</a></li> */}
