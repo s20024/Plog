@@ -9,12 +9,16 @@ export interface Props {
   title: string;
   description?: string;
   image?: string;
+  hideFooter?: boolean;
+  flush?: boolean;
 }
 
 const {
   title,
   description,
   image = '/images/logo@256.png',
+  hideFooter = false,
+  flush = false,
 } = Astro.props;
 ---
 
@@ -42,10 +46,10 @@ const {
   <body>
     <BackgroundDecoration client:load />
     <Header client:load /> <!-- memo:表示が遅かったら、header.astroにし、Navigationをclient:loadに変更 -->
-    <main>
+    <main class={flush ? 'flush' : undefined}>
       <slot />
     </main>
-    <Footer client:load />
+    {!hideFooter && <Footer client:load />}
   </body>
 </html>
 
@@ -53,5 +57,9 @@ const {
   main {
     min-height: calc(100vh - 180px);
     padding: 2rem 0;
+
+    &.flush {
+      padding-top: 0;
+    }
   }
 </style>

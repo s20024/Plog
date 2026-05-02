@@ -1,0 +1,321 @@
+// 画面左上の「新しいチャット」ボタン
+.newChatButton {
+  position: fixed;
+  top: 100px;
+  left: 1.5rem;
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.95rem 0.55rem 0.85rem;
+  background: linear-gradient(135deg, var(--base-color), var(--sub-color-3));
+  border: none;
+  border-radius: 999px;
+  font-family: var(--font-main);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-color);
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.newChatIcon {
+  font-size: 1rem;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.newChatLabel {
+  font-size: 0.85rem;
+}
+
+// バブル群 (浮いてるスレッド)
+.bubblesLayer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.bubble {
+  position: fixed;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  opacity: 0.92;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: bubbleFloat infinite ease-in-out;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    transform: scale(1.06);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+  }
+
+  &.active {
+    box-shadow:
+      0 0 0 3px rgba(74, 144, 200, 0.5),
+      0 6px 18px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.bubbleSurface {
+  background: transparent;
+  border: none;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-main);
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-color);
+  text-align: center;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.bubbleTitle {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-all;
+  line-height: 1.3;
+  pointer-events: none;
+}
+
+.bubbleDelete {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: rgba(51, 51, 51, 0.6);
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  // ホバー時以外はクリックできないようにして誤押しを防止
+  pointer-events: none;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease,
+    color 0.15s ease;
+
+  .bubble:hover & {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  &:hover {
+    color: #d9534f;
+    transform: scale(1.12);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+// 削除確認オーバーレイ
+.bubbleConfirm {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.96);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.5rem;
+}
+
+.bubbleConfirmLabel {
+  font-size: 0.62rem;
+  font-family: var(--font-main);
+  color: var(--text-color);
+  text-align: center;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.bubbleConfirmButtons {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.bubbleConfirmOk {
+  font-size: 0.62rem;
+  font-family: var(--font-main);
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 0.2rem 0.45rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: #e05555;
+  }
+}
+
+.bubbleConfirmCancel {
+  font-size: 0.62rem;
+  font-family: var(--font-main);
+  background-color: rgba(0, 0, 0, 0.08);
+  color: var(--text-color);
+  border: none;
+  border-radius: 999px;
+  padding: 0.2rem 0.45rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.15);
+  }
+}
+
+@keyframes bubbleFloat {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(8px, -10px);
+  }
+  50% {
+    transform: translate(-4px, 6px);
+  }
+  75% {
+    transform: translate(-10px, -4px);
+  }
+}
+
+// コンテンツ幅外に余裕がない画面では、ヘッダー直下に横スクロールのバブルバーへ切替
+@media (max-width: 1380px) {
+  .newChatButton {
+    top: 96px;
+  }
+
+  .bubblesLayer {
+    position: fixed;
+    top: 88px;
+    left: 11rem; // 「新しいチャット」ボタンの右側から開始
+    right: 0;
+    bottom: auto; // デスクトップ側の inset: 0 を打ち消す
+    height: 110px;
+    pointer-events: auto;
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    // 揺らぎと影が収まるよう余白を取る (左右はフェード幅と揃える)
+    padding: 22px 30px;
+    overflow-x: auto;
+    // overflow-x が visible でないと overflow-y も自動的に clip されるため、
+    // 揺らぎ範囲は padding 内に収まるよう設計している
+    overflow-y: hidden;
+    // タッチデバイスで横スワイプを確実に有効化
+    touch-action: pan-x;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+
+    // 画面幅に収まらない時、左右にふわっと消えるフェード
+    mask-image: linear-gradient(to right, transparent 0, black 30px, black calc(100% - 30px), transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0, black 30px, black calc(100% - 30px), transparent 100%);
+
+    // スクロールバーを非表示
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  // 横並びになるので fixed 解除 (inline style の top/left/right を !important で無効化)
+  .bubble {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+  }
+
+  .bubbleSurface {
+    padding: 0.4rem;
+    font-size: 0.6rem;
+  }
+
+  .bubbleTitle {
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  .bubbleDelete {
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    top: -2px;
+    right: -2px;
+    // モバイルはホバーが無いので常時表示
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .newChatButton {
+    left: 1rem;
+    padding: 0.45rem 0.55rem;
+    gap: 0;
+  }
+  .newChatLabel {
+    display: none;
+  }
+  .newChatIcon {
+    font-size: 1.15rem;
+  }
+
+  .bubblesLayer {
+    // 「新しいチャット」アイコンのみになる分、左を詰める
+    left: 4rem;
+  }
+}

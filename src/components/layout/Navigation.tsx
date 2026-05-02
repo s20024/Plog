@@ -25,6 +25,9 @@ const Navigation: React.FC = () => {
             <a href="/memo">メモ</a>
           </li>
           <li>
+            <a href="/chat">チャット</a>
+          </li>
+          <li>
             <a href="/about">プロフィール</a>
           </li>
         </ul>
@@ -57,6 +60,11 @@ const Navigation: React.FC = () => {
             <li>
               <a href="/memo" onClick={toggleMenu}>
                 メモ
+              </a>
+            </li>
+            <li>
+              <a href="/chat" onClick={toggleMenu}>
+                チャット
               </a>
             </li>
             <li>
