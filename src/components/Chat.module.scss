@@ -73,6 +73,14 @@
   gap: 1rem;
 }
 
+// 最新ユーザーメッセージ以降をくくる「応答グループ」
+// inline で min-height が当たり、画面いっぱいに広がる
+.responseGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .messageRow {
   display: flex;
   max-width: 100%;

@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import styles from './Chat.module.scss';
 import AiMessage from './AiMessage';
 import ChatThreadNav, { type ThreadEntry } from './ChatThreadNav';
@@ -165,8 +171,47 @@ const Chat: React.FC = () => {
     loadThreadsFromStorage(),
   );
   const [greeting] = useState(getGreeting);
+  // 最新ユーザーメッセージ以降をくくる「応答グループ」の min-height
+  const [aiGroupMinHeight, setAiGroupMinHeight] = useState<number | undefined>(
+    undefined,
+  );
   const listRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // 最新の user メッセージのインデックスと id (応答グループの開始点)
+  const lastUserIndex = useMemo(() => {
+    for (let i = messages.length - 1; i >= 0; i--) {
+      if (messages[i].role === 'user') return i;
+    }
+    return -1;
+  }, [messages]);
+  const lastUserId = lastUserIndex >= 0 ? messages[lastUserIndex].id : null;
+
+  // 最新ユーザーメッセージの DOM サイズから応答グループの min-height を計算
+  useLayoutEffect(() => {
+    if (!lastUserId) {
+      setAiGroupMinHeight(undefined);
+      return;
+    }
+    const compute = (attempt = 0) => {
+      const list = listRef.current;
+      const userEl = list?.querySelector<HTMLElement>(
+        `[data-msg-id="${lastUserId}"]`,
+      );
+      if (!list || !userEl) {
+        if (attempt < 5) setTimeout(() => compute(attempt + 1), 30);
+        return;
+      }
+      // messageList の表示高さ - ユーザーメッセージ - gap (1rem)
+      const minH = Math.max(0, list.clientHeight - userEl.offsetHeight - 16);
+      setAiGroupMinHeight(minH);
+    };
+    compute();
+
+    const onResize = () => compute();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, [lastUserId]);
 
   // 受信した text_delta を一時的に貯めるバッファ (message id -> 残り文字列)
   const typingBufferRef = useRef<Map<string, string>>(new Map());
@@ -319,7 +364,9 @@ const Chat: React.FC = () => {
     setThreadId(null);
   };
 
-  // 送信時に「自分のメッセージ」が画面上端にくるよう一度だけスクロールする
+  // 送信時に「自分のメッセージ」が画面上端付近にくるよう一度だけスクロールする
+  // ヘッダーぴったりに張り付かないよう、上に少し余白(20px)を残す
+  const SCROLL_TOP_OFFSET = 20;
   const scrollMessageToTop = (msgId: string) => {
     const tryScroll = (attempt: number) => {
       const list = listRef.current;
@@ -334,7 +381,10 @@ const Chat: React.FC = () => {
       const containerTop = list.getBoundingClientRect().top;
       const elTop = el.getBoundingClientRect().top;
       list.scrollTo({
-        top: list.scrollTop + (elTop - containerTop),
+        top: Math.max(
+          0,
+          list.scrollTop + (elTop - containerTop) - SCROLL_TOP_OFFSET,
+        ),
         behavior: 'smooth',
       });
     };
@@ -583,58 +633,85 @@ const Chat: React.FC = () => {
                 </div>
               </div>
             )}
-            {messages.map((m) => {
-              if (m.role === 'tool') {
+            {(() => {
+              const renderMessage = (m: Message) => {
+                if (m.role === 'tool') {
+                  return (
+                    <div
+                      key={m.id}
+                      data-msg-id={m.id}
+                      className={`${styles.messageRow} ${styles.assistant}`}
+                    >
+                      <ToolBadge
+                        name={m.toolName || 'unknown'}
+                        args={m.toolArguments}
+                        result={m.toolResult}
+                      />
+                    </div>
+                  );
+                }
                 return (
                   <div
                     key={m.id}
                     data-msg-id={m.id}
-                    className={`${styles.messageRow} ${styles.assistant}`}
+                    className={`${styles.messageRow} ${
+                      m.role === 'user' ? styles.user : styles.assistant
+                    }`}
                   >
-                    <ToolBadge
-                      name={m.toolName || 'unknown'}
-                      args={m.toolArguments}
-                      result={m.toolResult}
-                    />
+                    <div className={styles.bubble}>
+                      {m.role === 'user' ? (
+                        <div className={styles.userText}>{m.content}</div>
+                      ) : m.id === streamingId && !m.content ? (
+                        <div className={styles.typing}>
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                        </div>
+                      ) : (
+                        <AiMessage content={m.content} />
+                      )}
+                    </div>
                   </div>
                 );
-              }
-              return (
-                <div
-                  key={m.id}
-                  data-msg-id={m.id}
-                  className={`${styles.messageRow} ${
-                    m.role === 'user' ? styles.user : styles.assistant
-                  }`}
-                >
-                  <div className={styles.bubble}>
-                    {m.role === 'user' ? (
-                      <div className={styles.userText}>{m.content}</div>
-                    ) : m.id === streamingId && !m.content ? (
-                      <div className={styles.typing}>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                      </div>
-                    ) : (
-                      <AiMessage content={m.content} />
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+              };
 
-            {isLoading && !streamingId && (
-              <div className={`${styles.messageRow} ${styles.assistant}`}>
-                <div className={styles.bubble}>
-                  <div className={styles.typing}>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                </div>
-              </div>
-            )}
+              // 最新ユーザーメッセージまでは通常 / それ以降は応答グループラッパーに入れる
+              const groupStart =
+                lastUserIndex >= 0 ? lastUserIndex + 1 : messages.length;
+              const beforeGroup = messages.slice(0, groupStart);
+              const inGroup = messages.slice(groupStart);
+              const showGroup = lastUserIndex >= 0;
+              return (
+                <>
+                  {beforeGroup.map(renderMessage)}
+                  {showGroup && (
+                    <div
+                      className={styles.responseGroup}
+                      style={
+                        aiGroupMinHeight !== undefined
+                          ? { minHeight: aiGroupMinHeight }
+                          : undefined
+                      }
+                    >
+                      {inGroup.map(renderMessage)}
+                      {isLoading && !streamingId && (
+                        <div
+                          className={`${styles.messageRow} ${styles.assistant}`}
+                        >
+                          <div className={styles.bubble}>
+                            <div className={styles.typing}>
+                              <span></span>
+                              <span></span>
+                              <span></span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </>
+              );
+            })()}
           </div>
         </div>
       )}
@@ -648,6 +725,7 @@ const Chat: React.FC = () => {
           onKeyDown={handleKeyDown}
           placeholder="メッセージを入力(Enterで送信、Shift+Enterで改行)"
           rows={2}
+          maxLength={1000}
           disabled={isLoading}
         />
         <button
