@@ -1,0 +1,122 @@
+.aiMessage {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--text-color);
+  background-color: transparent;
+
+  // github-markdown-css の上書き（既存デザインに合わせる）
+  &.markdown-body {
+    font-family: var(--font-main);
+    background-color: transparent;
+    color: var(--text-color);
+  }
+
+  :global(p) {
+    margin: 0 0 0.75rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  :global(h1),
+  :global(h2),
+  :global(h3),
+  :global(h4),
+  :global(h5),
+  :global(h6) {
+    margin: 1rem 0 0.5rem;
+    line-height: 1.3;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  :global(h1) {
+    font-size: 1.4rem;
+  }
+  :global(h2) {
+    font-size: 1.25rem;
+  }
+  :global(h3) {
+    font-size: 1.1rem;
+  }
+
+  :global(ul),
+  :global(ol) {
+    margin: 0.5rem 0 0.75rem;
+    padding-left: 1.4rem;
+  }
+
+  :global(li) {
+    margin-bottom: 0.25rem;
+  }
+
+  :global(a) {
+    color: #4a90c8;
+    text-decoration: underline;
+
+    &:hover {
+      color: var(--base-color);
+    }
+  }
+
+  :global(code) {
+    background-color: rgba(209, 241, 204, 0.35);
+    padding: 0.1em 0.4em;
+    border-radius: 6px;
+    font-size: 0.875em;
+  }
+
+  :global(pre) {
+    background-color: #f6f8fa;
+    border-radius: 12px;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 0.75rem 0;
+
+    code {
+      background-color: transparent;
+      padding: 0;
+      border-radius: 0;
+      font-size: 0.875rem;
+    }
+  }
+
+  :global(blockquote) {
+    margin: 0.75rem 0;
+    padding: 0.5rem 1rem;
+    border-left: 4px solid var(--base-color);
+    background-color: rgba(209, 241, 204, 0.2);
+    border-radius: 0 8px 8px 0;
+    color: var(--text-color);
+  }
+
+  :global(table) {
+    border-collapse: collapse;
+    margin: 0.75rem 0;
+    width: 100%;
+    font-size: 0.9rem;
+  }
+
+  :global(th),
+  :global(td) {
+    border: 1px solid #e6e6e6;
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+  }
+
+  :global(th) {
+    background-color: rgba(209, 241, 204, 0.3);
+  }
+
+  :global(hr) {
+    border: none;
+    border-top: 1px dashed #e0e0e0;
+    margin: 1rem 0;
+  }
+
+  :global(img) {
+    max-width: 100%;
+    border-radius: 8px;
+  }
+}
