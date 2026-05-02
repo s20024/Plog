@@ -1,0 +1,25 @@
+.chat {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  // 初期状態: ウェルカムメッセージを中央に
+  &.initial {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    min-height: calc(100vh - 240px);
+    min-height: calc(100dvh - 240px);
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 1380px) {
+  // ウェルカム表示時だけバブルバー(110px)分の余白を確保する
+  .chat.initial {
+    padding-top: 120px;
+    min-height: calc(100vh - 360px);
+    min-height: calc(100dvh - 360px);
+  }
+}

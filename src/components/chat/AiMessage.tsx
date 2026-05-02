@@ -5,20 +5,20 @@ import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/github.css';
 import styles from './AiMessage.module.scss';
 
-interface AiMessageProps {
+/**
+ * AIからのメッセージをMarkdownとしてレンダリングするコンポーネント。
+ * コードハイライトとGFM(テーブル・チェックボックス等)に対応している。
+ */
+const AiMessage: React.FC<{
   content: string;
-}
-
-const AiMessage: React.FC<AiMessageProps> = ({ content }) => {
+}> = ({ content }) => {
   return (
     <div className={`${styles.aiMessage} markdown-body`}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeHighlight]}
         components={{
-          a: ({ node, ...props }) => (
-            <a {...props} target="_blank" rel="noopener noreferrer" />
-          ),
+          a: ({ node, ...props }) => <a {...props} target="_blank" rel="noopener noreferrer" />,
         }}
       >
         {content}

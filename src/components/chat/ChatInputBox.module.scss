@@ -1,0 +1,96 @@
+// 入力エリア (textarea + 送信ボタンを横並び) - 常に画面下に固定
+.inputBox {
+  position: fixed;
+  left: 50%;
+  bottom: max(1.5rem, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  width: calc(100% - 2rem);
+  max-width: 720px;
+  z-index: 10;
+
+  background-color: white;
+  border-radius: 24px;
+  padding: 0.5rem 0.5rem 0.5rem 1.1rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.textarea {
+  flex: 1;
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: var(--font-main);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-color);
+  background-color: transparent;
+  padding: 0.6rem 0.25rem;
+  min-height: calc(1.6em * 2 + 1.2rem);
+  max-height: calc(1.6em * 5 + 1.2rem);
+  overflow-y: auto;
+
+  // スクロールバーを非表示
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &::placeholder {
+    color: rgba(51, 51, 51, 0.4);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.sendButton {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1.4rem;
+  border: none;
+  border-radius: 50px;
+  font-family: var(--font-main);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-color);
+  cursor: pointer;
+  background: linear-gradient(45deg, var(--base-color), var(--sub-color-3));
+  transition: all 0.25s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+@media (max-width: 768px) {
+  .inputBox {
+    width: calc(100% - 1.5rem);
+    padding: 0.4rem 0.4rem 0.4rem 0.9rem;
+    border-radius: 20px;
+    gap: 0.35rem;
+  }
+
+  .textarea {
+    font-size: 0.95rem;
+    padding: 0.5rem 0.25rem;
+  }
+
+  .sendButton {
+    padding: 0.55rem 0.95rem;
+    font-size: 0.85rem;
+  }
+}

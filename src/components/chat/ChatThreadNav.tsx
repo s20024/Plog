@@ -1,12 +1,7 @@
-import React, { useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import styles from './ChatThreadNav.module.scss';
-import { COLORS } from '../consts';
-
-export interface ThreadEntry {
-  id: string;
-  title: string | null;
-  createdAt: number;
-}
+import { COLORS } from '../../consts';
+import type { ThreadEntry } from '../../interfaces/chat';
 
 interface Props {
   threads: ThreadEntry[];
@@ -19,9 +14,15 @@ interface Props {
 
 const BUBBLE_SIZE = 110;
 const CONTENT_HALF_WIDTH = 540; // 1080 / 2
-const TOP_LIMIT = 100; // ヘッダー直下を避ける
-const BOTTOM_LIMIT_GAP = 30; // 下端のマージン
-const SIDE_EDGE_PADDING = 8; // 画面端からの最低マージン
+const TOP_LIMIT = 100;
+const BOTTOM_LIMIT_GAP = 30;
+const SIDE_EDGE_PADDING = 8;
+
+// 速度・ステアリング設定 (背景バブル並みにゆっくり)
+const MAX_SPEED = 0.025;
+const STEER_FACTOR = 0.0005;
+const NOISE = 0.0003;
+const STEER_BUFFER = 60;
 
 interface Physics {
   side: 'left' | 'right';
@@ -31,14 +32,11 @@ interface Physics {
   vy: number;
 }
 
-const computeMarginWidth = (vw: number): number =>
-  Math.max(0, (vw - CONTENT_HALF_WIDTH * 2) / 2);
+/** コンテンツ外のマージン幅を計算する */
+const computeMarginWidth = (vw: number): number => Math.max(0, (vw - CONTENT_HALF_WIDTH * 2) / 2);
 
-// 指定された側のXレンジを返す
-const xRangeForSide = (
-  side: 'left' | 'right',
-  vw: number,
-): { min: number; max: number } => {
+/** 指定された側のXレンジを返す */
+const xRangeForSide = (side: 'left' | 'right', vw: number): { min: number; max: number } => {
   const margin = computeMarginWidth(vw);
   if (side === 'left') {
     return {
@@ -52,13 +50,7 @@ const xRangeForSide = (
   };
 };
 
-// 速度の上限とステアリング設定 (背景バブル並みにゆっくり)
-const MAX_SPEED = 0.025; // px/frame (約 1.5px/sec @60fps)
-const STEER_FACTOR = 0.0005;
-const NOISE = 0.0003;
-const STEER_BUFFER = 60; // 壁から何 px 手前から旋回し始めるか
-
-// バブルの初期 physics 状態を作る
+/** バブルの初期 physics 状態を作る */
 const createPhysics = (index: number): Physics => {
   const vw = window.innerWidth;
   const vh = window.innerHeight;
@@ -66,9 +58,8 @@ const createPhysics = (index: number): Physics => {
   const { min: xMin, max: xMax } = xRangeForSide(side, vw);
   const yMin = TOP_LIMIT;
   const yMax = Math.max(yMin, vh - BUBBLE_SIZE - BOTTOM_LIMIT_GAP);
-  // 速度はゆっくりめ
   const angle = Math.random() * Math.PI * 2;
-  const speed = 0.01 + Math.random() * 0.015; // 0.01〜0.025
+  const speed = 0.01 + Math.random() * 0.015;
   return {
     side,
     x: xMin + Math.random() * Math.max(1, xMax - xMin),
@@ -78,20 +69,19 @@ const createPhysics = (index: number): Physics => {
   };
 };
 
-const ChatThreadNav: React.FC<Props> = ({
-  threads,
-  currentThreadId,
-  busy,
-  onSelect,
-  onDelete,
-  onNewChat,
-}) => {
+/**
+ * チャットスレッドをバブルUIで表示するナビゲーションコンポーネント。
+ * PCではバブルが画面サイド上を漂い、モバイルでは上部に横スクロールで並ぶ。
+ */
+const ChatThreadNav: React.FC<Props> = ({ threads, currentThreadId, busy, onSelect, onDelete, onNewChat }) => {
   const bubbleRefs = useRef<Map<string, HTMLDivElement>>(new Map());
   const physicsRef = useRef<Map<string, Physics>>(new Map());
   const rafRef = useRef<number | null>(null);
   const isDesktopRef = useRef<boolean>(false);
+  // 削除確認中のスレッドID
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
-  // PC かどうかを判定 (スマホ/タブレットは横スクロールバーで管理しているので物理演算しない)
+  // PC かどうかを判定 (スマホ/タブレットは横スクロールバーで管理)
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const mq = window.matchMedia('(min-width: 1381px)');
@@ -103,7 +93,7 @@ const ChatThreadNav: React.FC<Props> = ({
     return () => mq.removeEventListener('change', handler);
   }, []);
 
-  // threads 変更時: 新規バブルの physics 初期化 / 削除されたバブルの physics 削除
+  // threads 変更時: 新規バブルの physics 初期化 / 削除バブルの physics 削除
   useLayoutEffect(() => {
     threads.forEach((t, i) => {
       if (!physicsRef.current.has(t.id)) {
@@ -115,7 +105,7 @@ const ChatThreadNav: React.FC<Props> = ({
         physicsRef.current.delete(id);
       }
     }
-    // 初期位置を即座に DOM に反映 (チラつき防止)
+    // 初期位置を即座に DOM に反映してチラつきを防ぐ
     physicsRef.current.forEach((state, id) => {
       const el = bubbleRefs.current.get(id);
       if (el) {
@@ -125,7 +115,7 @@ const ChatThreadNav: React.FC<Props> = ({
     });
   }, [threads]);
 
-  // RAF ループでバブルを漂わせる (跳ね返りではなく ゆるやかなステアリング)
+  // RAF ループでバブルをゆるやかなステアリングで漂わせる
   useEffect(() => {
     const tick = () => {
       if (isDesktopRef.current) {
@@ -150,7 +140,6 @@ const ChatThreadNav: React.FC<Props> = ({
             steerY = -(state.y - (yMax - STEER_BUFFER)) / STEER_BUFFER;
           }
 
-          // ステアリング力 + 自然なゆらぎを加える
           state.vx += steerX * STEER_FACTOR + (Math.random() - 0.5) * NOISE;
           state.vy += steerY * STEER_FACTOR + (Math.random() - 0.5) * NOISE;
 
@@ -161,7 +150,6 @@ const ChatThreadNav: React.FC<Props> = ({
             state.vy = (state.vy / speed) * MAX_SPEED;
           }
 
-          // 移動
           state.x += state.vx;
           state.y += state.vy;
 
@@ -203,6 +191,7 @@ const ChatThreadNav: React.FC<Props> = ({
         {threads.map((t, i) => {
           const color = COLORS[i % COLORS.length];
           const isActive = t.id === currentThreadId;
+          const isConfirming = confirmDeleteId === t.id;
           return (
             <div
               key={t.id}
@@ -217,32 +206,60 @@ const ChatThreadNav: React.FC<Props> = ({
                 animationDelay: `-${(i * 1.7) % 8}s`,
               }}
             >
-              <button
-                type="button"
-                className={styles.bubbleSurface}
-                onClick={() => !busy && onSelect(t.id)}
-                disabled={busy}
-                title={t.title || '新しいチャット'}
-              >
-                <span className={styles.bubbleTitle}>
-                  {t.title || '新しいチャット'}
-                </span>
-              </button>
-              <button
-                type="button"
-                className={styles.bubbleDelete}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (busy) return;
-                  if (confirm('このチャットを削除しますか?')) {
-                    onDelete(t.id);
-                  }
-                }}
-                disabled={busy}
-                aria-label="このチャットを削除"
-              >
-                ×
-              </button>
+              {isConfirming ? (
+                // 削除確認オーバーレイ
+                <div className={styles.bubbleConfirm}>
+                  <p className={styles.bubbleConfirmLabel}>削除しますか？</p>
+                  <div className={styles.bubbleConfirmButtons}>
+                    <button
+                      type="button"
+                      className={styles.bubbleConfirmOk}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setConfirmDeleteId(null);
+                        onDelete(t.id);
+                      }}
+                    >
+                      削除
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.bubbleConfirmCancel}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setConfirmDeleteId(null);
+                      }}
+                    >
+                      戻る
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    className={styles.bubbleSurface}
+                    onClick={() => !busy && onSelect(t.id)}
+                    disabled={busy}
+                    title={t.title || '新しいチャット'}
+                  >
+                    <span className={styles.bubbleTitle}>{t.title || '新しいチャット'}</span>
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.bubbleDelete}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (busy) return;
+                      setConfirmDeleteId(t.id);
+                    }}
+                    disabled={busy}
+                    aria-label="このチャットを削除"
+                  >
+                    ×
+                  </button>
+                </>
+              )}
             </div>
           );
         })}

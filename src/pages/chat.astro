@@ -1,10 +1,10 @@
 ---
 import Layout from '../layouts/BaseLayout.astro';
-import Chat from '../components/Chat';
+import ChatApp from '../components/chat/ChatApp';
 ---
 
 <Layout title="AIチャット" description="AIとチャットができるページです。" hideFooter flush>
-  <Chat client:only="react" />
+  <ChatApp client:only="react" />
 </Layout>
 
 <style lang="scss">

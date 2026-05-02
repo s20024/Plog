@@ -1,0 +1,88 @@
+// ツール利用バッジ
+.tool {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 100%;
+}
+
+.toolName {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: rgba(209, 241, 204, 0.35);
+  border: 1px solid rgba(209, 241, 204, 0.7);
+  border-radius: 14px;
+  padding: 0.3rem 0.75rem;
+  font-family: var(--font-main);
+  font-size: 0.8rem;
+  color: rgba(51, 51, 51, 0.75);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: rgba(209, 241, 204, 0.6);
+  }
+}
+
+.toolPendingDot {
+  font-size: 0.85rem;
+  color: rgba(51, 51, 51, 0.5);
+  animation: toolPending 1.4s infinite ease-in-out;
+}
+
+.toolChevron {
+  font-size: 0.7rem;
+  color: rgba(51, 51, 51, 0.45);
+}
+
+.toolDetail {
+  margin-top: 0.4rem;
+  padding: 0.6rem 0.8rem;
+  background-color: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.toolSection + .toolSection {
+  margin-top: 0.6rem;
+}
+
+.toolLabel {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgba(51, 51, 51, 0.5);
+  margin-bottom: 0.25rem;
+  letter-spacing: 0.02em;
+}
+
+.toolJson {
+  margin: 0;
+  font-size: 0.75rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  white-space: pre-wrap;
+  word-break: break-all;
+  color: var(--text-color);
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.toolPending {
+  font-size: 0.78rem;
+  color: rgba(51, 51, 51, 0.5);
+  font-style: italic;
+}
+
+@keyframes toolPending {
+  0%,
+  60%,
+  100% {
+    opacity: 0.6;
+  }
+  30% {
+    opacity: 1;
+  }
+}

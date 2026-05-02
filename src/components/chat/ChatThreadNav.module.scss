@@ -17,7 +17,10 @@
   color: var(--text-color);
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
 
   &:hover:not(:disabled) {
     transform: translateY(-2px);
@@ -60,7 +63,9 @@
   justify-content: center;
   animation: bubbleFloat infinite ease-in-out;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:hover {
     transform: scale(1.06);
@@ -68,7 +73,8 @@
   }
 
   &.active {
-    box-shadow: 0 0 0 3px rgba(74, 144, 200, 0.5),
+    box-shadow:
+      0 0 0 3px rgba(74, 144, 200, 0.5),
       0 6px 18px rgba(0, 0, 0, 0.1);
   }
 }
@@ -125,7 +131,10 @@
   opacity: 0;
   // ホバー時以外はクリックできないようにして誤押しを防止
   pointer-events: none;
-  transition: opacity 0.15s ease, transform 0.15s ease, color 0.15s ease;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease,
+    color 0.15s ease;
 
   .bubble:hover & {
     opacity: 1;
@@ -142,8 +151,69 @@
   }
 }
 
+// 削除確認オーバーレイ
+.bubbleConfirm {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.96);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.5rem;
+}
+
+.bubbleConfirmLabel {
+  font-size: 0.62rem;
+  font-family: var(--font-main);
+  color: var(--text-color);
+  text-align: center;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.bubbleConfirmButtons {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.bubbleConfirmOk {
+  font-size: 0.62rem;
+  font-family: var(--font-main);
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 0.2rem 0.45rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: #e05555;
+  }
+}
+
+.bubbleConfirmCancel {
+  font-size: 0.62rem;
+  font-family: var(--font-main);
+  background-color: rgba(0, 0, 0, 0.08);
+  color: var(--text-color);
+  border: none;
+  border-radius: 999px;
+  padding: 0.2rem 0.45rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.15);
+  }
+}
+
 @keyframes bubbleFloat {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0, 0);
   }
   25% {
@@ -188,20 +258,8 @@
     overscroll-behavior-x: contain;
 
     // 画面幅に収まらない時、左右にふわっと消えるフェード
-    mask-image: linear-gradient(
-      to right,
-      transparent 0,
-      black 30px,
-      black calc(100% - 30px),
-      transparent 100%
-    );
-    -webkit-mask-image: linear-gradient(
-      to right,
-      transparent 0,
-      black 30px,
-      black calc(100% - 30px),
-      transparent 100%
-    );
+    mask-image: linear-gradient(to right, transparent 0, black 30px, black calc(100% - 30px), transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0, black 30px, black calc(100% - 30px), transparent 100%);
 
     // スクロールバーを非表示
     scrollbar-width: none;
