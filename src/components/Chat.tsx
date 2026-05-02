@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './Chat.module.scss';
 import AiMessage from './AiMessage';
+import ChatThreadNav, { type ThreadEntry } from './ChatThreadNav';
 
 const ToolBadge: React.FC<{
   name: string;
@@ -55,7 +56,10 @@ const API_BASE =
   (import.meta.env.PUBLIC_PROFILE_CHAT_API_URL as string | undefined) ||
   'https://backend.s20024.com/api/profile-chat';
 
-const STORAGE_KEY = 'plog.chat.threadId';
+// 旧スキーマ (単一スレッドID) のキー。今は使わないので起動時に消す
+const LEGACY_THREAD_KEY = 'plog.chat.threadId';
+// スレッド一覧を保存するキー
+const THREADS_KEY = 'plog.chat.threads';
 
 type Role = 'user' | 'assistant' | 'tool';
 
@@ -68,6 +72,75 @@ interface Message {
   toolArguments?: unknown;
   toolResult?: unknown;
 }
+
+const loadThreadsFromStorage = (): ThreadEntry[] => {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = localStorage.getItem(THREADS_KEY);
+    if (!raw) return [];
+    const arr = JSON.parse(raw);
+    if (!Array.isArray(arr)) return [];
+    return arr.filter(
+      (e: any): e is ThreadEntry =>
+        e && typeof e === 'object' && typeof e.id === 'string',
+    );
+  } catch {
+    return [];
+  }
+};
+
+const saveThreadsToStorage = (threads: ThreadEntry[]) => {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(THREADS_KEY, JSON.stringify(threads));
+  } catch {
+    // ignore
+  }
+};
+
+// API 履歴 → 内部 Message[] への変換
+const buildHistoryFromAPI = (rawMessages: any[]): Message[] => {
+  const history: Message[] = [];
+  const toolCallIndex = new Map<string, number>();
+  for (const m of rawMessages || []) {
+    if (m.role === 'user' && typeof m.content === 'string' && m.content.length > 0) {
+      history.push({ id: createId(), role: 'user', content: m.content });
+    } else if (m.role === 'assistant') {
+      if (typeof m.content === 'string' && m.content.length > 0) {
+        history.push({ id: createId(), role: 'assistant', content: m.content });
+      }
+      if (Array.isArray(m.tool_calls)) {
+        for (const tc of m.tool_calls) {
+          history.push({
+            id: createId(),
+            role: 'tool',
+            content: '',
+            toolName: tc.name || 'unknown',
+            toolArguments: tc.arguments,
+          });
+          if (tc.id) toolCallIndex.set(tc.id, history.length - 1);
+        }
+      }
+    } else if (m.role === 'tool_result' && Array.isArray(m.tool_results)) {
+      for (const tr of m.tool_results) {
+        const idx = tr.id ? toolCallIndex.get(tr.id) : undefined;
+        if (idx !== undefined) {
+          history[idx] = { ...history[idx], toolResult: tr.result };
+        } else {
+          history.push({
+            id: createId(),
+            role: 'tool',
+            content: '',
+            toolName: tr.name || 'unknown',
+            toolArguments: tr.arguments,
+            toolResult: tr.result,
+          });
+        }
+      }
+    }
+  }
+  return history;
+};
 
 const createId = () =>
   typeof crypto !== 'undefined' && 'randomUUID' in crypto
@@ -87,7 +160,10 @@ const Chat: React.FC = () => {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [streamingId, setStreamingId] = useState<string | null>(null);
-  const [historyLoading, setHistoryLoading] = useState(true);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [threads, setThreads] = useState<ThreadEntry[]>(() =>
+    loadThreadsFromStorage(),
+  );
   const [greeting] = useState(getGreeting);
   const listRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -169,74 +245,79 @@ const Chat: React.FC = () => {
     };
   }, []);
 
-  // 初回マウント: localStorage からスレッドを復元
+  // 起動時は常に新しいチャットで始める。旧スキーマのキーだけ掃除する
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (!stored) {
-      setHistoryLoading(false);
-      return;
+    try {
+      localStorage.removeItem(LEGACY_THREAD_KEY);
+    } catch {
+      // ignore
     }
-
-    (async () => {
-      try {
-        const res = await fetch(`${API_BASE}/${stored}`);
-        if (res.status === 404) {
-          localStorage.removeItem(STORAGE_KEY);
-          return;
-        }
-        if (!res.ok) {
-          console.warn('履歴取得失敗:', res.status);
-          return;
-        }
-        const data = await res.json();
-        setThreadId(data.thread_id);
-        const history: Message[] = [];
-        const toolCallIndex = new Map<string, number>(); // tool_call.id -> messages index
-        for (const m of data.messages || []) {
-          if (m.role === 'user' && typeof m.content === 'string' && m.content.length > 0) {
-            history.push({ id: createId(), role: 'user', content: m.content });
-          } else if (m.role === 'assistant') {
-            if (typeof m.content === 'string' && m.content.length > 0) {
-              history.push({ id: createId(), role: 'assistant', content: m.content });
-            }
-            if (Array.isArray(m.tool_calls)) {
-              for (const tc of m.tool_calls) {
-                history.push({
-                  id: createId(),
-                  role: 'tool',
-                  content: '',
-                  toolName: tc.name || 'unknown',
-                  toolArguments: tc.arguments,
-                });
-                if (tc.id) toolCallIndex.set(tc.id, history.length - 1);
-              }
-            }
-          } else if (m.role === 'tool_result' && Array.isArray(m.tool_results)) {
-            for (const tr of m.tool_results) {
-              const idx = tr.id ? toolCallIndex.get(tr.id) : undefined;
-              if (idx !== undefined) {
-                history[idx] = { ...history[idx], toolResult: tr.result };
-              } else {
-                history.push({
-                  id: createId(),
-                  role: 'tool',
-                  content: '',
-                  toolName: tr.name || 'unknown',
-                  toolArguments: tr.arguments,
-                  toolResult: tr.result,
-                });
-              }
-            }
-          }
-        }
-        setMessages(history);
-      } catch (e) {
-        console.error('履歴の取得に失敗しました', e);
-      } finally {
-        setHistoryLoading(false);
-      }
-    })();
   }, []);
+
+  // threads を更新しつつ localStorage にも反映する
+  const updateThreads = (mutator: (prev: ThreadEntry[]) => ThreadEntry[]) => {
+    setThreads((prev) => {
+      const next = mutator(prev);
+      saveThreadsToStorage(next);
+      return next;
+    });
+  };
+
+  // 既存スレッドへの切替
+  const switchToThread = async (tid: string) => {
+    if (isLoading || historyLoading) return;
+    if (tid === threadId) return;
+    setHistoryLoading(true);
+    setMessages([]);
+    setThreadId(null);
+    try {
+      const res = await fetch(`${API_BASE}/${tid}`);
+      if (res.status === 404) {
+        // サーバから消えていればローカルからも消す
+        updateThreads((prev) => prev.filter((t) => t.id !== tid));
+        return;
+      }
+      if (!res.ok) {
+        console.warn('履歴取得失敗:', res.status);
+        return;
+      }
+      const data = await res.json();
+      setThreadId(data.thread_id);
+      setMessages(buildHistoryFromAPI(data.messages || []));
+      // タイトルがあれば一覧側も更新
+      if (typeof data.title === 'string' && data.title) {
+        updateThreads((prev) =>
+          prev.map((t) => (t.id === tid ? { ...t, title: data.title } : t)),
+        );
+      }
+    } catch (e) {
+      console.error('履歴の取得に失敗しました', e);
+    } finally {
+      setHistoryLoading(false);
+    }
+  };
+
+  // スレッド削除 (ローカル即削除 → 非同期で API 呼ぶ)
+  const deleteThread = async (tid: string) => {
+    if (isLoading) return;
+    updateThreads((prev) => prev.filter((t) => t.id !== tid));
+    if (threadId === tid) {
+      setMessages([]);
+      setThreadId(null);
+    }
+    try {
+      await fetch(`${API_BASE}/${tid}`, { method: 'DELETE' });
+    } catch (e) {
+      console.warn('スレッド削除APIの失敗:', e);
+    }
+  };
+
+  // 新しいチャット (現在のチャットだけクリア。サーバ側スレッドは送信時に作成)
+  const startNewChat = () => {
+    if (isLoading) return;
+    setMessages([]);
+    setThreadId(null);
+  };
 
   // 送信時に「自分のメッセージ」が画面上端にくるよう一度だけスクロールする
   const scrollMessageToTop = (msgId: string) => {
@@ -323,6 +404,15 @@ const Chat: React.FC = () => {
         }
 
         switch (ev.type) {
+          case 'title': {
+            const title = ev.title;
+            if (typeof title === 'string' && title.length > 0) {
+              updateThreads((prev) =>
+                prev.map((t) => (t.id === tid ? { ...t, title } : t)),
+              );
+            }
+            break;
+          }
           case 'text_start': {
             // API 仕様の推奨: 新しい発話前に前のバッファを flush しておく
             flushTypingBuffer();
@@ -424,7 +514,13 @@ const Chat: React.FC = () => {
         const data = await createRes.json();
         tid = data.thread_id as string;
         setThreadId(tid);
-        localStorage.setItem(STORAGE_KEY, tid);
+        // ローカルのスレッド一覧に追加 (タイトルは title イベントで後で埋まる)
+        const newEntry: ThreadEntry = {
+          id: tid,
+          title: null,
+          createdAt: Date.now(),
+        };
+        updateThreads((prev) => [newEntry, ...prev]);
       }
 
       await streamReply(tid, text);
@@ -453,15 +549,19 @@ const Chat: React.FC = () => {
     }
   };
 
-  // 履歴読み込み中はチラつき防止のため何も描画しない
-  if (historyLoading) {
-    return <div className={styles.chat} aria-busy="true" />;
-  }
-
-  const isInitial = messages.length === 0 && !isLoading;
+  const isInitial = messages.length === 0 && !isLoading && !historyLoading;
 
   return (
-    <div className={`${styles.chat} ${isInitial ? styles.initial : ''}`}>
+    <>
+      <ChatThreadNav
+        threads={threads}
+        currentThreadId={threadId}
+        busy={isLoading || historyLoading}
+        onSelect={switchToThread}
+        onDelete={deleteThread}
+        onNewChat={startNewChat}
+      />
+      <div className={`${styles.chat} ${isInitial ? styles.initial : ''}`}>
       {isInitial && (
         <div className={styles.welcome}>
           <h2 className={styles.greeting}>{greeting}</h2>
@@ -474,6 +574,15 @@ const Chat: React.FC = () => {
       {!isInitial && (
         <div className={styles.messageList} ref={listRef}>
           <div className={styles.messageListInner}>
+            {historyLoading && (
+              <div className={styles.historyLoading} aria-busy="true">
+                <div className={styles.typing}>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+            )}
             {messages.map((m) => {
               if (m.role === 'tool') {
                 return (
@@ -551,7 +660,8 @@ const Chat: React.FC = () => {
           送信
         </button>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

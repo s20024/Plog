@@ -190,6 +190,13 @@
   font-style: italic;
 }
 
+// 履歴読み込み中インジケーター (中央寄せ)
+.historyLoading {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 0;
+}
+
 // タイピングインジケーター
 .typing {
   display: flex;
@@ -307,6 +314,39 @@
   }
 }
 
+// バブルバーがコンテンツに被る画面サイズでは、messageList をバブルバーの下に潜り込ませる
+@media (max-width: 1380px) {
+  // ウェルカム表示時だけはバブルバー(110px)分の余白を確保
+  .chat.initial {
+    padding-top: 120px;
+    min-height: calc(100vh - 360px);
+    min-height: calc(100dvh - 360px);
+  }
+
+  .messageList {
+    // 上端 130px はバブルバーに潜るためのフェード領域
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      black 130px,
+      black calc(100% - 80px),
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      black 130px,
+      black calc(100% - 80px),
+      transparent 100%
+    );
+  }
+
+  .messageListInner {
+    // 最初のメッセージがバブルバーから抜けて表示されるように余白を取る
+    padding-top: 130px;
+  }
+}
+
 @media (max-width: 768px) {
   .messageList {
     height: calc(100vh - 148px);
@@ -314,7 +354,7 @@
   }
 
   .messageListInner {
-    padding: 1.25rem 1rem 110px;
+    padding: 130px 1rem 110px;
   }
 
   .bubble {
