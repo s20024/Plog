@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://plog.s20024.com/sitemap-index.xml
