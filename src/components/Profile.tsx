@@ -20,7 +20,7 @@ const Profile: React.FC<ProfileProps> = ({ type = 'short' }) => {
       <div className={styles.profileInfo}>
         <h2>{PLOGGER}({PLOGGER_NAME})</h2>
         <p className={styles.profileBio}>
-          プログラマー歴2年の初心者プログラマーです。<br />
+          プログラマー歴3年の初心者プログラマーです。<br />
           フロントエンドエンジニアです。たまにバックエンドもしています。<br />
           SNSは、あまりやっていないです。<br />
           <br />
