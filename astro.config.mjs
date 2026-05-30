@@ -6,7 +6,7 @@ import rehypeExternalLinks from 'rehype-external-links';
 
 export default defineConfig({
   site: 'https://plog.s20024.com',
-  trailingSlash: 'always',
+  trailingSlash: 'ignore',
   build: {
     format: 'directory',
   },
