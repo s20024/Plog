@@ -129,16 +129,20 @@
   align-items: center;
   justify-content: center;
   opacity: 0;
-  // ホバー時以外はクリックできないようにして誤押しを防止
-  pointer-events: none;
+  // 非表示中はクリックできないようにして誤押しを防止
+  visibility: hidden;
+  // バブルが円形でホバー判定から外れやすいため、
+  // ホバーが外れてもしばらく表示とクリック可否を残す猶予を設ける
   transition:
-    opacity 0.15s ease,
+    opacity 0.2s ease 0.6s,
+    visibility 0s linear 0.8s,
     transform 0.15s ease,
     color 0.15s ease;
 
   .bubble:hover & {
     opacity: 1;
-    pointer-events: auto;
+    visibility: visible;
+    transition-delay: 0s;
   }
 
   &:hover {
@@ -298,6 +302,7 @@
     right: -2px;
     // モバイルはホバーが無いので常時表示
     opacity: 1;
+    visibility: visible;
   }
 }
 

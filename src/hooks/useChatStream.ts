@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import type { Message, ThreadEntry } from '../interfaces/chat';
-import { CHAT_API_BASE } from '../consts';
+import { CHAT_API_BASE, CHAT_PERSONA } from '../consts';
 import { createId } from '../utils/createId';
 
 interface UseChatStreamParams {
@@ -35,11 +35,15 @@ export const useChatStream = ({
   const [streamingId, setStreamingId] = useState<string | null>(null);
 
   const createThread = async (): Promise<string> => {
-    const res = await fetch(CHAT_API_BASE, { method: 'POST' });
+    const res = await fetch(CHAT_API_BASE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ persona: CHAT_PERSONA }),
+    });
     if (!res.ok) {
       throw new Error(`スレッド作成に失敗しました (${res.status})`);
     }
-    const data = (await res.json()) as { thread_id: string };
+    const data = (await res.json()) as { thread_id: string; persona?: string };
     return data.thread_id;
   };
 
