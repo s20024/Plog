@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './Footer.module.scss';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 import SocialIcon from '../SocialIcon';
+import PortfolioLink from '../PortfolioLink';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -51,9 +52,11 @@ const Footer = () => {
             <div className={styles.linkGroup}>
               <h3>フォロー</h3>
               <div className={styles.socialLinks}>
-                <SocialIcon type="github" />
-                <SocialIcon type="twitter" />
-                <SocialIcon type="portfolio" />
+                <PortfolioLink />
+                <div className={styles.socialIcons}>
+                  <SocialIcon type="github" />
+                  <SocialIcon type="twitter" />
+                </div>
               </div>
             </div>
           </div>
