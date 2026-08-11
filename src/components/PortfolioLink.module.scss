@@ -1,0 +1,42 @@
+.portfolioLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  background: linear-gradient(45deg, var(--base-color), var(--sub-color-1));
+  color: var(--text-color);
+  text-decoration: none;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  .label {
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  .url {
+    font-size: 0.85rem;
+    opacity: 0.75;
+    white-space: nowrap;
+  }
+}
+
+// 画面が狭いときはラベルを省いて、URLだけ折り返さずに収める
+@media (max-width: 360px) {
+  .portfolioLink {
+    .label {
+      display: none;
+    }
+  }
+}

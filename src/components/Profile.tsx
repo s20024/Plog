@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './Profile.module.scss';
 import SocialIcon from './SocialIcon';
+import PortfolioLink from './PortfolioLink';
 import { PLOGGER, PLOGGER_NAME } from '../consts';
 
 interface ProfileProps {
@@ -28,9 +29,11 @@ const Profile: React.FC<ProfileProps> = ({ type = 'short' }) => {
           バックエンドエンジニアじゃん。w<br />
         </p>
         <div className={styles.socialLinks}>
-          <SocialIcon type="github" />
-          <SocialIcon type="twitter" />
-          <SocialIcon type="portfolio" />
+          <PortfolioLink />
+          <div className={styles.socialIcons}>
+            <SocialIcon type="github" />
+            <SocialIcon type="twitter" />
+          </div>
         </div>
       </div>
     </div>
