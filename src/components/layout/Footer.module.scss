@@ -41,6 +41,11 @@
           font-size: 0.9rem;
           opacity: 0.8;
         }
+
+        .footerSearch {
+          max-width: 360px;
+          margin-top: 1.25rem;
+        }
       }
 
       .footerLinks {
@@ -117,6 +122,10 @@
     @media (max-width: 768px) {
       .footerContent {
         grid-template-columns: 1fr;
+
+        .footerLogo .footerSearch {
+          max-width: none;
+        }
 
         .footerLinks {
           grid-template-columns: 1fr;

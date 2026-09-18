@@ -44,6 +44,8 @@ github-copilotのアシスタントは、「ずんだもん」人格にしてい
 - 検索対象は `data-pagefind-body` を付けた記事本文(`PostContainer.astro`)のみ。プログ・ニュース・メモが対象。
 - 検索ページの検索欄・件数表示・検索結果は、Pagefind公式の [Component UI](https://pagefind.app/docs/ui/) を利用している(デザインは `--pf-*` 変数と結果テンプレートでサイトに合わせている)。
 - 検索ページ(`/search/`)は、キーワード(`?q=`)・カテゴリ(`?category=`)・タグ(`?tag=`)で検索でき、検索条件はURLと同期する。キーワード未入力時はタグ一覧を表示する。
+- Footer と、プログ・ニュース・メモの各一覧、プログ詳細の検索欄(`SearchForm`)から、検索ページ(`/search/?q=キーワード`)に遷移する。
+  - Footer 以外の検索欄からは、そのカテゴリで絞り込んだ状態(`&category=plog` など)で遷移する。
 - `npm run dev` では、前回のビルドで生成したインデックス(`dist/pagefind/`)を配信する(astro-pagefind の機能)。
   - 開発中に検索するには、先に一度 `npm run build` を実行しておく。
   - 開発中に追加・変更した記事は、再度 `npm run build` するまで検索結果に反映されない。

@@ -3,6 +3,7 @@ import styles from './Footer.module.scss';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 import SocialIcon from '../SocialIcon';
 import PortfolioLink from '../PortfolioLink';
+import SearchForm from '../search/SearchForm';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -18,6 +19,9 @@ const Footer = () => {
               <h2>{SITE_TITLE}</h2>
             </a>
             <p>{SITE_DESCRIPTION}</p>
+            <div className={styles.footerSearch}>
+              <SearchForm />
+            </div>
           </div>
 
           <div className={styles.footerLinks}>

@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/BaseLayout.astro';
+import SearchForm from '../../components/search/SearchForm';
 
 const news = (await getCollection('news')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
@@ -10,6 +11,11 @@ const news = (await getCollection('news')).sort((a, b) => b.data.pubDate.valueOf
     <div class="page-header">
       <h1>ニュース</h1>
       <p>個人的なニュースをお届けします。</p>
+    </div>
+
+    <div class="news-search">
+      {/* memo: ニュース一覧からの検索のため、検索ページをニュースで絞り込んだ状態で開く。 */}
+      <SearchForm category="news" placeholder="ニュース内を検索" />
     </div>
 
     <div class="news-container">
@@ -40,7 +46,7 @@ const news = (await getCollection('news')).sort((a, b) => b.data.pubDate.valueOf
 <style lang="scss">
   .page-header {
     text-align: center;
-    margin: 2rem 0 3rem;
+    margin: 2rem 0 2rem;
 
     h1 {
       font-size: 2.5rem;
@@ -56,6 +62,11 @@ const news = (await getCollection('news')).sort((a, b) => b.data.pubDate.valueOf
       font-size: 1.2rem;
       opacity: 0.8;
     }
+  }
+
+  .news-search {
+    max-width: 600px;
+    margin: 0 auto 3rem;
   }
 
   .news-container {
