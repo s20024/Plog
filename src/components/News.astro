@@ -1,12 +1,9 @@
 ---
 import { getCollection } from 'astro:content';
 
-const { type = 'latest', max = -1, tag = '' } = Astro.props;
+const { max = -1 } = Astro.props;
 let news = (await getCollection('news')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-if (type == 'tag') {
-  news = news.filter((news) => news.data.tags && news.data.tags.map((tag) => tag.toLowerCase()).includes(tag));
-}
 if (0 <= max) {
   news = news.slice(0, max);
 }
@@ -26,14 +23,14 @@ if (0 <= max) {
         </div>
         <div class="news-content">
           <h3 class="news-title">
-            <a href={`/news/${news.id}`}>{news.data.title}</a>
+            <a href={`/news/${news.id}/`}>{news.data.title}</a>
           </h3>
         </div>
       </article>
     ))
   }
 
-  <a href="/news" class="view-all">すべてのニュースを見る →</a>
+  <a href="/news/" class="view-all">すべてのニュースを見る →</a>
 </div>
 
 <style lang="scss">

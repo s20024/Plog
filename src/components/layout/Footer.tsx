@@ -3,6 +3,7 @@ import styles from './Footer.module.scss';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 import SocialIcon from '../SocialIcon';
 import PortfolioLink from '../PortfolioLink';
+import SearchForm from '../search/SearchForm';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -12,8 +13,15 @@ const Footer = () => {
       <div className={`container ${styles.container}`}>
         <div className={styles.footerContent}>
           <div className={styles.footerLogo}>
-            <h2>{SITE_TITLE}</h2>
+            <a href="/" className={styles.homeLink}>
+              {/* memo: 隣にサイト名があるため、ロゴは装飾扱い(alt="")にする。 */}
+              <img className={styles.logoImg} src="/images/logo@256.png" alt="" />
+              <h2>{SITE_TITLE}</h2>
+            </a>
             <p>{SITE_DESCRIPTION}</p>
+            <div className={styles.footerSearch}>
+              <SearchForm />
+            </div>
           </div>
 
           <div className={styles.footerLinks}>
@@ -21,16 +29,13 @@ const Footer = () => {
               <h3>コンテンツ</h3>
               <ul>
                 <li>
-                  <a href="/">ホーム</a>
+                  <a href="/plog/">プログ</a>
                 </li>
                 <li>
-                  <a href="/plog">プログ</a>
+                  <a href="/news/">ニュース</a>
                 </li>
                 <li>
-                  <a href="/news">ニュース</a>
-                </li>
-                <li>
-                  <a href="/memo">メモ</a>
+                  <a href="/memo/">メモ</a>
                 </li>
               </ul>
             </div>
@@ -39,10 +44,10 @@ const Footer = () => {
               <h3>その他</h3>
               <ul>
                 <li>
-                  <a href="/chat">チャット</a>
+                  <a href="/chat/">チャット</a>
                 </li>
                 <li>
-                  <a href="/about">プロフィール</a>
+                  <a href="/about/">プロフィール</a>
                 </li>
                 {/* <li><a href="/contact">お問い合わせ</a></li> */}
                 {/* <li><a href="/privacy">プライバシーポリシー</a></li> */}
