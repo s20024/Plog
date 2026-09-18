@@ -86,6 +86,7 @@ tags: ['Bolt', 'Astro', 'AIDD']
     - `[...slug].astro`: タグの詳細ページになります。そのタグがついているコンテンツ一覧を表示します。
     - `index.astro`: タグの一覧ページになります。
   - `about.astro`: このプログの概要を記載するページになります。
+  - `search.astro`: サイト内検索(Pagefind)のページになります。キーワード・カテゴリ・タグで検索結果を表示します。(例: `/search/?q=キーワード&tag=タグ名`)
   - `index.astro`: トップページになります。
 
 ## Style規約 `src/styles/**/*.scss`

@@ -1,0 +1,38 @@
+---
+import Layout from '../layouts/BaseLayout.astro';
+import PagefindConfig from 'astro-pagefind/components/PagefindConfig.astro';
+import SiteSearch from '../components/search/SiteSearch';
+
+// memo: 検索結果の抜粋の長さ(Pagefindの excerpt-length。既定値は30)。
+const EXCERPT_LENGTH = 40;
+---
+
+{/* memo: サイト内の検索結果ページのため、検索エンジンにはインデックスさせない。 */}
+<Layout title="検索" description="プログ・ニュース・メモをキーワードで横断検索できるページです。" noindex>
+  <div class="container">
+    <div class="page-header">
+      <h1>検索</h1>
+    </div>
+
+    {/* memo: Pagefind Component UI の設定。faceted はキーワードなし(タグのみ)でも検索できるようにするため。 */}
+    <PagefindConfig faceted excerpt-length={EXCERPT_LENGTH} />
+    <SiteSearch client:only="react" />
+  </div>
+</Layout>
+
+<style lang="scss">
+  .page-header {
+    text-align: center;
+    margin: 2rem 0 3rem;
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(45deg, var(--base-color), var(--sub-color-1), var(--sub-color-4));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+    }
+  }
+</style>

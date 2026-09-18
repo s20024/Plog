@@ -1,0 +1,193 @@
+// memo: Pagefind Component UI の要素は `all: initial` でリセットされるため、内部の見た目は `--pf-*` 変数で指定する。
+.siteSearch {
+  max-width: 900px;
+  margin: 0 auto;
+  --pf-font: var(--font-main);
+  --pf-text: var(--text-color);
+}
+
+// 検索欄(選択中のタグ + 公式の検索欄)
+.searchBox {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+  padding: 0 0.75rem;
+  border: 2px solid transparent;
+  border-radius: 50px;
+  background-color: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  // 公式の検索欄は枠を消し、この外枠を検索欄として見せる
+  --pf-background: transparent;
+  --pf-border: transparent;
+  --pf-border-radius: 50px;
+  --pf-input-height: 3.4rem;
+  --pf-input-font-size: 1.1rem;
+  --pf-text-muted: rgba(51, 51, 51, 0.45);
+  --pf-text-secondary: var(--text-color);
+  --pf-hover: var(--base-color);
+  --pf-outline-focus: transparent;
+  --pf-outline-width: 0;
+
+  &:focus-within {
+    border-color: var(--base-color);
+    box-shadow: 0 0 0 4px rgba(209, 241, 204, 0.5);
+  }
+
+  &.hasTag {
+    padding-left: 0.6rem;
+  }
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 0;
+}
+
+.tagToken {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.45rem;
+  max-width: 50%;
+  padding: 0.35rem 0.75rem;
+  border: none;
+  border-radius: 50px;
+  font-family: var(--font-main);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-color);
+  background-color: var(--base-color);
+  cursor: pointer;
+
+  svg {
+    flex-shrink: 0;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+  }
+
+  &:hover svg {
+    opacity: 1;
+  }
+}
+
+.tagTokenName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.categoryFilter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.categoryChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 1rem;
+  border: 2px solid var(--base-color);
+  border-radius: 50px;
+  font-family: var(--font-main);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-color);
+  background-color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover,
+  &.active {
+    background-color: var(--base-color);
+  }
+
+  .count {
+    min-width: 1.5em;
+    padding: 0 0.4em;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+.statusMessage {
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+// 公式の件数表示・検索結果
+.results {
+  --pf-text-muted: rgba(51, 51, 51, 0.8);
+  --pf-summary-font-size: 1rem;
+  --pf-results-gap: 1rem;
+  --pf-border: transparent;
+  --pf-border-radius: 16px;
+  --pf-background: white;
+  --pf-skeleton: #eef3ee;
+  --pf-skeleton-shine: #f7faf7;
+}
+
+.summary {
+  margin-bottom: 1rem;
+}
+
+// memo: 公式CSSが文字色を CanvasText にリセットするため、サイトの文字色に戻す(結果テンプレートが継承する)。
+.resultList {
+  color: var(--text-color);
+}
+
+// 未検索時のタグ一覧(控えめに表示する)
+.tagCloud {
+  margin-top: 2rem;
+}
+
+.tagCloudTitle {
+  margin: 0 0 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0.55;
+}
+
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.4rem;
+  list-style: none;
+}
+
+.tagLink {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  opacity: 0.6;
+  transition:
+    opacity 0.2s ease,
+    background-color 0.2s ease;
+
+  &:hover {
+    color: var(--text-color);
+    opacity: 1;
+    background-color: var(--base-color);
+  }
+}
+
+@media (max-width: 768px) {
+  .searchBox {
+    padding: 0 0.5rem;
+
+    --pf-input-font-size: 1rem;
+
+    &.hasTag {
+      padding-left: 0.5rem;
+    }
+  }
+}
