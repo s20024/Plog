@@ -3,16 +3,29 @@ import 'github-markdown-css/github-markdown-light.css';
 import { render } from "astro:content";
 import Profile from "./Profile";
 import Tags from './Tags';
+import { SEARCH_CATEGORY_FILTER_KEY, SEARCH_DATE_SORT_KEY, SEARCH_TAG_FILTER_KEY } from '../consts';
 
 const { post, prevPost, nextPost } = Astro.props;
 const { Content } = await render(post);
 ---
 
-<article class="post-container">
+{/* memo: data-pagefind-body を付けた要素だけが検索対象になる(一覧ページ等はインデックスされない)。 */}
+<article
+  class="post-container"
+  data-pagefind-body
+  data-pagefind-filter={`${SEARCH_CATEGORY_FILTER_KEY}:${post.collection}`}
+  data-pagefind-meta={post.data.heroImage ? `image:${post.data.heroImage}` : undefined}
+>
   <header class="post-header">
-    <h1 class="post-title">{post.data.title}</h1>
-    <div class="post-meta">
-      <time class="post-date">
+    {/* memo: 未指定だとヘッダーのサイト名(h1)がタイトルとして拾われるため、明示する。 */}
+    <h1 class="post-title" data-pagefind-meta="title">{post.data.title}</h1>
+    {/* memo: 日付・タグは抜粋に混ざると読みにくいため本文から除外する(日付はメタデータとして取得される)。 */}
+    <div class="post-meta" data-pagefind-ignore>
+      <time
+        class="post-date"
+        data-pagefind-meta="date"
+        data-pagefind-sort={`${SEARCH_DATE_SORT_KEY}:${post.data.pubDate.toISOString().slice(0, 10)}`}
+      >
         {
           new Date(post.data.pubDate).toLocaleDateString('ja-JP', {
             year: 'numeric',
@@ -22,6 +35,8 @@ const { Content } = await render(post);
         }
       </time>
       <Tags tags={post.data.tags} />
+      {/* memo: Pagefindはページ全体から絞り込み条件を拾うため、Tags側ではなくこの記事のタグだけをここで登録する。 */}
+      {post.data.tags?.map((tag: string) => <span hidden data-pagefind-filter={`${SEARCH_TAG_FILTER_KEY}:${tag}`} />)}
     </div>
   </header>
 
@@ -29,7 +44,7 @@ const { Content } = await render(post);
     <Content />
   </div>
 
-  <footer class="post-footer">
+  <footer class="post-footer" data-pagefind-ignore>
     <div class="post-navigation">
       {
         prevPost && (

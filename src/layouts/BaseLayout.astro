@@ -12,6 +12,8 @@ export interface Props {
   image?: string;
   hideFooter?: boolean;
   flush?: boolean;
+  /** 検索エンジンにインデックスさせない場合は true */
+  noindex?: boolean;
 }
 
 const {
@@ -20,6 +22,7 @@ const {
   image = '/images/logo@256.png',
   hideFooter = false,
   flush = false,
+  noindex = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
@@ -33,6 +36,7 @@ const ogImageURL = new URL(image, Astro.site).toString();
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />

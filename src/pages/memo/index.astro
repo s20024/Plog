@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/BaseLayout.astro';
 import Tags from '../../components/Tags';
+import SearchForm from '../../components/search/SearchForm';
 
 const memos = (await getCollection('memo')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
@@ -11,6 +12,11 @@ const memos = (await getCollection('memo')).sort((a, b) => b.data.pubDate.valueO
     <div class="page-header">
       <h1>メモ</h1>
       <p>開発に役立つ技術メモやチートシートをまとめています。</p>
+    </div>
+
+    <div class="memo-search">
+      {/* memo: メモ一覧からの検索のため、検索ページをメモで絞り込んだ状態で開く。 */}
+      <SearchForm category="memo" placeholder="メモ内を検索" />
     </div>
 
     <div class="memos-container">
@@ -44,7 +50,7 @@ const memos = (await getCollection('memo')).sort((a, b) => b.data.pubDate.valueO
 <style lang="scss">
   .page-header {
     text-align: center;
-    margin: 2rem 0 3rem;
+    margin: 2rem 0 2rem;
 
     h1 {
       font-size: 2.5rem;
@@ -60,6 +66,11 @@ const memos = (await getCollection('memo')).sort((a, b) => b.data.pubDate.valueO
       font-size: 1.2rem;
       opacity: 0.8;
     }
+  }
+
+  .memo-search {
+    max-width: 600px;
+    margin: 0 auto 3rem;
   }
 
   .memo-layout {

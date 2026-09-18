@@ -3,6 +3,7 @@ import Layout from '../../layouts/BaseLayout.astro';
 import { type CollectionEntry, getCollection } from 'astro:content';
 import Plogs from '../../components/Plogs.astro';
 import PostContainer from '../../components/PostContainer.astro';
+import SearchForm from '../../components/search/SearchForm';
 
 export async function getStaticPaths() {
   const plogs = await getCollection('plog');
@@ -31,6 +32,12 @@ const { plog, prevPlog, nextPlog } = Astro.props;
       <PostContainer post={plog} prevPost={prevPlog} nextPost={nextPlog} />
 
       <aside class="latest-plogs">
+        <h2 class="section-title">Plog検索</h2>
+        <div class="plog-search">
+          {/* memo: プログからの検索のため、検索ページをプログで絞り込んだ状態で開く。 */}
+          <SearchForm category="plog" placeholder="プログ内を検索" />
+        </div>
+
         <h2 class="section-title">最新のPlog</h2>
         <Plogs flow="vertical" max="3" />
       </aside>
@@ -48,6 +55,10 @@ const { plog, prevPlog, nextPlog } = Astro.props;
     margin: 2rem auto;
     max-width: 300px;
     flex: 1;
+  }
+
+  .plog-search {
+    margin-bottom: 2.5rem;
   }
 
   @media (max-width: 768px) {

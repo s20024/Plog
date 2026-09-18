@@ -1,19 +1,7 @@
 ---
 import Layout from '../../layouts/BaseLayout.astro';
-import PostCard from '../../components/PostCard.astro';
-import { getCollection } from 'astro:content';
-import Tags from '../../components/Tags';
-
-const plogs = (await getCollection('plog')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-const tags: string[] = [];
-plogs.map((plog) => {
-  if (!plog.data.tags) return;
-  plog.data.tags.map((tag) => {
-    if (!tags.includes(tag)) {
-      tags.push(tag);
-    }
-  });
-});
+import Plogs from '../../components/Plogs.astro';
+import SearchForm from '../../components/search/SearchForm';
 ---
 
 <Layout title="Plog記事一覧">
@@ -23,36 +11,20 @@ plogs.map((plog) => {
       <p>プログラミングや開発に関する記事を書いています。</p>
     </div>
 
-    <div class="plog-layout">
-      <div class="plogs-container">
-        {plogs.map((plog) => <PostCard post={plog} />)}
-      </div>
-
-      <aside class="sidebar">
-        <div class="sidebar-section">
-          <h2>タグ</h2>
-          <div class="tags-cloud">
-            <Tags tags={tags} />
-          </div>
-        </div>
-
-        <!-- <div class="sidebar-section">
-          <h2>アーカイブ</h2>
-          <ul class="archive-list">
-            <li><a href="/archive/2025/03">2025年3月</a></li>
-            <li><a href="/archive/2025/02">2025年2月</a></li>
-            <li><a href="/archive/2025/01">2025年1月</a></li>
-          </ul>
-        </div> -->
-      </aside>
+    <div class="plog-search">
+      {/* memo: プログ一覧からの検索のため、検索ページをプログで絞り込んだ状態で開く。 */}
+      <SearchForm category="plog" placeholder="プログ内を検索" />
     </div>
+
+    {/* memo: トップページの「最新のPlog」と同じ一覧(幅・列数)で全件を表示する。 */}
+    <Plogs />
   </div>
 </Layout>
 
 <style lang="scss">
   .page-header {
     text-align: center;
-    margin: 2rem 0 3rem;
+    margin: 2rem 0 2rem;
 
     h1 {
       font-size: 2.5rem;
@@ -70,86 +42,8 @@ plogs.map((plog) => {
     }
   }
 
-  .plog-layout {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 2rem;
-  }
-
-  .plogs-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-  }
-
-  .sidebar {
-    .sidebar-section {
-      background-color: white;
-      border-radius: 16px;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-
-      h2 {
-        font-size: 1.3rem;
-        margin: 0 0 1rem;
-        position: relative;
-        display: inline-block;
-
-        &::after {
-          content: '';
-          position: absolute;
-          bottom: -5px;
-          left: 0;
-          width: 30px;
-          height: 3px;
-          background: linear-gradient(45deg, var(--base-color), var(--sub-color-1));
-          border-radius: 10px;
-        }
-      }
-
-      .archive-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-
-        li {
-          margin-bottom: 0.5rem;
-
-          a {
-            display: block;
-            padding: 0.5rem;
-            border-radius: 8px;
-            transition: background-color 0.2s ease;
-
-            &:hover {
-              background-color: var(--base-color);
-            }
-          }
-        }
-      }
-
-      .tags-cloud {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-      }
-    }
-  }
-
-  @media (max-width: 992px) {
-    .plog-layout {
-      grid-template-columns: 1fr;
-    }
-
-    .plogs-container {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (max-width: 768px) {
-    .plogs-container {
-      grid-template-columns: 1fr;
-    }
+  .plog-search {
+    max-width: 600px;
+    margin: 0 auto 3rem;
   }
 </style>
