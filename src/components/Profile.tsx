@@ -10,7 +10,7 @@ interface ProfileProps {
 
 const Profile: React.FC<ProfileProps> = ({ type = 'short' }) => {
   const handleClick = () => {
-    window.location.href = '/about';
+    window.location.href = '/about/';
   };
 
   return (

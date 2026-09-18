@@ -29,10 +29,10 @@ const news = (await getCollection('news')).sort((a, b) => b.data.pubDate.valueOf
             </div>
             <div class="news-content">
               <h2 class="news-title">
-                <a href={`/news/${news.id}`}>{news.data.title}</a>
+                <a href={`/news/${news.id}/`}>{news.data.title}</a>
               </h2>
               <p class="news-excerpt">{news.data.description}</p>
-              <a href={`/news/${news.id}`} class="read-more">
+              <a href={`/news/${news.id}/`} class="read-more">
                 続きを読む →
               </a>
             </div>

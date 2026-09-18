@@ -24,7 +24,7 @@ const memos = (await getCollection('memo')).sort((a, b) => b.data.pubDate.valueO
         memos.map((memo) => (
           <article class="memo-card">
             <h2 class="memo-title">
-              <a href={`/memo/${memo.id}`}>{memo.data.title}</a>
+              <a href={`/memo/${memo.id}/`}>{memo.data.title}</a>
             </h2>
             <div class="memo-meta">
               <span class="memo-date">
@@ -37,7 +37,7 @@ const memos = (await getCollection('memo')).sort((a, b) => b.data.pubDate.valueO
               <Tags tags={memo.data.tags} />
             </div>
             <p class="memo-excerpt">{memo.data.description}</p>
-            <a href={`/memo/${memo.id}`} class="read-more">
+            <a href={`/memo/${memo.id}/`} class="read-more">
               続きを読む →
             </a>
           </article>

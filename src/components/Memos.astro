@@ -15,7 +15,7 @@ if (0 <= max) {
     memos.map((memo) => (
       <article class="memo-item">
         <h3 class="memo-title">
-          <a href={`/memo/${memo.id}`}>{memo.data.title}</a>
+          <a href={`/memo/${memo.id}/`}>{memo.data.title}</a>
         </h3>
         <div class="memo-meta">
           <span class="memo-date">
@@ -31,7 +31,7 @@ if (0 <= max) {
     ))
   }
 
-  <a href="/memo" class="view-all">すべてのメモを見る →</a>
+  <a href="/memo/" class="view-all">すべてのメモを見る →</a>
 </div>
 
 <style lang="scss">

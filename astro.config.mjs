@@ -7,7 +7,8 @@ import pagefind from 'astro-pagefind';
 
 export default defineConfig({
   site: 'https://plog.s20024.com',
-  trailingSlash: 'ignore',
+  // memo: canonical・サイトマップと同じ「末尾スラッシュあり」に内部リンクも統一する(なしのURLは 301 リダイレクトになるため)。
+  trailingSlash: 'always',
   build: {
     format: 'directory',
   },

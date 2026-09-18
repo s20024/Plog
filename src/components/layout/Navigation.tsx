@@ -13,19 +13,19 @@ const Navigation: React.FC = () => {
       <div className={style.desktopNav}>
         <ul>
           <li>
-            <a href="/plog">プログ</a>
+            <a href="/plog/">プログ</a>
           </li>
           <li>
-            <a href="/news">ニュース</a>
+            <a href="/news/">ニュース</a>
           </li>
           <li>
-            <a href="/memo">メモ</a>
+            <a href="/memo/">メモ</a>
           </li>
           <li>
-            <a href="/chat">チャット</a>
+            <a href="/chat/">チャット</a>
           </li>
           <li>
-            <a href="/about">プロフィール</a>
+            <a href="/about/">プロフィール</a>
           </li>
         </ul>
       </div>
@@ -40,27 +40,27 @@ const Navigation: React.FC = () => {
         <div className={`${style.mobileMenu} ${isMenuOpen ? style.active : ''}`}>
           <ul>
             <li>
-              <a href="/plog" onClick={toggleMenu}>
+              <a href="/plog/" onClick={toggleMenu}>
                 プログ
               </a>
             </li>
             <li>
-              <a href="/news" onClick={toggleMenu}>
+              <a href="/news/" onClick={toggleMenu}>
                 ニュース
               </a>
             </li>
             <li>
-              <a href="/memo" onClick={toggleMenu}>
+              <a href="/memo/" onClick={toggleMenu}>
                 メモ
               </a>
             </li>
             <li>
-              <a href="/chat" onClick={toggleMenu}>
+              <a href="/chat/" onClick={toggleMenu}>
                 チャット
               </a>
             </li>
             <li>
-              <a href="/about" onClick={toggleMenu}>
+              <a href="/about/" onClick={toggleMenu}>
                 プロフィール
               </a>
             </li>

@@ -29,13 +29,13 @@ const Footer = () => {
               <h3>コンテンツ</h3>
               <ul>
                 <li>
-                  <a href="/plog">プログ</a>
+                  <a href="/plog/">プログ</a>
                 </li>
                 <li>
-                  <a href="/news">ニュース</a>
+                  <a href="/news/">ニュース</a>
                 </li>
                 <li>
-                  <a href="/memo">メモ</a>
+                  <a href="/memo/">メモ</a>
                 </li>
               </ul>
             </div>
@@ -44,10 +44,10 @@ const Footer = () => {
               <h3>その他</h3>
               <ul>
                 <li>
-                  <a href="/chat">チャット</a>
+                  <a href="/chat/">チャット</a>
                 </li>
                 <li>
-                  <a href="/about">プロフィール</a>
+                  <a href="/about/">プロフィール</a>
                 </li>
                 {/* <li><a href="/contact">お問い合わせ</a></li> */}
                 {/* <li><a href="/privacy">プライバシーポリシー</a></li> */}
