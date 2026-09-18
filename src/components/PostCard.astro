@@ -6,7 +6,7 @@ const { post } = Astro.props;
 
 <article class="post-card">
   <div class="post-image">
-    <a href={`/plog/${post.id}`}>
+    <a href={`/plog/${post.id}/`}>
       <div
         class="image-placeholder"
         style={`background-color: ${['var(--base-color)', 'var(--sub-color-1)', 'var(--sub-color-3)', 'var(--sub-color-4)'][Math.floor(Math.random() * 4)]}`}
@@ -17,7 +17,7 @@ const { post } = Astro.props;
   </div>
   <div class="post-content">
     <h2 class="post-title">
-      <a href={`/plog/${post.id}`}>{post.data.title}</a>
+      <a href={`/plog/${post.id}/`}>{post.data.title}</a>
     </h2>
     <div class="post-meta">
       <span class="post-date">
@@ -32,7 +32,7 @@ const { post } = Astro.props;
       <Tags tags={post.data.tags} max={2} />
     </div>
     <p class="post-excerpt">{post.data.description}</p>
-    <a href={`/plog/${post.id}`} class="read-more">続きを読む →</a>
+    <a href={`/plog/${post.id}/`} class="read-more">続きを読む →</a>
   </div>
 </article>
 
