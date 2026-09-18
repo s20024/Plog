@@ -19,3 +19,17 @@ export const GITHUB_URL = 'https://github.com/s20024';
 export const INSTAGRAM_URL = 'https://www.instagram.com';
 export const TWITTER_URL = 'https://x.com/s20024itcollege';
 export const PORTFOLIO_URL = 'https://portfolio.s20024.com';
+
+// Search
+export const SEARCH_PAGE_PATH = '/search/';
+export const SEARCH_QUERY_PARAM = 'q';
+export const SEARCH_CATEGORY_PARAM = 'category';
+export const SEARCH_TAG_PARAM = 'tag';
+export const SEARCH_CATEGORY_FILTER_KEY = 'category';
+export const SEARCH_TAG_FILTER_KEY = 'tag';
+export const SEARCH_DATE_SORT_KEY = 'date';
+export const SEARCH_CATEGORY_LABELS: Record<string, string> = {
+  plog: 'プログ',
+  news: 'ニュース',
+  memo: 'メモ',
+};

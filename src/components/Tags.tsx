@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './Tags.module.scss';
+import { createTagSearchUrl } from '../utils/searchUrl';
 
 interface TagsProps {
   size?: 'small' | 'large';
@@ -18,7 +19,7 @@ const Tags: React.FC<TagsProps> = ({ size = 'small', max = -1, tags = [] }) => {
   return (
     <div className={styles.tags}>
       {displayTags.map((tag) => (
-        <a href={`/tag/${tag.toLowerCase()}`} className={`${styles.tag} ${styles[size]}`} key={tag}>
+        <a href={createTagSearchUrl(tag)} className={`${styles.tag} ${styles[size]}`} key={tag}>
           {tag}
         </a>
       ))}

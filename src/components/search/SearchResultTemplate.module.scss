@@ -1,0 +1,110 @@
+.item {
+  list-style: none;
+}
+
+.link {
+  display: flex;
+  gap: 1.25rem;
+  padding: 1.25rem;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+
+  &:hover {
+    color: inherit;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+
+    .title {
+      text-decoration: underline;
+      text-decoration-color: var(--base-color);
+      text-decoration-thickness: 3px;
+    }
+  }
+
+  // memo: 検索欄から↓キーで結果を選択した際(Pagefind Component UI が data-pf-selected を付与する)
+  &[data-pf-selected],
+  &:focus-visible {
+    outline: 3px solid var(--base-color);
+    outline-offset: 2px;
+  }
+}
+
+.thumbnail {
+  flex-shrink: 0;
+  width: 160px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 12px;
+  background-color: var(--sub-color-3);
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.category {
+  padding: 0.15rem 0.7rem;
+  border-radius: 50px;
+  font-weight: 600;
+  background-color: var(--base-color);
+
+  &.news {
+    background-color: var(--sub-color-1);
+  }
+
+  &.memo {
+    background-color: var(--sub-color-3);
+  }
+}
+
+.date {
+  opacity: 0.7;
+}
+
+.title {
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+  line-height: 1.4;
+}
+
+.excerpt {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: #555;
+  overflow-wrap: anywhere;
+
+  mark {
+    padding: 0 0.15em;
+    border-radius: 4px;
+    color: inherit;
+    background-color: var(--base-color);
+  }
+}
+
+@media (max-width: 768px) {
+  .link {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .thumbnail {
+    width: 100%;
+    height: auto;
+    // memo: 高さを固定すると画面幅が広いほど横長になるため、サムネイル画像(960x480)と同じ比率にする。
+    aspect-ratio: 2 / 1;
+  }
+}

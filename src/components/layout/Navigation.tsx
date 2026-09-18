@@ -13,9 +13,6 @@ const Navigation: React.FC = () => {
       <div className={style.desktopNav}>
         <ul>
           <li>
-            <a href="/">ホーム</a>
-          </li>
-          <li>
             <a href="/plog">プログ</a>
           </li>
           <li>
@@ -42,11 +39,6 @@ const Navigation: React.FC = () => {
 
         <div className={`${style.mobileMenu} ${isMenuOpen ? style.active : ''}`}>
           <ul>
-            <li>
-              <a href="/" onClick={toggleMenu}>
-                ホーム
-              </a>
-            </li>
             <li>
               <a href="/plog" onClick={toggleMenu}>
                 プログ
