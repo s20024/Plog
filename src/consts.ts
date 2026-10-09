@@ -15,6 +15,10 @@ export const CHAT_API_BASE =
 export const CHAT_THREADS_KEY = 'plog.chat.threads';
 export const CHAT_PERSONA = 'zundamon';
 
+// MCP
+export const MCP_SERVER_URL = 'https://backend.s20024.com/mcp/profile';
+export const MCP_SERVER_NAME = 's20024-profile-server';
+
 export const GITHUB_URL = 'https://github.com/s20024';
 export const INSTAGRAM_URL = 'https://www.instagram.com';
 export const TWITTER_URL = 'https://x.com/s20024itcollege';

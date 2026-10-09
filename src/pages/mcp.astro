@@ -1,0 +1,257 @@
+---
+import { MCP_SERVER_NAME, MCP_SERVER_URL } from '../consts';
+import Layout from '../layouts/BaseLayout.astro';
+
+const claudeCodeCommand = `claude mcp add --transport http ${MCP_SERVER_NAME} ${MCP_SERVER_URL}`;
+const cursorConfig = JSON.stringify({ mcpServers: { [MCP_SERVER_NAME]: { url: MCP_SERVER_URL } } }, null, 2);
+---
+
+<Layout title="MCP サーバー" description="s20024(やら)のプロフィールを AI から参照できる MCP サーバーの設定手順です。" noindex>
+  <div class="container">
+    <div class="page-header">
+      <h1>MCP サーバー</h1>
+    </div>
+
+    <div class="mcp-container">
+      <section class="mcp-section">
+        <h2>MCP サーバーについて</h2>
+        <p>
+          s20024(やら)のプロフィール情報(経歴・スキル・強み・作ったものなど)を、AI から参照できる MCP サーバーです。
+        </p>
+
+        <h3 class="section-subtitle">接続先 URL</h3>
+        <div class="code-block">
+          <pre><code>{MCP_SERVER_URL}</code></pre>
+          <button type="button" class="copy-button">コピー</button>
+        </div>
+        <ul class="badges">
+          <li>Streamable HTTP</li>
+          <li>認証不要</li>
+        </ul>
+      </section>
+
+      <section class="mcp-section">
+        <h2>設定手順</h2>
+
+        <h3 class="section-subtitle">Claude(claude.ai / Claude Desktop)</h3>
+        <ol>
+          <li>「カスタマイズ」→「コネクタ」を開く</li>
+          <li>「+ 追加」→「カスタムコネクタを追加」を選ぶ</li>
+          <li>名前に任意の名前、URL に上の接続先 URL を入力して「続行」を押す</li>
+          <li>認証設定を確認して「続行」を押し、認証は「サインインなし」を選んで「追加」を押す</li>
+        </ol>
+        <p class="note">チャットでは、入力欄左下の「+」→「コネクタ」からオンにして使います。</p>
+
+        <h3 class="section-subtitle">Claude Code</h3>
+        <p>ターミナルで次のコマンドを実行します。</p>
+        <div class="code-block">
+          <pre><code>{claudeCodeCommand}</code></pre>
+          <button type="button" class="copy-button">コピー</button>
+        </div>
+        <p class="note">Claude Code 内で <code>/mcp</code> を実行すると、接続状態を確認できます。</p>
+
+        <h3 class="section-subtitle">VS Code(GitHub Copilot)</h3>
+        <ol>
+          <li>コマンドパレットで「MCP: Add Server」を実行する</li>
+          <li>案内に沿って HTTP のサーバーとして上の接続先 URL を入力する</li>
+          <li>保存先は、このワークスペースだけなら「.mcp.json」、どこでも使うなら「Copilot Global」を選ぶ</li>
+        </ol>
+        <p class="note">追加後は、チャット入力欄の「Configure Tools」からツールを確認できます。</p>
+
+        <h3 class="section-subtitle">Cursor</h3>
+        <p><code>~/.cursor/mcp.json</code>(プロジェクト単位なら <code>.cursor/mcp.json</code>)に追加します。</p>
+        <div class="code-block">
+          <pre><code>{cursorConfig}</code></pre>
+          <button type="button" class="copy-button">コピー</button>
+        </div>
+
+        <h3 class="section-subtitle">その他のクライアント</h3>
+        <p>Streamable HTTP に対応した MCP クライアントであれば、接続先 URL を登録するだけで使えます。</p>
+      </section>
+
+      <section class="mcp-section">
+        <h2>使い方の例</h2>
+        <p>設定後、AI に次のように話しかけると、MCP サーバーの情報を使って回答してくれます。</p>
+        <ul class="examples">
+          <li>やらさんのスキルと強みを教えて</li>
+          <li>やらさんの職歴を時系列でまとめて</li>
+          <li>やらさんが作ったプロダクトを紹介して</li>
+        </ul>
+        <p class="note">MCP を設定しなくても、<a href="/chat/">チャット</a>から同じように質問できます。</p>
+      </section>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.copy-button').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const text = button.parentElement?.querySelector('pre')?.innerText ?? '';
+      try {
+        await navigator.clipboard.writeText(text);
+        button.textContent = 'コピーしました';
+      } catch {
+        button.textContent = 'コピーできませんでした';
+      }
+      setTimeout(() => {
+        button.textContent = 'コピー';
+      }, 1500);
+    });
+  });
+</script>
+
+<style lang="scss">
+  .page-header {
+    text-align: center;
+    margin: 2rem 0 3rem;
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(45deg, var(--base-color), var(--sub-color-1), var(--sub-color-4));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+    }
+  }
+
+  .mcp-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .mcp-section {
+    background-color: white;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+
+    h2 {
+      font-size: 1.5rem;
+      margin: 0 0 1.5rem;
+      position: relative;
+      display: inline-block;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 40px;
+        height: 3px;
+        background: linear-gradient(45deg, var(--base-color), var(--sub-color-1));
+        border-radius: 10px;
+      }
+    }
+
+    p {
+      margin: 0 0 1rem;
+      line-height: 1.6;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    ol,
+    .examples {
+      margin: 0 0 1rem;
+      padding-left: 1.4em;
+      line-height: 1.8;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    .section-subtitle {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #555;
+      margin: 2rem 0 0.75rem;
+    }
+
+    h2 + .section-subtitle {
+      margin-top: 0.5rem;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.875em;
+    }
+
+    :not(pre) > code {
+      padding: 0.1em 0.4em;
+      background-color: #f6f8fa;
+      border-radius: 6px;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    p a {
+      text-decoration: underline;
+    }
+  }
+
+  .code-block {
+    position: relative;
+    margin-bottom: 1rem;
+
+    pre {
+      margin: 0;
+      padding: 1rem 5rem 1rem 1rem;
+      background-color: #f6f8fa;
+      border-radius: 12px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  .copy-button {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    padding: 0.25rem 0.75rem;
+    background-color: var(--base-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      padding: 0.15rem 0.75rem;
+      background-color: var(--sub-color-2);
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .mcp-section {
+      padding: 1.5rem;
+    }
+  }
+</style>
