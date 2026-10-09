@@ -28,8 +28,8 @@ export default defineConfig({
       },
     }),
     sitemap({
-      // memo: 検索ページは noindex のため、サイトマップに含めない。
-      filter: (page) => new URL(page).pathname !== '/search/',
+      // memo: 検索ページ・MCPページは noindex のため、サイトマップに含めない。
+      filter: (page) => !['/search/', '/mcp/'].includes(new URL(page).pathname),
     }),
     react(),
     // memo: ビルド後にPagefindの検索インデックスを生成し、開発サーバーでは前回ビルドのインデックスを配信する。
